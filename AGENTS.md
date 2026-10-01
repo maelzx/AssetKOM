@@ -83,3 +83,4 @@ npm run dev                # Vite dev server
 - Follow standard Laravel conventions (Eloquent models, Form Requests, queues, events).
 - Run `./vendor/bin/pint` before committing PHP changes.
 - Keep the SQLite database local; do not commit `database/*.sqlite` or `.env`.
+- Commit and push to GitHub (`origin main`) at the end of each implementation phase.
