@@ -176,6 +176,13 @@ new #[Layout('layouts.app')] class extends Component
         return [
             'users' => User::orderBy('name')->get(),
             'locations' => Location::orderBy('full_name')->get(),
+            'activities' => \Spatie\Activitylog\Models\Activity::query()
+                ->where('subject_type', $this->asset->getMorphClass())
+                ->where('subject_id', $this->asset->getKey())
+                ->with('causer')
+                ->latest()
+                ->take(15)
+                ->get(),
         ];
     }
 }; ?>
@@ -450,7 +457,19 @@ new #[Layout('layouts.app')] class extends Component
 
                 <div class="bg-white shadow sm:rounded-lg p-6">
                     <h3 class="text-lg font-medium text-gray-900">{{ __('Activity') }}</h3>
-                    <p class="mt-2 text-sm text-gray-500">{{ __('Change history will appear here.') }}</p>
+                    <ul class="mt-3 space-y-2">
+                        @forelse ($activities as $activity)
+                            <li class="text-xs text-gray-600" wire:key="asset-activity-{{ $activity->id }}">
+                                <span class="font-medium text-gray-800">{{ ucfirst($activity->event) }}</span>
+                                — {{ $activity->created_at?->format('d M Y H:i') }}
+                                @if ($activity->causer)
+                                    · {{ $activity->causer->name }}
+                                @endif
+                            </li>
+                        @empty
+                            <li class="text-sm text-gray-500">{{ __('No changes recorded yet.') }}</li>
+                        @endforelse
+                    </ul>
                 </div>
             </div>
         </div>

@@ -11,6 +11,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Spatie\Activitylog\Models\Concerns\LogsActivity;
+use Spatie\Activitylog\Support\LogOptions;
 
 #[Fillable([
     'asset_id',
@@ -30,7 +32,16 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
 class AssetAssignment extends Model
 {
     /** @use HasFactory<AssetAssignmentFactory> */
-    use HasFactory;
+    use HasFactory, LogsActivity;
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logFillable()
+            ->logOnlyDirty()
+            ->dontLogEmptyChanges()
+            ->useLogName('assignment');
+    }
 
     /**
      * @return array<string, string>

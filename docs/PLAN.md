@@ -117,10 +117,10 @@ Notes:
 - [x] Polymorphic uploads for assets and maintenances (private disk)
 - [x] Authorized download / delete, mime whitelist + size limit
 
-### Phase 5 — Dashboard & Reporting basics
-- [ ] Dashboard stats (status / category / location, warranty & maintenance due counts)
-- [ ] CSV export of assets + assignment/maintenance history (asset currency preserved)
-- [ ] Audit log UI (activity feed)
+### Phase 5 — Dashboard & Reporting basics ✅
+- [x] Dashboard stats (status / category / location, warranty & maintenance due counts)
+- [x] CSV export of assets + assignment/maintenance history (asset currency preserved)
+- [x] Audit log UI (activity feed)
 
 > **MVP milestone reached here.**
 

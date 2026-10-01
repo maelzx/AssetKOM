@@ -46,6 +46,16 @@ new class extends Component
                         {{ __('Maintenance') }}
                     </x-nav-link>
 
+                    @can('view-reports')
+                        <x-nav-link :href="route('reports.index')" :active="request()->routeIs('reports.*')" wire:navigate>
+                            {{ __('Reports') }}
+                        </x-nav-link>
+
+                        <x-nav-link :href="route('activity.index')" :active="request()->routeIs('activity.*')" wire:navigate>
+                            {{ __('Activity') }}
+                        </x-nav-link>
+                    @endcan
+
                     @can('manage-catalog')
                         <x-nav-link :href="route('categories.index')" :active="request()->routeIs('categories.*')" wire:navigate>
                             {{ __('Categories') }}
@@ -124,6 +134,16 @@ new class extends Component
             <x-responsive-nav-link :href="route('maintenance.index')" :active="request()->routeIs('maintenance.*')" wire:navigate>
                 {{ __('Maintenance') }}
             </x-responsive-nav-link>
+
+            @can('view-reports')
+                <x-responsive-nav-link :href="route('reports.index')" :active="request()->routeIs('reports.*')" wire:navigate>
+                    {{ __('Reports') }}
+                </x-responsive-nav-link>
+
+                <x-responsive-nav-link :href="route('activity.index')" :active="request()->routeIs('activity.*')" wire:navigate>
+                    {{ __('Activity') }}
+                </x-responsive-nav-link>
+            @endcan
 
             @can('manage-catalog')
                 <x-responsive-nav-link :href="route('categories.index')" :active="request()->routeIs('categories.*')" wire:navigate>

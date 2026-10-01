@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AttachmentDownloadController;
+use App\Http\Controllers\ExportController;
 use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
 
@@ -10,13 +11,27 @@ Route::get('/', function () {
         : redirect()->route('login');
 })->name('home');
 
-Route::view('dashboard', 'dashboard')
+Volt::route('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
 
 Route::view('profile', 'profile')
     ->middleware(['auth'])
     ->name('profile');
+
+Volt::route('reports', 'reports.index')
+    ->middleware(['auth', 'verified', 'can:view-reports'])
+    ->name('reports.index');
+
+Volt::route('activity', 'activity.index')
+    ->middleware(['auth', 'verified', 'can:view-reports'])
+    ->name('activity.index');
+
+Route::middleware(['auth', 'verified', 'can:view-reports'])->group(function (): void {
+    Route::get('exports/assets', [ExportController::class, 'assets'])->name('exports.assets');
+    Route::get('exports/assignments', [ExportController::class, 'assignments'])->name('exports.assignments');
+    Route::get('exports/maintenance', [ExportController::class, 'maintenance'])->name('exports.maintenance');
+});
 
 Volt::route('settings', 'settings.index')
     ->middleware(['auth', 'verified', 'can:manage-settings'])
