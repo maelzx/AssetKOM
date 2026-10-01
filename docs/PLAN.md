@@ -137,9 +137,9 @@ Notes:
 - [x] Warranty expiring soon, maintenance due, overdue assignments
 - [x] Scheduler + queued mail; notification preferences
 
-### Phase 9 — CSV Import (v1.1 candidate)
-- [ ] Column mapping UI + dry-run + per-row error report
-- [ ] Idempotent by `asset_tag`
+### Phase 9 — CSV Import (v1.1 candidate) ✅
+- [x] Column mapping UI + dry-run + per-row error report
+- [x] Idempotent by `asset_tag`
 
 ### Phase 10 — Hardening & QA
 - [ ] Full permission matrix test coverage

@@ -67,6 +67,10 @@ Volt::route('labels', 'labels.index')
     ->middleware(['auth', 'verified'])
     ->name('labels.index');
 
+Volt::route('imports/assets', 'imports.assets')
+    ->middleware(['auth', 'verified', 'can:manage-assets'])
+    ->name('imports.assets');
+
 Route::middleware('auth')->group(function (): void {
     Route::get('a/{asset:asset_tag}', fn (Asset $asset) => redirect()->route('assets.show', $asset))
         ->name('scan.show');

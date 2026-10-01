@@ -50,6 +50,12 @@ new class extends Component
                         {{ __('Labels') }}
                     </x-nav-link>
 
+                    @can('manage-assets')
+                        <x-nav-link :href="route('imports.assets')" :active="request()->routeIs('imports.*')" wire:navigate>
+                            {{ __('Import') }}
+                        </x-nav-link>
+                    @endcan
+
                     @can('view-reports')
                         <x-nav-link :href="route('reports.index')" :active="request()->routeIs('reports.*')" wire:navigate>
                             {{ __('Reports') }}
@@ -142,6 +148,12 @@ new class extends Component
             <x-responsive-nav-link :href="route('labels.index')" :active="request()->routeIs('labels.*')" wire:navigate>
                 {{ __('Labels') }}
             </x-responsive-nav-link>
+
+            @can('manage-assets')
+                <x-responsive-nav-link :href="route('imports.assets')" :active="request()->routeIs('imports.*')" wire:navigate>
+                    {{ __('Import') }}
+                </x-responsive-nav-link>
+            @endcan
 
             @can('view-reports')
                 <x-responsive-nav-link :href="route('reports.index')" :active="request()->routeIs('reports.*')" wire:navigate>
