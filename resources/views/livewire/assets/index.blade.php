@@ -89,41 +89,41 @@ new #[Layout('layouts.app')] class extends Component
         <x-page-header :title="__('Assets')" :subtitle="__('Browse and manage the asset registry.')">
             <x-slot name="actions">
                 @can('create', \App\Models\Asset::class)
-                    <a href="{{ route('assets.create') }}" wire:navigate class="inline-flex items-center rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-500">
+                    <a href="{{ route('assets.create') }}" wire:navigate class="inline-flex items-center rounded-md bg-primary px-4 py-2 text-sm font-semibold text-white hover:bg-primary">
                         {{ __('New asset') }}
                     </a>
                 @endcan
             </x-slot>
         </x-page-header>
 
-        <div class="bg-white shadow sm:rounded-lg p-4">
+        <div class="card bg-base-100 shadow-sm p-4">
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
                 <div class="lg:col-span-2">
                     <x-text-input wire:model.live.debounce.300ms="search" type="search" class="block w-full" placeholder="{{ __('Search tag, name, serial…') }}" />
                 </div>
 
-                <select wire:model.live="category" class="block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
+                <select wire:model.live="category" class="select select-bordered w-full block w-full border-base-300 focus:border-primary focus:ring-primary rounded-md shadow-sm">
                     <option value="">{{ __('All categories') }}</option>
                     @foreach ($categories as $option)
                         <option value="{{ $option->id }}">{{ $option->full_name }}</option>
                     @endforeach
                 </select>
 
-                <select wire:model.live="location" class="block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
+                <select wire:model.live="location" class="select select-bordered w-full block w-full border-base-300 focus:border-primary focus:ring-primary rounded-md shadow-sm">
                     <option value="">{{ __('All locations') }}</option>
                     @foreach ($locations as $option)
                         <option value="{{ $option->id }}">{{ $option->full_name }}</option>
                     @endforeach
                 </select>
 
-                <select wire:model.live="status" class="block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
+                <select wire:model.live="status" class="select select-bordered w-full block w-full border-base-300 focus:border-primary focus:ring-primary rounded-md shadow-sm">
                     <option value="">{{ __('All statuses') }}</option>
                     @foreach ($statuses as $option)
                         <option value="{{ $option->value }}">{{ $option->label() }}</option>
                     @endforeach
                 </select>
 
-                <select wire:model.live="condition" class="block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
+                <select wire:model.live="condition" class="select select-bordered w-full block w-full border-base-300 focus:border-primary focus:ring-primary rounded-md shadow-sm">
                     <option value="">{{ __('All conditions') }}</option>
                     @foreach ($conditions as $option)
                         <option value="{{ $option->value }}">{{ $option->label() }}</option>
@@ -131,42 +131,42 @@ new #[Layout('layouts.app')] class extends Component
                 </select>
 
                 <div class="flex items-center">
-                    <button type="button" wire:click="resetFilters" class="text-sm text-gray-600 hover:text-gray-900">
+                    <button type="button" wire:click="resetFilters" class="text-sm text-base-content/70 hover:text-base-content">
                         {{ __('Reset filters') }}
                     </button>
                 </div>
             </div>
         </div>
 
-        <div class="bg-white shadow sm:rounded-lg overflow-hidden">
+        <div class="card bg-base-100 shadow-sm overflow-hidden">
             <div class="overflow-x-auto">
-                <table class="min-w-full divide-y divide-gray-200">
-                    <thead class="bg-gray-50">
+                <table class="table table-sm">
+                    <thead class="bg-base-200">
                         <tr>
-                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Tag') }}</th>
-                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Name') }}</th>
-                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Category') }}</th>
-                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Location') }}</th>
-                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Status') }}</th>
-                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Condition') }}</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-base-content/60 uppercase tracking-wider">{{ __('Tag') }}</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-base-content/60 uppercase tracking-wider">{{ __('Name') }}</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-base-content/60 uppercase tracking-wider">{{ __('Category') }}</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-base-content/60 uppercase tracking-wider">{{ __('Location') }}</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-base-content/60 uppercase tracking-wider">{{ __('Status') }}</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-base-content/60 uppercase tracking-wider">{{ __('Condition') }}</th>
                             <th class="px-4 py-3"></th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-gray-100">
+                    <tbody class="divide-y divide-base-300">
                         @forelse ($assets as $asset)
-                            <tr wire:key="asset-{{ $asset->id }}" class="hover:bg-gray-50">
-                                <td class="px-4 py-3 text-sm font-mono text-gray-900">{{ $asset->asset_tag }}</td>
-                                <td class="px-4 py-3 text-sm text-gray-900">
-                                    <a href="{{ route('assets.show', $asset) }}" wire:navigate class="hover:text-indigo-600">{{ $asset->name }}</a>
+                            <tr wire:key="asset-{{ $asset->id }}" class="hover:bg-base-200">
+                                <td class="px-4 py-3 text-sm font-mono text-base-content">{{ $asset->asset_tag }}</td>
+                                <td class="px-4 py-3 text-sm text-base-content">
+                                    <a href="{{ route('assets.show', $asset) }}" wire:navigate class="hover:text-primary">{{ $asset->name }}</a>
                                 </td>
-                                <td class="px-4 py-3 text-sm text-gray-500">{{ $asset->category?->name ?? '—' }}</td>
-                                <td class="px-4 py-3 text-sm text-gray-500">{{ $asset->location?->name ?? '—' }}</td>
+                                <td class="px-4 py-3 text-sm text-base-content/60">{{ $asset->category?->name ?? '—' }}</td>
+                                <td class="px-4 py-3 text-sm text-base-content/60">{{ $asset->location?->name ?? '—' }}</td>
                                 <td class="px-4 py-3 text-sm"><x-status-badge :status="$asset->status" /></td>
-                                <td class="px-4 py-3 text-sm text-gray-500">{{ $asset->condition?->label() ?? '—' }}</td>
+                                <td class="px-4 py-3 text-sm text-base-content/60">{{ $asset->condition?->label() ?? '—' }}</td>
                                 <td class="px-4 py-3 text-right text-sm whitespace-nowrap">
-                                    <a href="{{ route('assets.show', $asset) }}" wire:navigate class="text-indigo-600 hover:text-indigo-900">{{ __('View') }}</a>
+                                    <a href="{{ route('assets.show', $asset) }}" wire:navigate class="text-primary hover:text-primary">{{ __('View') }}</a>
                                     @can('update', $asset)
-                                        <a href="{{ route('assets.edit', $asset) }}" wire:navigate class="ms-3 text-gray-600 hover:text-gray-900">{{ __('Edit') }}</a>
+                                        <a href="{{ route('assets.edit', $asset) }}" wire:navigate class="ms-3 text-base-content/70 hover:text-base-content">{{ __('Edit') }}</a>
                                     @endcan
                                     @can('delete', $asset)
                                         <button wire:click="delete({{ $asset->id }})" wire:confirm="{{ __('Delete this asset?') }}" class="ms-3 text-red-600 hover:text-red-900">{{ __('Delete') }}</button>
@@ -175,7 +175,7 @@ new #[Layout('layouts.app')] class extends Component
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="7" class="px-4 py-10 text-center text-sm text-gray-500">{{ __('No assets found.') }}</td>
+                                <td colspan="7" class="px-4 py-10 text-center text-sm text-base-content/60">{{ __('No assets found.') }}</td>
                             </tr>
                         @endforelse
                     </tbody>
@@ -183,7 +183,7 @@ new #[Layout('layouts.app')] class extends Component
             </div>
 
             @if ($assets->hasPages())
-                <div class="border-t border-gray-100 px-4 py-3">
+                <div class="border-t border-base-300 px-4 py-3">
                     {{ $assets->links() }}
                 </div>
             @endif

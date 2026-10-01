@@ -57,9 +57,9 @@ new #[Layout('layouts.app')] class extends Component
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
         <x-page-header :title="__('Activity')" :subtitle="__('Audit trail of changes across the system.')" />
 
-        <div class="bg-white shadow sm:rounded-lg p-4">
+        <div class="card bg-base-100 shadow-sm p-4">
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                <select wire:model.live="log" class="block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
+                <select wire:model.live="log" class="select select-bordered w-full block w-full border-base-300 focus:border-primary focus:ring-primary rounded-md shadow-sm">
                     <option value="">{{ __('All logs') }}</option>
                     @foreach ($logs as $name)
                         <option value="{{ $name }}">{{ ucfirst($name) }}</option>
@@ -71,37 +71,37 @@ new #[Layout('layouts.app')] class extends Component
             </div>
         </div>
 
-        <div class="bg-white shadow sm:rounded-lg overflow-hidden">
+        <div class="card bg-base-100 shadow-sm overflow-hidden">
             <div class="overflow-x-auto">
-                <table class="min-w-full divide-y divide-gray-200">
-                    <thead class="bg-gray-50">
+                <table class="table table-sm">
+                    <thead class="bg-base-200">
                         <tr>
-                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('When') }}</th>
-                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Log') }}</th>
-                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Event') }}</th>
-                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Description') }}</th>
-                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('By') }}</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-base-content/60 uppercase tracking-wider">{{ __('When') }}</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-base-content/60 uppercase tracking-wider">{{ __('Log') }}</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-base-content/60 uppercase tracking-wider">{{ __('Event') }}</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-base-content/60 uppercase tracking-wider">{{ __('Description') }}</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-base-content/60 uppercase tracking-wider">{{ __('By') }}</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-gray-100">
+                    <tbody class="divide-y divide-base-300">
                         @forelse ($activities as $activity)
                             <tr wire:key="activity-{{ $activity->id }}">
-                                <td class="px-4 py-3 text-sm text-gray-500 whitespace-nowrap">{{ $activity->created_at?->format('d M Y H:i') }}</td>
-                                <td class="px-4 py-3 text-sm text-gray-500">{{ $activity->log_name ? ucfirst($activity->log_name) : '—' }}</td>
-                                <td class="px-4 py-3 text-sm text-gray-500">{{ $activity->event ? ucfirst($activity->event) : '—' }}</td>
-                                <td class="px-4 py-3 text-sm text-gray-900">
+                                <td class="px-4 py-3 text-sm text-base-content/60 whitespace-nowrap">{{ $activity->created_at?->format('d M Y H:i') }}</td>
+                                <td class="px-4 py-3 text-sm text-base-content/60">{{ $activity->log_name ? ucfirst($activity->log_name) : '—' }}</td>
+                                <td class="px-4 py-3 text-sm text-base-content/60">{{ $activity->event ? ucfirst($activity->event) : '—' }}</td>
+                                <td class="px-4 py-3 text-sm text-base-content">
                                     {{ $activity->description }}
                                     @if ($activity->subject)
-                                        <span class="block text-xs text-gray-400">
+                                        <span class="block text-xs text-base-content/50">
                                             {{ class_basename($activity->subject_type) }} #{{ $activity->subject_id }}
                                         </span>
                                     @endif
                                 </td>
-                                <td class="px-4 py-3 text-sm text-gray-500">{{ $activity->causer?->name ?? __('System') }}</td>
+                                <td class="px-4 py-3 text-sm text-base-content/60">{{ $activity->causer?->name ?? __('System') }}</td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="5" class="px-4 py-10 text-center text-sm text-gray-500">{{ __('No activity recorded.') }}</td>
+                                <td colspan="5" class="px-4 py-10 text-center text-sm text-base-content/60">{{ __('No activity recorded.') }}</td>
                             </tr>
                         @endforelse
                     </tbody>
@@ -109,7 +109,7 @@ new #[Layout('layouts.app')] class extends Component
             </div>
 
             @if ($activities->hasPages())
-                <div class="border-t border-gray-100 px-4 py-3">
+                <div class="border-t border-base-300 px-4 py-3">
                     {{ $activities->links() }}
                 </div>
             @endif

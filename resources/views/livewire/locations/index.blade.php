@@ -124,8 +124,8 @@ new #[Layout('layouts.app')] class extends Component
     <div class="max-w-5xl mx-auto sm:px-6 lg:px-8 space-y-6">
         <x-page-header :title="__('Locations')" :subtitle="__('Track where assets physically live.')" />
 
-        <div class="bg-white shadow sm:rounded-lg p-6">
-            <h3 class="text-lg font-medium text-gray-900">
+        <div class="card bg-base-100 shadow-sm p-6">
+            <h3 class="text-lg font-medium text-base-content">
                 {{ $editingId ? __('Edit location') : __('New location') }}
             </h3>
 
@@ -144,7 +144,7 @@ new #[Layout('layouts.app')] class extends Component
 
                 <div>
                     <x-input-label for="parent_id" :value="__('Parent')" />
-                    <select wire:model="parent_id" id="parent_id" class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
+                    <select wire:model="parent_id" id="parent_id" class="select select-bordered w-full mt-1 block w-full border-base-300 focus:border-primary focus:ring-primary rounded-md shadow-sm">
                         <option value="">{{ __('— None —') }}</option>
                         @foreach ($parents as $parent)
                             <option value="{{ $parent->id }}">{{ $parent->full_name }}</option>
@@ -162,7 +162,7 @@ new #[Layout('layouts.app')] class extends Component
                 <div class="sm:col-span-2 flex items-center gap-3">
                     <x-primary-button>{{ $editingId ? __('Update') : __('Create') }}</x-primary-button>
                     @if ($editingId)
-                        <button type="button" wire:click="cancel" class="text-sm text-gray-600 hover:text-gray-900">
+                        <button type="button" wire:click="cancel" class="text-sm text-base-content/70 hover:text-base-content">
                             {{ __('Cancel') }}
                         </button>
                     @endif
@@ -170,30 +170,30 @@ new #[Layout('layouts.app')] class extends Component
             </form>
         </div>
 
-        <div class="bg-white shadow sm:rounded-lg overflow-hidden">
-            <table class="min-w-full divide-y divide-gray-200">
-                <thead class="bg-gray-50">
+        <div class="card bg-base-100 shadow-sm overflow-hidden">
+            <table class="table table-sm">
+                <thead class="bg-base-200">
                     <tr>
-                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Name') }}</th>
-                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Code') }}</th>
-                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Assets') }}</th>
+                        <th class="px-4 py-2 text-left text-xs font-medium text-base-content/60 uppercase tracking-wider">{{ __('Name') }}</th>
+                        <th class="px-4 py-2 text-left text-xs font-medium text-base-content/60 uppercase tracking-wider">{{ __('Code') }}</th>
+                        <th class="px-4 py-2 text-left text-xs font-medium text-base-content/60 uppercase tracking-wider">{{ __('Assets') }}</th>
                         <th class="px-4 py-2"></th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-gray-100">
+                <tbody class="divide-y divide-base-300">
                     @forelse ($locations as $location)
                         <tr wire:key="location-{{ $location->id }}">
-                            <td class="px-4 py-2 text-sm text-gray-900">{{ $location->full_name }}</td>
-                            <td class="px-4 py-2 text-sm text-gray-500">{{ $location->code ?: '—' }}</td>
-                            <td class="px-4 py-2 text-sm text-gray-500">{{ $location->assets_count }}</td>
+                            <td class="px-4 py-2 text-sm text-base-content">{{ $location->full_name }}</td>
+                            <td class="px-4 py-2 text-sm text-base-content/60">{{ $location->code ?: '—' }}</td>
+                            <td class="px-4 py-2 text-sm text-base-content/60">{{ $location->assets_count }}</td>
                             <td class="px-4 py-2 text-right text-sm whitespace-nowrap">
-                                <button wire:click="edit({{ $location->id }})" class="text-indigo-600 hover:text-indigo-900">{{ __('Edit') }}</button>
+                                <button wire:click="edit({{ $location->id }})" class="text-primary hover:text-primary">{{ __('Edit') }}</button>
                                 <button wire:click="delete({{ $location->id }})" wire:confirm="{{ __('Delete this location?') }}" class="ms-3 text-red-600 hover:text-red-900">{{ __('Delete') }}</button>
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="4" class="px-4 py-6 text-center text-sm text-gray-500">{{ __('No locations yet.') }}</td>
+                            <td colspan="4" class="px-4 py-6 text-center text-sm text-base-content/60">{{ __('No locations yet.') }}</td>
                         </tr>
                     @endforelse
                 </tbody>

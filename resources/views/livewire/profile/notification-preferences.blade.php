@@ -35,24 +35,24 @@ new class extends Component
 
 <section>
     <header>
-        <h2 class="text-lg font-medium text-gray-900">{{ __('Email alerts') }}</h2>
-        <p class="mt-1 text-sm text-gray-600">{{ __('Choose which parts of the daily alert digest you receive.') }}</p>
+        <h2 class="text-lg font-medium text-base-content">{{ __('Email alerts') }}</h2>
+        <p class="mt-1 text-sm text-base-content/70">{{ __('Choose which parts of the daily alert digest you receive.') }}</p>
     </header>
 
     <form wire:submit="update" class="mt-6 space-y-3">
         <label class="flex items-center gap-2">
-            <input type="checkbox" wire:model="notify_warranty_expiry" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500">
-            <span class="text-sm text-gray-700">{{ __('Warranties expiring within 30 days') }}</span>
+            <input type="checkbox" wire:model="notify_warranty_expiry" class="rounded border-base-300 text-primary shadow-sm focus:ring-primary">
+            <span class="text-sm text-base-content/80">{{ __('Warranties expiring within 30 days') }}</span>
         </label>
 
         <label class="flex items-center gap-2">
-            <input type="checkbox" wire:model="notify_maintenance_due" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500">
-            <span class="text-sm text-gray-700">{{ __('Maintenance due or overdue') }}</span>
+            <input type="checkbox" wire:model="notify_maintenance_due" class="rounded border-base-300 text-primary shadow-sm focus:ring-primary">
+            <span class="text-sm text-base-content/80">{{ __('Maintenance due or overdue') }}</span>
         </label>
 
         <label class="flex items-center gap-2">
-            <input type="checkbox" wire:model="notify_overdue_assignments" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500">
-            <span class="text-sm text-gray-700">{{ __('Overdue assignments') }}</span>
+            <input type="checkbox" wire:model="notify_overdue_assignments" class="rounded border-base-300 text-primary shadow-sm focus:ring-primary">
+            <span class="text-sm text-base-content/80">{{ __('Overdue assignments') }}</span>
         </label>
 
         <div class="flex items-center gap-4">

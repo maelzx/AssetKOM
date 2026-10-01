@@ -135,30 +135,30 @@ new #[Layout('layouts.app')] class extends Component
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
         <x-page-header :title="__('Import assets')" :subtitle="__('Upload a CSV, map the columns, dry-run, then import. Existing tags are updated.')" />
 
-        <div class="bg-white shadow sm:rounded-lg p-6 space-y-4">
+        <div class="card bg-base-100 shadow-sm p-6 space-y-4">
             <div class="flex flex-wrap items-end gap-3">
                 <div>
                     <x-input-label for="csv" :value="__('CSV file')" />
-                    <input wire:model="file" id="csv" type="file" accept=".csv,text/csv" class="mt-1 block text-sm text-gray-600" />
+                    <input wire:model="file" id="csv" type="file" accept=".csv,text/csv" class="mt-1 block text-sm text-base-content/70" />
                     <x-input-error :messages="$errors->get('file')" class="mt-1" />
                 </div>
                 <x-primary-button wire:click="parse">{{ __('Parse') }}</x-primary-button>
             </div>
 
             @if ($headers !== [])
-                <p class="text-sm text-gray-500">{{ trans_choice(':count column detected|:count columns detected', count($headers)) }}</p>
+                <p class="text-sm text-base-content/60">{{ trans_choice(':count column detected|:count columns detected', count($headers)) }}</p>
             @endif
         </div>
 
         @if ($headers !== [])
-            <div class="bg-white shadow sm:rounded-lg p-6 space-y-4">
-                <h3 class="text-lg font-medium text-gray-900">{{ __('Column mapping') }}</h3>
+            <div class="card bg-base-100 shadow-sm p-6 space-y-4">
+                <h3 class="text-lg font-medium text-base-content">{{ __('Column mapping') }}</h3>
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     @foreach ($fields as $field => $label)
                         <div>
                             <x-input-label :for="'map_'.$field" :value="$label" />
-                            <select wire:model="mapping.{{ $field }}" id="map_{{ $field }}" class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm text-sm">
+                            <select wire:model="mapping.{{ $field }}" id="map_{{ $field }}" class="select select-bordered w-full mt-1 block w-full border-base-300 focus:border-primary focus:ring-primary rounded-md shadow-sm text-sm">
                                 <option value="">{{ __('— none —') }}</option>
                                 @foreach ($headers as $header)
                                     <option value="{{ $header }}">{{ $header }}</option>
@@ -168,22 +168,22 @@ new #[Layout('layouts.app')] class extends Component
                     @endforeach
                 </div>
 
-                <div class="border-t border-gray-100 pt-4">
-                    <h4 class="text-sm font-medium text-gray-700">{{ __('Preview') }}</h4>
+                <div class="border-t border-base-300 pt-4">
+                    <h4 class="text-sm font-medium text-base-content/80">{{ __('Preview') }}</h4>
                     <div class="mt-2 overflow-x-auto">
-                        <table class="min-w-full divide-y divide-gray-200 text-xs">
-                            <thead class="bg-gray-50">
+                        <table class="table table-sm text-xs">
+                            <thead class="bg-base-200">
                                 <tr>
                                     @foreach ($headers as $header)
-                                        <th class="px-2 py-1 text-left font-medium text-gray-500">{{ $header }}</th>
+                                        <th class="px-2 py-1 text-left font-medium text-base-content/60">{{ $header }}</th>
                                     @endforeach
                                 </tr>
                             </thead>
-                            <tbody class="divide-y divide-gray-100">
+                            <tbody class="divide-y divide-base-300">
                                 @foreach ($preview as $row)
                                     <tr>
                                         @foreach ($headers as $header)
-                                            <td class="px-2 py-1 text-gray-600">{{ $row[$header] ?? '' }}</td>
+                                            <td class="px-2 py-1 text-base-content/70">{{ $row[$header] ?? '' }}</td>
                                         @endforeach
                                     </tr>
                                 @endforeach
@@ -200,32 +200,32 @@ new #[Layout('layouts.app')] class extends Component
         @endif
 
         @if ($report)
-            <div class="bg-white shadow sm:rounded-lg p-6 space-y-4">
-                <h3 class="text-lg font-medium text-gray-900">{{ __('Dry-run report') }}</h3>
+            <div class="card bg-base-100 shadow-sm p-6 space-y-4">
+                <h3 class="text-lg font-medium text-base-content">{{ __('Dry-run report') }}</h3>
                 <div class="flex flex-wrap gap-4 text-sm">
                     <span class="text-green-700">{{ __('Create') }}: <strong>{{ $report['summary']['create'] }}</strong></span>
                     <span class="text-blue-700">{{ __('Update') }}: <strong>{{ $report['summary']['update'] }}</strong></span>
                     <span class="text-red-700">{{ __('Errors') }}: <strong>{{ $report['summary']['errors'] }}</strong></span>
-                    <span class="text-gray-500">{{ __('Total') }}: <strong>{{ $report['summary']['total'] }}</strong></span>
+                    <span class="text-base-content/60">{{ __('Total') }}: <strong>{{ $report['summary']['total'] }}</strong></span>
                 </div>
 
                 <div class="overflow-x-auto">
-                    <table class="min-w-full divide-y divide-gray-200 text-sm">
-                        <thead class="bg-gray-50">
+                    <table class="table table-sm">
+                        <thead class="bg-base-200">
                             <tr>
-                                <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">{{ __('Line') }}</th>
-                                <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">{{ __('Tag') }}</th>
-                                <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">{{ __('Name') }}</th>
-                                <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">{{ __('Action') }}</th>
-                                <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">{{ __('Issues') }}</th>
+                                <th class="px-3 py-2 text-left text-xs font-medium text-base-content/60 uppercase">{{ __('Line') }}</th>
+                                <th class="px-3 py-2 text-left text-xs font-medium text-base-content/60 uppercase">{{ __('Tag') }}</th>
+                                <th class="px-3 py-2 text-left text-xs font-medium text-base-content/60 uppercase">{{ __('Name') }}</th>
+                                <th class="px-3 py-2 text-left text-xs font-medium text-base-content/60 uppercase">{{ __('Action') }}</th>
+                                <th class="px-3 py-2 text-left text-xs font-medium text-base-content/60 uppercase">{{ __('Issues') }}</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-gray-100">
+                        <tbody class="divide-y divide-base-300">
                             @foreach ($report['rows'] as $row)
                                 <tr class="{{ $row['errors'] ? 'bg-red-50' : '' }}">
-                                    <td class="px-3 py-1.5 text-gray-500">{{ $row['line'] }}</td>
-                                    <td class="px-3 py-1.5 font-mono text-gray-700">{{ $row['asset_tag'] ?: '—' }}</td>
-                                    <td class="px-3 py-1.5 text-gray-700">{{ $row['name'] ?: '—' }}</td>
+                                    <td class="px-3 py-1.5 text-base-content/60">{{ $row['line'] }}</td>
+                                    <td class="px-3 py-1.5 font-mono text-base-content/80">{{ $row['asset_tag'] ?: '—' }}</td>
+                                    <td class="px-3 py-1.5 text-base-content/80">{{ $row['name'] ?: '—' }}</td>
                                     <td class="px-3 py-1.5">
                                         <span class="text-xs {{ $row['action'] === 'update' ? 'text-blue-700' : 'text-green-700' }}">{{ ucfirst($row['action']) }}</span>
                                     </td>

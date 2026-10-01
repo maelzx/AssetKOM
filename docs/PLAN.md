@@ -149,20 +149,21 @@ Notes:
       auth-only scan route and authorized attachment downloads, no unescaped output
 - [x] `./vendor/bin/pint`, full suite green (158 tests), README updated
 
-### Phase 11 — UI Polish & Design System
+### Phase 11 — UI Polish & Design System ✅
 Decisions (locked): **daisyUI 5**, **modern spacious / card-based**, placeholder branding
 (wordmark + neutral accent until real brand is supplied). Functionality-first until here.
 - [x] Upgrade **Tailwind v3 → v4** (Breeze scaffolded v3; daisyUI 5 requires v4)
-- [ ] Install daisyUI 5, define a light theme + dark mode toggle
-- [ ] Replace the default Breeze app shell/nav with a branded spacious layout
-- [ ] Re-skin assets list/detail, assignments, maintenance, auth screens to daisyUI components
-- [ ] Placeholder logo/wordmark + accent color tokens
+- [x] Install daisyUI 5, light theme + dark mode toggle (persisted)
+- [x] Replace the default Breeze app shell/nav with a branded spacious layout
+- [x] Re-skin assets list/detail, assignments, maintenance, auth screens to daisyUI components
+- [x] Placeholder logo/wordmark + accent color tokens (`AssetKOM` wordmark, primary accent)
 
 ## Risks / watch items
 
-- **Tailwind v3 → v4 (done)**: upgraded to v4.3 (Breeze pinned v3). Some renamed utilities
-  (`shadow-sm`, `rounded-sm`, `focus:outline-none`) shift slightly; to be reconciled during
-  the Phase 11 daisyUI reskin. Verify visuals when reskinning.
+- **Tailwind v3 → v4 + daisyUI (done)**: upgraded to v4.3 and reskinned to daisyUI 5.
+  Theme is daisyUI `light` (default) + `dark` (prefers-color-scheme) with a persisted toggle;
+  indigo utilities were mapped to `primary`. Swap the `primary` token + `AssetKOM` wordmark
+  for real branding when available.
 - **Scope**: "all features in v1" is large; MVP line at Phase 5 protects a usable release.
 - **DB portability**: code runs on SQLite (dev) and MySQL (prod) — avoid engine-specific
   SQL; keep a MySQL smoke test in CI.

@@ -206,7 +206,7 @@ new #[Layout('layouts.app')] class extends Component
             <x-slot name="actions">
                 <x-status-badge :status="$asset->status" />
                 @can('update', $asset)
-                    <a href="{{ route('assets.edit', $asset) }}" wire:navigate class="inline-flex items-center rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-500">
+                    <a href="{{ route('assets.edit', $asset) }}" wire:navigate class="inline-flex items-center rounded-md bg-primary px-4 py-2 text-sm font-semibold text-white hover:bg-primary">
                         {{ __('Edit') }}
                     </a>
                 @endcan
@@ -220,8 +220,8 @@ new #[Layout('layouts.app')] class extends Component
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <div class="lg:col-span-2 space-y-6">
-                <div class="bg-white shadow sm:rounded-lg p-6 space-y-4">
-                    <h3 class="text-lg font-medium text-gray-900">{{ __('Overview') }}</h3>
+                <div class="card bg-base-100 shadow-sm p-6 space-y-4">
+                    <h3 class="text-lg font-medium text-base-content">{{ __('Overview') }}</h3>
 
                     @if ($asset->image_path)
                         <img src="{{ \Illuminate\Support\Facades\Storage::disk('public')->url($asset->image_path) }}" class="h-48 w-48 rounded object-cover" alt="">
@@ -229,70 +229,70 @@ new #[Layout('layouts.app')] class extends Component
 
                     <dl class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3 text-sm">
                         <div>
-                            <dt class="text-gray-500">{{ __('Category') }}</dt>
-                            <dd class="text-gray-900">{{ $asset->category?->full_name ?? '—' }}</dd>
+                            <dt class="text-base-content/60">{{ __('Category') }}</dt>
+                            <dd class="text-base-content">{{ $asset->category?->full_name ?? '—' }}</dd>
                         </div>
                         <div>
-                            <dt class="text-gray-500">{{ __('Current location') }}</dt>
-                            <dd class="text-gray-900">{{ $asset->location?->full_name ?? '—' }}</dd>
+                            <dt class="text-base-content/60">{{ __('Current location') }}</dt>
+                            <dd class="text-base-content">{{ $asset->location?->full_name ?? '—' }}</dd>
                         </div>
                         <div>
-                            <dt class="text-gray-500">{{ __('Condition') }}</dt>
-                            <dd class="text-gray-900">{{ $asset->condition?->label() ?? '—' }}</dd>
+                            <dt class="text-base-content/60">{{ __('Condition') }}</dt>
+                            <dd class="text-base-content">{{ $asset->condition?->label() ?? '—' }}</dd>
                         </div>
                         <div>
-                            <dt class="text-gray-500">{{ __('Serial number') }}</dt>
-                            <dd class="text-gray-900">{{ $asset->serial_number ?: '—' }}</dd>
+                            <dt class="text-base-content/60">{{ __('Serial number') }}</dt>
+                            <dd class="text-base-content">{{ $asset->serial_number ?: '—' }}</dd>
                         </div>
                         <div>
-                            <dt class="text-gray-500">{{ __('Manufacturer') }}</dt>
-                            <dd class="text-gray-900">{{ $asset->manufacturer ?: '—' }}</dd>
+                            <dt class="text-base-content/60">{{ __('Manufacturer') }}</dt>
+                            <dd class="text-base-content">{{ $asset->manufacturer ?: '—' }}</dd>
                         </div>
                         <div>
-                            <dt class="text-gray-500">{{ __('Model') }}</dt>
-                            <dd class="text-gray-900">{{ $asset->model ?: '—' }}</dd>
+                            <dt class="text-base-content/60">{{ __('Model') }}</dt>
+                            <dd class="text-base-content">{{ $asset->model ?: '—' }}</dd>
                         </div>
                         <div>
-                            <dt class="text-gray-500">{{ __('Supplier') }}</dt>
-                            <dd class="text-gray-900">{{ $asset->supplier ?: '—' }}</dd>
+                            <dt class="text-base-content/60">{{ __('Supplier') }}</dt>
+                            <dd class="text-base-content">{{ $asset->supplier ?: '—' }}</dd>
                         </div>
                         <div>
-                            <dt class="text-gray-500">{{ __('Added by') }}</dt>
-                            <dd class="text-gray-900">{{ $asset->creator?->name ?? '—' }} · {{ $asset->created_at?->format('d M Y') }}</dd>
+                            <dt class="text-base-content/60">{{ __('Added by') }}</dt>
+                            <dd class="text-base-content">{{ $asset->creator?->name ?? '—' }} · {{ $asset->created_at?->format('d M Y') }}</dd>
                         </div>
                     </dl>
 
                     @if ($asset->description)
-                        <div class="border-t border-gray-100 pt-4">
-                            <dt class="text-sm text-gray-500">{{ __('Description') }}</dt>
-                            <dd class="mt-1 text-sm text-gray-900 whitespace-pre-line">{{ $asset->description }}</dd>
+                        <div class="border-t border-base-300 pt-4">
+                            <dt class="text-sm text-base-content/60">{{ __('Description') }}</dt>
+                            <dd class="mt-1 text-sm text-base-content whitespace-pre-line">{{ $asset->description }}</dd>
                         </div>
                     @endif
                 </div>
 
-                <div class="bg-white shadow sm:rounded-lg p-6 space-y-4">
-                    <h3 class="text-lg font-medium text-gray-900">{{ __('Financials') }}</h3>
+                <div class="card bg-base-100 shadow-sm p-6 space-y-4">
+                    <h3 class="text-lg font-medium text-base-content">{{ __('Financials') }}</h3>
 
                     <dl class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3 text-sm">
                         <div>
-                            <dt class="text-gray-500">{{ __('Purchase date') }}</dt>
-                            <dd class="text-gray-900">{{ $asset->purchase_date?->format('d M Y') ?? '—' }}</dd>
+                            <dt class="text-base-content/60">{{ __('Purchase date') }}</dt>
+                            <dd class="text-base-content">{{ $asset->purchase_date?->format('d M Y') ?? '—' }}</dd>
                         </div>
                         <div>
-                            <dt class="text-gray-500">{{ __('Purchase cost') }}</dt>
-                            <dd class="text-gray-900">{{ $asset->purchase_cost !== null ? \App\Support\Money::format($asset->purchase_cost, $asset->currency) : '—' }}</dd>
+                            <dt class="text-base-content/60">{{ __('Purchase cost') }}</dt>
+                            <dd class="text-base-content">{{ $asset->purchase_cost !== null ? \App\Support\Money::format($asset->purchase_cost, $asset->currency) : '—' }}</dd>
                         </div>
                         <div>
-                            <dt class="text-gray-500">{{ __('Salvage value') }}</dt>
-                            <dd class="text-gray-900">{{ $asset->salvage_value !== null ? \App\Support\Money::format($asset->salvage_value, $asset->currency) : '—' }}</dd>
+                            <dt class="text-base-content/60">{{ __('Salvage value') }}</dt>
+                            <dd class="text-base-content">{{ $asset->salvage_value !== null ? \App\Support\Money::format($asset->salvage_value, $asset->currency) : '—' }}</dd>
                         </div>
                         <div>
-                            <dt class="text-gray-500">{{ __('Useful life') }}</dt>
-                            <dd class="text-gray-900">{{ $asset->useful_life_years ? $asset->useful_life_years.' '.__('years') : '—' }}</dd>
+                            <dt class="text-base-content/60">{{ __('Useful life') }}</dt>
+                            <dd class="text-base-content">{{ $asset->useful_life_years ? $asset->useful_life_years.' '.__('years') : '—' }}</dd>
                         </div>
                         <div>
-                            <dt class="text-gray-500">{{ __('Warranty expiry') }}</dt>
-                            <dd class="text-gray-900">
+                            <dt class="text-base-content/60">{{ __('Warranty expiry') }}</dt>
+                            <dd class="text-base-content">
                                 {{ $asset->warranty_expiry?->format('d M Y') ?? '—' }}
                                 @if ($asset->warranty_expiry && $asset->warranty_expiry->isPast())
                                     <span class="ms-1 text-xs text-red-600">{{ __('(expired)') }}</span>
@@ -302,78 +302,78 @@ new #[Layout('layouts.app')] class extends Component
                     </dl>
                 </div>
 
-                <div class="bg-white shadow sm:rounded-lg p-6 space-y-4">
-                    <h3 class="text-lg font-medium text-gray-900">{{ __('Depreciation') }}</h3>
+                <div class="card bg-base-100 shadow-sm p-6 space-y-4">
+                    <h3 class="text-lg font-medium text-base-content">{{ __('Depreciation') }}</h3>
 
                     @if ($isDepreciable)
                         <dl class="grid grid-cols-1 sm:grid-cols-3 gap-x-6 gap-y-3 text-sm">
                             <div>
-                                <dt class="text-gray-500">{{ __('Annual depreciation') }}</dt>
-                                <dd class="text-gray-900">{{ \App\Support\Money::format($annualDepreciation, $asset->currency) }}</dd>
+                                <dt class="text-base-content/60">{{ __('Annual depreciation') }}</dt>
+                                <dd class="text-base-content">{{ \App\Support\Money::format($annualDepreciation, $asset->currency) }}</dd>
                             </div>
                             <div>
-                                <dt class="text-gray-500">{{ __('Accumulated') }}</dt>
-                                <dd class="text-gray-900">{{ \App\Support\Money::format($accumulatedDepreciation, $asset->currency) }}</dd>
+                                <dt class="text-base-content/60">{{ __('Accumulated') }}</dt>
+                                <dd class="text-base-content">{{ \App\Support\Money::format($accumulatedDepreciation, $asset->currency) }}</dd>
                             </div>
                             <div>
-                                <dt class="text-gray-500">{{ __('Current book value') }}</dt>
-                                <dd class="font-semibold text-gray-900">{{ \App\Support\Money::format($bookValue, $asset->currency) }}</dd>
+                                <dt class="text-base-content/60">{{ __('Current book value') }}</dt>
+                                <dd class="font-semibold text-base-content">{{ \App\Support\Money::format($bookValue, $asset->currency) }}</dd>
                             </div>
                         </dl>
 
                         <div class="overflow-x-auto">
-                            <table class="min-w-full divide-y divide-gray-200 text-sm">
+                            <table class="table table-sm">
                                 <thead>
                                     <tr>
-                                        <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">{{ __('Year') }}</th>
-                                        <th class="px-3 py-2 text-right text-xs font-medium text-gray-500 uppercase">{{ __('Opening') }}</th>
-                                        <th class="px-3 py-2 text-right text-xs font-medium text-gray-500 uppercase">{{ __('Depreciation') }}</th>
-                                        <th class="px-3 py-2 text-right text-xs font-medium text-gray-500 uppercase">{{ __('Accumulated') }}</th>
-                                        <th class="px-3 py-2 text-right text-xs font-medium text-gray-500 uppercase">{{ __('Closing') }}</th>
+                                        <th class="px-3 py-2 text-left text-xs font-medium text-base-content/60 uppercase">{{ __('Year') }}</th>
+                                        <th class="px-3 py-2 text-right text-xs font-medium text-base-content/60 uppercase">{{ __('Opening') }}</th>
+                                        <th class="px-3 py-2 text-right text-xs font-medium text-base-content/60 uppercase">{{ __('Depreciation') }}</th>
+                                        <th class="px-3 py-2 text-right text-xs font-medium text-base-content/60 uppercase">{{ __('Accumulated') }}</th>
+                                        <th class="px-3 py-2 text-right text-xs font-medium text-base-content/60 uppercase">{{ __('Closing') }}</th>
                                     </tr>
                                 </thead>
-                                <tbody class="divide-y divide-gray-100">
+                                <tbody class="divide-y divide-base-300">
                                     @foreach ($depreciationSchedule as $row)
                                         <tr>
-                                            <td class="px-3 py-1.5 text-gray-700">{{ $row['year'] }}</td>
-                                            <td class="px-3 py-1.5 text-right text-gray-600">{{ \App\Support\Money::format($row['opening'], $asset->currency) }}</td>
-                                            <td class="px-3 py-1.5 text-right text-gray-600">{{ \App\Support\Money::format($row['depreciation'], $asset->currency) }}</td>
-                                            <td class="px-3 py-1.5 text-right text-gray-600">{{ \App\Support\Money::format($row['accumulated'], $asset->currency) }}</td>
-                                            <td class="px-3 py-1.5 text-right font-medium text-gray-900">{{ \App\Support\Money::format($row['closing'], $asset->currency) }}</td>
+                                            <td class="px-3 py-1.5 text-base-content/80">{{ $row['year'] }}</td>
+                                            <td class="px-3 py-1.5 text-right text-base-content/70">{{ \App\Support\Money::format($row['opening'], $asset->currency) }}</td>
+                                            <td class="px-3 py-1.5 text-right text-base-content/70">{{ \App\Support\Money::format($row['depreciation'], $asset->currency) }}</td>
+                                            <td class="px-3 py-1.5 text-right text-base-content/70">{{ \App\Support\Money::format($row['accumulated'], $asset->currency) }}</td>
+                                            <td class="px-3 py-1.5 text-right font-medium text-base-content">{{ \App\Support\Money::format($row['closing'], $asset->currency) }}</td>
                                         </tr>
                                     @endforeach
                                 </tbody>
                             </table>
                         </div>
                     @else
-                        <p class="text-sm text-gray-500">{{ __('Add a purchase cost, purchase date, and useful life to calculate depreciation.') }}</p>
+                        <p class="text-sm text-base-content/60">{{ __('Add a purchase cost, purchase date, and useful life to calculate depreciation.') }}</p>
                     @endif
                 </div>
 
                 @if (! empty($asset->custom_fields))
-                    <div class="bg-white shadow sm:rounded-lg p-6 space-y-4">
-                        <h3 class="text-lg font-medium text-gray-900">{{ __('Custom fields') }}</h3>
+                    <div class="card bg-base-100 shadow-sm p-6 space-y-4">
+                        <h3 class="text-lg font-medium text-base-content">{{ __('Custom fields') }}</h3>
 
                         <dl class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3 text-sm">
                             @foreach ($asset->custom_fields as $key => $value)
                                 <div>
-                                    <dt class="text-gray-500">{{ $key }}</dt>
-                                    <dd class="text-gray-900">{{ $value !== '' ? $value : '—' }}</dd>
+                                    <dt class="text-base-content/60">{{ $key }}</dt>
+                                    <dd class="text-base-content">{{ $value !== '' ? $value : '—' }}</dd>
                                 </div>
                             @endforeach
                         </dl>
                     </div>
                 @endif
 
-                <div class="bg-white shadow sm:rounded-lg p-6 space-y-4">
-                    <h3 class="text-lg font-medium text-gray-900">{{ __('Assignment history') }}</h3>
+                <div class="card bg-base-100 shadow-sm p-6 space-y-4">
+                    <h3 class="text-lg font-medium text-base-content">{{ __('Assignment history') }}</h3>
 
                     @forelse ($asset->assignments as $assignment)
-                        <div class="border-l-2 border-gray-200 pl-4 py-1" wire:key="assignment-{{ $assignment->id }}">
+                        <div class="border-l-2 border-base-300 pl-4 py-1" wire:key="assignment-{{ $assignment->id }}">
                             <div class="flex items-center justify-between">
-                                <p class="text-sm font-medium text-gray-900">
+                                <p class="text-sm font-medium text-base-content">
                                     {{ $assignment->assignable?->name ?? __('Unknown') }}
-                                    <span class="text-xs font-normal text-gray-400">
+                                    <span class="text-xs font-normal text-base-content/50">
                                         ({{ $assignment->assignable_type === \App\Models\User::class ? __('User') : __('Location') }})
                                     </span>
                                 </p>
@@ -381,7 +381,7 @@ new #[Layout('layouts.app')] class extends Component
                                     {{ $assignment->status->label() }}
                                 </span>
                             </div>
-                            <p class="text-xs text-gray-500">
+                            <p class="text-xs text-base-content/60">
                                 {{ __('Out') }}: {{ $assignment->assigned_at?->format('d M Y') }}
                                 @if ($assignment->expected_return_at)
                                     · {{ __('Due') }}: {{ $assignment->expected_return_at->format('d M Y') }}
@@ -391,21 +391,21 @@ new #[Layout('layouts.app')] class extends Component
                                 @endif
                             </p>
                             @if ($assignment->checkout_notes)
-                                <p class="text-xs text-gray-500">{{ $assignment->checkout_notes }}</p>
+                                <p class="text-xs text-base-content/60">{{ $assignment->checkout_notes }}</p>
                             @endif
                             @if ($assignment->checkin_notes)
-                                <p class="text-xs text-gray-500">{{ __('Returned') }}: {{ $assignment->checkin_notes }}</p>
+                                <p class="text-xs text-base-content/60">{{ __('Returned') }}: {{ $assignment->checkin_notes }}</p>
                             @endif
                         </div>
                     @empty
-                        <p class="text-sm text-gray-500">{{ __('No assignments yet.') }}</p>
+                        <p class="text-sm text-base-content/60">{{ __('No assignments yet.') }}</p>
                     @endforelse
                 </div>
             </div>
 
             <div class="space-y-6">
-                <div class="bg-white shadow sm:rounded-lg p-6 space-y-3">
-                    <h3 class="text-lg font-medium text-gray-900">{{ __('Assignment') }}</h3>
+                <div class="card bg-base-100 shadow-sm p-6 space-y-3">
+                    <h3 class="text-lg font-medium text-base-content">{{ __('Assignment') }}</h3>
 
                     @error('assignment')
                         <div class="rounded-md bg-red-50 p-3 text-sm text-red-700">{{ $message }}</div>
@@ -415,11 +415,11 @@ new #[Layout('layouts.app')] class extends Component
 
                     @if ($active)
                         <div class="text-sm space-y-1">
-                            <p class="text-gray-500">{{ __('Currently with') }}</p>
-                            <p class="font-medium text-gray-900">{{ $active->assignable?->name ?? __('Unknown') }}</p>
-                            <p class="text-xs text-gray-500">{{ __('Since') }} {{ $active->assigned_at?->format('d M Y') }}</p>
+                            <p class="text-base-content/60">{{ __('Currently with') }}</p>
+                            <p class="font-medium text-base-content">{{ $active->assignable?->name ?? __('Unknown') }}</p>
+                            <p class="text-xs text-base-content/60">{{ __('Since') }} {{ $active->assigned_at?->format('d M Y') }}</p>
                             @if ($active->expected_return_at)
-                                <p class="text-xs {{ $active->isOverdue() ? 'text-red-600 font-semibold' : 'text-gray-500' }}">
+                                <p class="text-xs {{ $active->isOverdue() ? 'text-red-600 font-semibold' : 'text-base-content/60' }}">
                                     {{ __('Due') }} {{ $active->expected_return_at->format('d M Y') }}
                                     @if ($active->isOverdue()) ({{ __('overdue') }}) @endif
                                 </p>
@@ -427,10 +427,10 @@ new #[Layout('layouts.app')] class extends Component
                         </div>
 
                         @if ($showCheckin)
-                            <form wire:submit="checkin" class="space-y-3 border-t border-gray-100 pt-3">
+                            <form wire:submit="checkin" class="space-y-3 border-t border-base-300 pt-3">
                                 <div>
                                     <x-input-label for="conditionIn" :value="__('Condition on return')" />
-                                    <select wire:model="conditionIn" id="conditionIn" class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
+                                    <select wire:model="conditionIn" id="conditionIn" class="select select-bordered w-full mt-1 block w-full border-base-300 focus:border-primary focus:ring-primary rounded-md shadow-sm">
                                         @foreach (\App\Enums\AssetCondition::cases() as $condition)
                                             <option value="{{ $condition->value }}">{{ $condition->label() }}</option>
                                         @endforeach
@@ -439,11 +439,11 @@ new #[Layout('layouts.app')] class extends Component
                                 </div>
                                 <div>
                                     <x-input-label for="checkinNotes" :value="__('Notes')" />
-                                    <textarea wire:model="checkinNotes" id="checkinNotes" rows="2" class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"></textarea>
+                                    <textarea wire:model="checkinNotes" id="checkinNotes" rows="2" class="textarea textarea-bordered w-full mt-1 block w-full border-base-300 focus:border-primary focus:ring-primary rounded-md shadow-sm"></textarea>
                                 </div>
                                 <div class="flex items-center gap-3">
                                     <x-primary-button>{{ __('Check in') }}</x-primary-button>
-                                    <button type="button" wire:click="cancelCheckin" class="text-sm text-gray-600 hover:text-gray-900">{{ __('Cancel') }}</button>
+                                    <button type="button" wire:click="cancelCheckin" class="text-sm text-base-content/70 hover:text-base-content">{{ __('Cancel') }}</button>
                                 </div>
                             </form>
                         @else
@@ -452,13 +452,13 @@ new #[Layout('layouts.app')] class extends Component
                             </button>
                         @endif
                     @else
-                        <p class="text-sm text-gray-500">{{ __('This asset is available for checkout.') }}</p>
+                        <p class="text-sm text-base-content/60">{{ __('This asset is available for checkout.') }}</p>
 
                         @if ($showCheckout)
-                            <form wire:submit="checkout" class="space-y-3 border-t border-gray-100 pt-3">
+                            <form wire:submit="checkout" class="space-y-3 border-t border-base-300 pt-3">
                                 <div>
                                     <x-input-label for="assignableType" :value="__('Assign to')" />
-                                    <select wire:model.live="assignableType" id="assignableType" class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
+                                    <select wire:model.live="assignableType" id="assignableType" class="select select-bordered w-full mt-1 block w-full border-base-300 focus:border-primary focus:ring-primary rounded-md shadow-sm">
                                         <option value="user">{{ __('A person') }}</option>
                                         <option value="location">{{ __('A location') }}</option>
                                     </select>
@@ -466,7 +466,7 @@ new #[Layout('layouts.app')] class extends Component
 
                                 <div>
                                     <x-input-label for="assignableId" :value="$assignableType === 'user' ? __('Person') : __('Location')" />
-                                    <select wire:model="assignableId" id="assignableId" class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
+                                    <select wire:model="assignableId" id="assignableId" class="select select-bordered w-full mt-1 block w-full border-base-300 focus:border-primary focus:ring-primary rounded-md shadow-sm">
                                         <option value="">{{ __('— Select —') }}</option>
                                         @foreach ($assignableType === 'user' ? $users : $locations as $option)
                                             <option value="{{ $option->id }}">{{ $option->name }}</option>
@@ -483,7 +483,7 @@ new #[Layout('layouts.app')] class extends Component
 
                                 <div>
                                     <x-input-label for="conditionOut" :value="__('Condition out')" />
-                                    <select wire:model="conditionOut" id="conditionOut" class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
+                                    <select wire:model="conditionOut" id="conditionOut" class="select select-bordered w-full mt-1 block w-full border-base-300 focus:border-primary focus:ring-primary rounded-md shadow-sm">
                                         @foreach (\App\Enums\AssetCondition::cases() as $condition)
                                             <option value="{{ $condition->value }}">{{ $condition->label() }}</option>
                                         @endforeach
@@ -492,48 +492,48 @@ new #[Layout('layouts.app')] class extends Component
 
                                 <div>
                                     <x-input-label for="checkoutNotes" :value="__('Notes')" />
-                                    <textarea wire:model="checkoutNotes" id="checkoutNotes" rows="2" class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"></textarea>
+                                    <textarea wire:model="checkoutNotes" id="checkoutNotes" rows="2" class="textarea textarea-bordered w-full mt-1 block w-full border-base-300 focus:border-primary focus:ring-primary rounded-md shadow-sm"></textarea>
                                 </div>
 
                                 <div class="flex items-center gap-3">
                                     <x-primary-button>{{ __('Check out') }}</x-primary-button>
-                                    <button type="button" wire:click="cancelCheckout" class="text-sm text-gray-600 hover:text-gray-900">{{ __('Cancel') }}</button>
+                                    <button type="button" wire:click="cancelCheckout" class="text-sm text-base-content/70 hover:text-base-content">{{ __('Cancel') }}</button>
                                 </div>
                             </form>
                         @else
-                            <button wire:click="openCheckout" class="w-full rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-500">
+                            <button wire:click="openCheckout" class="w-full rounded-md bg-primary px-4 py-2 text-sm font-semibold text-white hover:bg-primary">
                                 {{ __('Check out') }}
                             </button>
                         @endif
                     @endif
                 </div>
 
-                <div class="bg-white shadow sm:rounded-lg p-6 text-center">
-                    <h3 class="text-lg font-medium text-gray-900">{{ __('QR label') }}</h3>
+                <div class="card bg-base-100 shadow-sm p-6 text-center">
+                    <h3 class="text-lg font-medium text-base-content">{{ __('QR label') }}</h3>
                     <img src="{{ $qr }}" class="mx-auto mt-3 h-40 w-40" alt="{{ $asset->asset_tag }}">
-                    <p class="mt-2 font-mono text-xs text-gray-500">{{ $asset->asset_tag }}</p>
-                    <a href="{{ route('labels.single', $asset) }}" target="_blank" class="mt-3 inline-flex items-center rounded-md bg-white px-4 py-2 text-sm font-semibold text-gray-700 shadow-sm hover:bg-gray-50">
+                    <p class="mt-2 font-mono text-xs text-base-content/60">{{ $asset->asset_tag }}</p>
+                    <a href="{{ route('labels.single', $asset) }}" target="_blank" class="mt-3 inline-flex items-center rounded-md bg-base-100 px-4 py-2 text-sm font-semibold text-base-content/80 shadow-sm hover:bg-base-200">
                         {{ __('Print label') }}
                     </a>
                 </div>
 
-                <div class="bg-white shadow sm:rounded-lg p-6">
+                <div class="card bg-base-100 shadow-sm p-6">
                     <livewire:attachments.panel :attachable="$asset" wire:key="attachments-asset-{{ $asset->id }}" />
                 </div>
 
-                <div class="bg-white shadow sm:rounded-lg p-6">
-                    <h3 class="text-lg font-medium text-gray-900">{{ __('Activity') }}</h3>
+                <div class="card bg-base-100 shadow-sm p-6">
+                    <h3 class="text-lg font-medium text-base-content">{{ __('Activity') }}</h3>
                     <ul class="mt-3 space-y-2">
                         @forelse ($activities as $activity)
-                            <li class="text-xs text-gray-600" wire:key="asset-activity-{{ $activity->id }}">
-                                <span class="font-medium text-gray-800">{{ ucfirst($activity->event) }}</span>
+                            <li class="text-xs text-base-content/70" wire:key="asset-activity-{{ $activity->id }}">
+                                <span class="font-medium text-base-content">{{ ucfirst($activity->event) }}</span>
                                 — {{ $activity->created_at?->format('d M Y H:i') }}
                                 @if ($activity->causer)
                                     · {{ $activity->causer->name }}
                                 @endif
                             </li>
                         @empty
-                            <li class="text-sm text-gray-500">{{ __('No changes recorded yet.') }}</li>
+                            <li class="text-sm text-base-content/60">{{ __('No changes recorded yet.') }}</li>
                         @endforelse
                     </ul>
                 </div>

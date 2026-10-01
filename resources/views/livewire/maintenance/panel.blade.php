@@ -124,11 +124,11 @@ new class extends Component
     }
 }; ?>
 
-<div class="bg-white shadow sm:rounded-lg p-6 space-y-4">
+<div class="card bg-base-100 shadow-sm p-6 space-y-4">
     <div class="flex items-center justify-between">
-        <h3 class="text-lg font-medium text-gray-900">{{ __('Maintenance') }}</h3>
+        <h3 class="text-lg font-medium text-base-content">{{ __('Maintenance') }}</h3>
         @unless ($showForm)
-            <button wire:click="$set('showForm', true)" class="text-sm text-indigo-600 hover:text-indigo-900">
+            <button wire:click="$set('showForm', true)" class="text-sm text-primary hover:text-primary">
                 {{ __('+ Log maintenance') }}
             </button>
         @endunless
@@ -139,11 +139,11 @@ new class extends Component
     @enderror
 
     @if ($showForm)
-        <form wire:submit="create" class="space-y-3 border-t border-gray-100 pt-3">
+        <form wire:submit="create" class="space-y-3 border-t border-base-300 pt-3">
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                     <x-input-label for="mt_type" :value="__('Type')" />
-                    <select wire:model="type" id="mt_type" class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
+                    <select wire:model="type" id="mt_type" class="select select-bordered w-full mt-1 block w-full border-base-300 focus:border-primary focus:ring-primary rounded-md shadow-sm">
                         @foreach ($types as $option)
                             <option value="{{ $option->value }}">{{ $option->label() }}</option>
                         @endforeach
@@ -169,7 +169,7 @@ new class extends Component
                 </div>
                 <div>
                     <x-input-label for="mt_performer" :value="__('Performed by')" />
-                    <select wire:model="performed_by" id="mt_performer" class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
+                    <select wire:model="performed_by" id="mt_performer" class="select select-bordered w-full mt-1 block w-full border-base-300 focus:border-primary focus:ring-primary rounded-md shadow-sm">
                         <option value="">{{ __('— Unassigned —') }}</option>
                         @foreach ($performers as $person)
                             <option value="{{ $person->id }}">{{ $person->name }}</option>
@@ -186,7 +186,7 @@ new class extends Component
                 </div>
                 <div>
                     <x-input-label for="mt_currency" :value="__('Currency')" />
-                    <select wire:model="currency" id="mt_currency" class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
+                    <select wire:model="currency" id="mt_currency" class="select select-bordered w-full mt-1 block w-full border-base-300 focus:border-primary focus:ring-primary rounded-md shadow-sm">
                         @foreach ($currencies as $option)
                             <option value="{{ $option->value }}">{{ $option->value }}</option>
                         @endforeach
@@ -196,30 +196,30 @@ new class extends Component
 
             <div>
                 <x-input-label for="mt_description" :value="__('Description')" />
-                <textarea wire:model="description" id="mt_description" rows="2" class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"></textarea>
+                <textarea wire:model="description" id="mt_description" rows="2" class="textarea textarea-bordered w-full mt-1 block w-full border-base-300 focus:border-primary focus:ring-primary rounded-md shadow-sm"></textarea>
             </div>
 
             <div class="flex items-center gap-3">
                 <x-primary-button>{{ __('Save') }}</x-primary-button>
-                <button type="button" wire:click="$set('showForm', false)" class="text-sm text-gray-600 hover:text-gray-900">{{ __('Cancel') }}</button>
+                <button type="button" wire:click="$set('showForm', false)" class="text-sm text-base-content/70 hover:text-base-content">{{ __('Cancel') }}</button>
             </div>
         </form>
     @endif
 
     <div class="space-y-3">
         @forelse ($records as $record)
-            <div class="rounded-md border border-gray-100 p-3" wire:key="maintenance-{{ $record->id }}">
+            <div class="rounded-md border border-base-300 p-3" wire:key="maintenance-{{ $record->id }}">
                 <div class="flex items-start justify-between gap-2">
                     <div>
-                        <p class="text-sm font-medium text-gray-900">{{ $record->title }}</p>
-                        <p class="text-xs text-gray-500">
+                        <p class="text-sm font-medium text-base-content">{{ $record->title }}</p>
+                        <p class="text-xs text-base-content/60">
                             {{ $record->type->label() }}
                             @if ($record->scheduled_at) · {{ $record->scheduled_at->format('d M Y') }} @endif
                             @if ($record->vendor) · {{ $record->vendor }} @endif
                             @if ($record->cost !== null) · {{ \App\Support\Money::format($record->cost, $record->currency) }} @endif
                         </p>
                         @if ($record->notes)
-                            <p class="mt-1 text-xs text-gray-500 whitespace-pre-line">{{ $record->notes }}</p>
+                            <p class="mt-1 text-xs text-base-content/60 whitespace-pre-line">{{ $record->notes }}</p>
                         @endif
                     </div>
                     <span class="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium {{ $record->status->color() }}">
@@ -231,22 +231,22 @@ new class extends Component
                     @if ($record->status === \App\Enums\MaintenanceStatus::Scheduled)
                         <button wire:click="start({{ $record->id }})" class="text-yellow-700 hover:text-yellow-900">{{ __('Start') }}</button>
                         <button wire:click="complete({{ $record->id }})" class="text-green-700 hover:text-green-900">{{ __('Complete') }}</button>
-                        <button wire:click="cancel({{ $record->id }})" class="text-gray-600 hover:text-gray-900">{{ __('Cancel') }}</button>
+                        <button wire:click="cancel({{ $record->id }})" class="text-base-content/70 hover:text-base-content">{{ __('Cancel') }}</button>
                     @elseif ($record->status === \App\Enums\MaintenanceStatus::InProgress)
                         <button wire:click="complete({{ $record->id }})" class="text-green-700 hover:text-green-900">{{ __('Complete') }}</button>
-                        <button wire:click="cancel({{ $record->id }})" class="text-gray-600 hover:text-gray-900">{{ __('Cancel') }}</button>
+                        <button wire:click="cancel({{ $record->id }})" class="text-base-content/70 hover:text-base-content">{{ __('Cancel') }}</button>
                     @endif
                     @can('delete', $record)
                         <button wire:click="delete({{ $record->id }})" wire:confirm="{{ __('Delete this maintenance record?') }}" class="text-red-600 hover:text-red-900">{{ __('Delete') }}</button>
                     @endcan
                 </div>
 
-                <div class="mt-3 border-t border-gray-100 pt-3">
+                <div class="mt-3 border-t border-base-300 pt-3">
                     <livewire:attachments.panel :attachable="$record" wire:key="attachments-maintenance-{{ $record->id }}" />
                 </div>
             </div>
         @empty
-            <p class="text-sm text-gray-500">{{ __('No maintenance records.') }}</p>
+            <p class="text-sm text-base-content/60">{{ __('No maintenance records.') }}</p>
         @endforelse
     </div>
 </div>
