@@ -133,9 +133,9 @@ Notes:
 - [x] Straight-line book value calculation
 - [x] Depreciation display on asset detail + report
 
-### Phase 8 — Notifications & Alerts (new)
-- [ ] Warranty expiring soon, maintenance due, overdue assignments
-- [ ] Scheduler + queued mail; notification preferences
+### Phase 8 — Notifications & Alerts (new) ✅
+- [x] Warranty expiring soon, maintenance due, overdue assignments
+- [x] Scheduler + queued mail; notification preferences
 
 ### Phase 9 — CSV Import (v1.1 candidate)
 - [ ] Column mapping UI + dry-run + per-row error report

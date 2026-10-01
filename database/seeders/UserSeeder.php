@@ -14,9 +14,9 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         $users = [
-            ['name' => 'System Administrator', 'email' => 'admin@assetkom.test', 'role' => Role::Admin],
-            ['name' => 'Asset Manager', 'email' => 'manager@assetkom.test', 'role' => Role::Manager],
-            ['name' => 'General Staff', 'email' => 'staff@assetkom.test', 'role' => Role::Staff],
+            ['name' => 'System Administrator', 'email' => 'admin@assetkom.test', 'role' => Role::Admin, 'notify' => true],
+            ['name' => 'Asset Manager', 'email' => 'manager@assetkom.test', 'role' => Role::Manager, 'notify' => true],
+            ['name' => 'General Staff', 'email' => 'staff@assetkom.test', 'role' => Role::Staff, 'notify' => false],
         ];
 
         foreach ($users as $user) {
@@ -27,6 +27,9 @@ class UserSeeder extends Seeder
                     'role' => $user['role'],
                     'email_verified_at' => now(),
                     'password' => 'password',
+                    'notify_warranty_expiry' => $user['notify'],
+                    'notify_maintenance_due' => $user['notify'],
+                    'notify_overdue_assignments' => $user['notify'],
                 ],
             );
         }
