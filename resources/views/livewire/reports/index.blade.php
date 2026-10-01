@@ -36,7 +36,32 @@ new #[Layout('layouts.app')] class extends Component
                 ->pluck('total', 'currency'),
             'activeAssignments' => AssetAssignment::active()->count(),
             'overdueAssignments' => AssetAssignment::overdue()->count(),
+            'depreciationTotals' => $this->depreciationTotals(),
         ];
+    }
+
+    /**
+     * @return array<string, array{purchase: float, accumulated: float, book: float}>
+     */
+    protected function depreciationTotals(): array
+    {
+        $calculator = app(\App\Services\DepreciationCalculator::class);
+        $totals = [];
+
+        Asset::query()
+            ->whereNotNull('purchase_cost')
+            ->whereNotNull('purchase_date')
+            ->whereNotNull('useful_life_years')
+            ->cursor()
+            ->each(function (Asset $asset) use ($calculator, &$totals): void {
+                $currency = $asset->currency->value;
+                $totals[$currency] ??= ['purchase' => 0.0, 'accumulated' => 0.0, 'book' => 0.0];
+                $totals[$currency]['purchase'] += (float) $asset->purchase_cost;
+                $totals[$currency]['accumulated'] += $calculator->accumulated($asset) ?? 0.0;
+                $totals[$currency]['book'] += $calculator->bookValue($asset) ?? 0.0;
+            });
+
+        return $totals;
     }
 }; ?>
 
@@ -97,6 +122,36 @@ new #[Layout('layouts.app')] class extends Component
                         <span class="font-medium {{ $overdueAssignments > 0 ? 'text-red-600' : 'text-gray-900' }}">{{ $overdueAssignments }}</span>
                     </div>
                 </div>
+            </div>
+        </div>
+
+        <div class="bg-white shadow sm:rounded-lg overflow-hidden">
+            <div class="border-b border-gray-100 px-6 py-4">
+                <h3 class="text-lg font-medium text-gray-900">{{ __('Depreciation (straight-line)') }}</h3>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200 text-sm">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-2 text-left text-xs font-medium text-gray-500 uppercase">{{ __('Currency') }}</th>
+                            <th class="px-6 py-2 text-right text-xs font-medium text-gray-500 uppercase">{{ __('Purchase cost') }}</th>
+                            <th class="px-6 py-2 text-right text-xs font-medium text-gray-500 uppercase">{{ __('Accumulated') }}</th>
+                            <th class="px-6 py-2 text-right text-xs font-medium text-gray-500 uppercase">{{ __('Book value') }}</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-100">
+                        @forelse ($depreciationTotals as $currency => $totals)
+                            <tr>
+                                <td class="px-6 py-2 text-gray-700">{{ $currency }}</td>
+                                <td class="px-6 py-2 text-right text-gray-600">{{ Money::format($totals['purchase'], $currency) }}</td>
+                                <td class="px-6 py-2 text-right text-gray-600">{{ Money::format($totals['accumulated'], $currency) }}</td>
+                                <td class="px-6 py-2 text-right font-medium text-gray-900">{{ Money::format($totals['book'], $currency) }}</td>
+                            </tr>
+                        @empty
+                            <tr><td colspan="4" class="px-6 py-4 text-sm text-gray-500">{{ __('No depreciable assets.') }}</td></tr>
+                        @endforelse
+                    </tbody>
+                </table>
             </div>
         </div>
 

@@ -174,10 +174,17 @@ new #[Layout('layouts.app')] class extends Component
      */
     public function with(): array
     {
+        $depreciation = app(\App\Services\DepreciationCalculator::class);
+
         return [
             'users' => User::orderBy('name')->get(),
             'locations' => Location::orderBy('full_name')->get(),
             'qr' => AssetQrCode::dataUri($this->asset, 200),
+            'isDepreciable' => $depreciation->isDepreciable($this->asset),
+            'annualDepreciation' => $depreciation->annualAmount($this->asset),
+            'accumulatedDepreciation' => $depreciation->accumulated($this->asset),
+            'bookValue' => $depreciation->bookValue($this->asset),
+            'depreciationSchedule' => $depreciation->schedule($this->asset),
             'activities' => \Spatie\Activitylog\Models\Activity::query()
                 ->where('subject_type', $this->asset->getMorphClass())
                 ->where('subject_id', $this->asset->getKey())
@@ -293,6 +300,54 @@ new #[Layout('layouts.app')] class extends Component
                             </dd>
                         </div>
                     </dl>
+                </div>
+
+                <div class="bg-white shadow sm:rounded-lg p-6 space-y-4">
+                    <h3 class="text-lg font-medium text-gray-900">{{ __('Depreciation') }}</h3>
+
+                    @if ($isDepreciable)
+                        <dl class="grid grid-cols-1 sm:grid-cols-3 gap-x-6 gap-y-3 text-sm">
+                            <div>
+                                <dt class="text-gray-500">{{ __('Annual depreciation') }}</dt>
+                                <dd class="text-gray-900">{{ \App\Support\Money::format($annualDepreciation, $asset->currency) }}</dd>
+                            </div>
+                            <div>
+                                <dt class="text-gray-500">{{ __('Accumulated') }}</dt>
+                                <dd class="text-gray-900">{{ \App\Support\Money::format($accumulatedDepreciation, $asset->currency) }}</dd>
+                            </div>
+                            <div>
+                                <dt class="text-gray-500">{{ __('Current book value') }}</dt>
+                                <dd class="font-semibold text-gray-900">{{ \App\Support\Money::format($bookValue, $asset->currency) }}</dd>
+                            </div>
+                        </dl>
+
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-200 text-sm">
+                                <thead>
+                                    <tr>
+                                        <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">{{ __('Year') }}</th>
+                                        <th class="px-3 py-2 text-right text-xs font-medium text-gray-500 uppercase">{{ __('Opening') }}</th>
+                                        <th class="px-3 py-2 text-right text-xs font-medium text-gray-500 uppercase">{{ __('Depreciation') }}</th>
+                                        <th class="px-3 py-2 text-right text-xs font-medium text-gray-500 uppercase">{{ __('Accumulated') }}</th>
+                                        <th class="px-3 py-2 text-right text-xs font-medium text-gray-500 uppercase">{{ __('Closing') }}</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-gray-100">
+                                    @foreach ($depreciationSchedule as $row)
+                                        <tr>
+                                            <td class="px-3 py-1.5 text-gray-700">{{ $row['year'] }}</td>
+                                            <td class="px-3 py-1.5 text-right text-gray-600">{{ \App\Support\Money::format($row['opening'], $asset->currency) }}</td>
+                                            <td class="px-3 py-1.5 text-right text-gray-600">{{ \App\Support\Money::format($row['depreciation'], $asset->currency) }}</td>
+                                            <td class="px-3 py-1.5 text-right text-gray-600">{{ \App\Support\Money::format($row['accumulated'], $asset->currency) }}</td>
+                                            <td class="px-3 py-1.5 text-right font-medium text-gray-900">{{ \App\Support\Money::format($row['closing'], $asset->currency) }}</td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    @else
+                        <p class="text-sm text-gray-500">{{ __('Add a purchase cost, purchase date, and useful life to calculate depreciation.') }}</p>
+                    @endif
                 </div>
 
                 @if (! empty($asset->custom_fields))

@@ -5,17 +5,20 @@ namespace App\Http\Controllers;
 use App\Models\Asset;
 use App\Models\AssetAssignment;
 use App\Models\Maintenance;
+use App\Services\DepreciationCalculator;
 use League\Csv\Writer;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class ExportController extends Controller
 {
+    public function __construct(private readonly DepreciationCalculator $depreciation) {}
+
     public function assets(): StreamedResponse
     {
         $headers = [
             'Asset Tag', 'Name', 'Category', 'Location', 'Status', 'Condition', 'Serial Number',
-            'Manufacturer', 'Model', 'Purchase Date', 'Purchase Cost', 'Currency', 'Warranty Expiry',
-            'Supplier', 'Created At',
+            'Manufacturer', 'Model', 'Purchase Date', 'Purchase Cost', 'Currency',
+            'Accumulated Depreciation', 'Book Value', 'Warranty Expiry', 'Supplier', 'Created At',
         ];
 
         $rows = Asset::query()->with(['category', 'location'])->orderBy('asset_tag')->cursor()
@@ -32,6 +35,8 @@ class ExportController extends Controller
                 $asset->purchase_date?->toDateString(),
                 $asset->purchase_cost,
                 $asset->currency->value,
+                $this->depreciation->accumulated($asset),
+                $this->depreciation->bookValue($asset),
                 $asset->warranty_expiry?->toDateString(),
                 $asset->supplier,
                 $asset->created_at?->toDateTimeString(),

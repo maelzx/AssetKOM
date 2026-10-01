@@ -129,9 +129,9 @@ Notes:
 - [x] Printable label PDF (single + bulk)
 - [x] Scan-to-view page (authentication required)
 
-### Phase 7 — Depreciation
-- [ ] Straight-line book value calculation
-- [ ] Depreciation display on asset detail + report
+### Phase 7 — Depreciation ✅
+- [x] Straight-line book value calculation
+- [x] Depreciation display on asset detail + report
 
 ### Phase 8 — Notifications & Alerts (new)
 - [ ] Warranty expiring soon, maintenance due, overdue assignments
