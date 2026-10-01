@@ -11,3 +11,52 @@
 @theme {
     --font-sans: 'Figtree', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
 }
+
+@layer base {
+    :root {
+        font-synthesis: none;
+        text-rendering: optimizeLegibility;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+        background-image: radial-gradient(ellipse at top, color-mix(in oklab, var(--color-primary) 5%, transparent), transparent 34rem);
+        background-attachment: fixed;
+    }
+
+    :focus-visible {
+        outline: 3px solid color-mix(in oklab, var(--color-primary) 55%, transparent);
+        outline-offset: 2px;
+    }
+
+    ::selection {
+        background-color: color-mix(in oklab, var(--color-primary) 22%, white);
+    }
+}
+
+@layer components {
+    .card {
+        border: 1px solid color-mix(in oklab, var(--color-base-300) 78%, transparent);
+        border-radius: 1rem;
+        box-shadow: 0 1px 2px rgb(15 23 42 / 0.035), 0 8px 24px -18px rgb(15 23 42 / 0.2);
+    }
+
+    .btn,
+    .input,
+    .select,
+    .textarea {
+        transition: color 150ms ease, background-color 150ms ease, border-color 150ms ease, box-shadow 150ms ease, transform 150ms ease;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+            scroll-behavior: auto !important;
+            transition-duration: 0.01ms !important;
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+        }
+    }
+}

@@ -4,6 +4,8 @@
     <button
         type="button"
         @click="open = ! open"
+        :aria-expanded="open.toString()"
+        aria-haspopup="true"
         class="inline-flex items-center gap-1 rounded-lg px-3 py-2 text-sm font-medium transition {{ $active ? 'bg-primary text-primary-content' : 'text-base-content/70 hover:bg-base-200 hover:text-base-content' }}"
     >
         {{ $label }}
@@ -20,6 +22,7 @@
         x-transition:leave-end="opacity-0"
         class="absolute left-0 z-50 mt-2 w-52 rounded-box bg-base-100 p-1 shadow-lg ring-1 ring-base-300"
         style="display: none;"
+        @keydown.escape.window="open = false"
         @click="open = false"
     >
         {{ $slot }}

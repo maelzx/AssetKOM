@@ -16,7 +16,7 @@ new class extends Component
     }
 }; ?>
 
-<nav x-data="{ open: false }" class="sticky top-0 z-40 border-b border-base-300 bg-base-100/95 backdrop-blur">
+<nav x-data="{ open: false }" class="sticky top-0 z-40 border-b border-base-300/70 bg-base-100/90 shadow-sm shadow-base-content/5 backdrop-blur-xl">
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div class="flex h-16 items-center justify-between gap-4">
             <div class="flex items-center gap-6">
@@ -68,8 +68,9 @@ new class extends Component
                 <div class="hidden sm:block">
                     <x-dropdown align="right" width="48">
                         <x-slot name="trigger">
-                            <button class="btn btn-ghost gap-2">
-                                <div x-data="{{ json_encode(['name' => auth()->user()->name]) }}" x-text="name" x-on:profile-updated.window="name = $event.detail.name"></div>
+                            <button class="btn btn-ghost h-10 gap-2 rounded-xl px-2.5">
+                                <span class="grid size-7 place-items-center rounded-full bg-primary/10 text-xs font-bold text-primary" aria-hidden="true">{{ mb_strtoupper(mb_substr(auth()->user()->name, 0, 1)) }}</span>
+                                <span class="max-w-36 truncate" x-data="{{ json_encode(['name' => auth()->user()->name]) }}" x-text="name" x-on:profile-updated.window="name = $event.detail.name"></span>
                                 <svg class="h-4 w-4 opacity-60" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
                             </button>
                         </x-slot>
@@ -84,7 +85,7 @@ new class extends Component
                     </x-dropdown>
                 </div>
 
-                <button class="btn btn-ghost btn-square lg:hidden" @click="open = ! open" aria-label="{{ __('Menu') }}">
+                <button class="btn btn-ghost btn-square rounded-xl lg:hidden" @click="open = ! open" :aria-expanded="open.toString()" aria-controls="mobile-navigation" aria-label="{{ __('Menu') }}">
                     <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path :class="{'hidden': open, 'inline-flex': ! open }" class="inline-flex" stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
                         <path :class="{'hidden': ! open, 'inline-flex': open }" class="hidden" stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
@@ -94,7 +95,7 @@ new class extends Component
         </div>
     </div>
 
-    <div x-show="open" x-transition class="border-t border-base-300 bg-base-100 lg:hidden">
+    <div id="mobile-navigation" x-show="open" x-transition class="border-t border-base-300 bg-base-100 lg:hidden">
         <div class="mx-auto max-w-7xl space-y-1 px-4 py-3 sm:px-6">
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate>{{ __('Dashboard') }}</x-responsive-nav-link>
             <x-responsive-nav-link :href="route('assets.index')" :active="request()->routeIs('assets.*')" wire:navigate>{{ __('Assets') }}</x-responsive-nav-link>

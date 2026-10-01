@@ -27,7 +27,7 @@
             <livewire:layout.navigation />
 
             @if (isset($header))
-                <header class="border-b border-base-300 bg-base-100">
+                <header class="border-b border-base-300/70 bg-base-100/80 backdrop-blur">
                     <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
                         {{ $header }}
                     </div>
@@ -38,8 +38,11 @@
                 {{ $slot }}
             </main>
 
-            <footer class="mx-auto w-full max-w-7xl px-4 py-8 text-xs text-base-content/50 sm:px-6 lg:px-8">
-                {{ config('app.name', 'AssetKOM') }} · {{ now()->year }}
+            <footer class="mt-8 border-t border-base-300/70 bg-base-100/40">
+                <div class="mx-auto flex w-full max-w-7xl flex-col gap-1 px-4 py-5 text-xs text-base-content/50 sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8">
+                    <span>{{ config('app.name', 'AssetKOM') }}</span>
+                    <span>{{ __('Asset management workspace') }} · {{ now()->year }}</span>
+                </div>
             </footer>
         </div>
     </body>

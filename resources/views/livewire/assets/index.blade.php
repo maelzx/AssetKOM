@@ -97,44 +97,56 @@ new #[Layout('layouts.app')] class extends Component
         </x-page-header>
 
         <div class="card bg-base-100 shadow-sm p-4">
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
+            <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-6">
                 <div class="lg:col-span-2">
-                    <x-text-input wire:model.live.debounce.300ms="search" type="search" class="block w-full" placeholder="{{ __('Search tag, name, serial…') }}" />
+                    <label for="asset-search" class="sr-only">{{ __('Search assets') }}</label>
+                    <x-text-input wire:model.live.debounce.300ms="search" id="asset-search" type="search" class="block w-full" placeholder="{{ __('Search tag, name, serial…') }}" />
                 </div>
 
-                <select wire:model.live="category" class="select select-bordered w-full block w-full border-base-300 focus:border-primary focus:ring-primary rounded-md shadow-sm">
+                <label for="asset-category-filter" class="sr-only">{{ __('Category') }}</label>
+                <select wire:model.live="category" id="asset-category-filter" class="select select-bordered w-full border-base-300 shadow-sm focus:border-primary focus:ring-primary">
                     <option value="">{{ __('All categories') }}</option>
                     @foreach ($categories as $option)
                         <option value="{{ $option->id }}">{{ $option->full_name }}</option>
                     @endforeach
                 </select>
 
-                <select wire:model.live="location" class="select select-bordered w-full block w-full border-base-300 focus:border-primary focus:ring-primary rounded-md shadow-sm">
+                <label for="asset-location-filter" class="sr-only">{{ __('Location') }}</label>
+                <select wire:model.live="location" id="asset-location-filter" class="select select-bordered w-full border-base-300 shadow-sm focus:border-primary focus:ring-primary">
                     <option value="">{{ __('All locations') }}</option>
                     @foreach ($locations as $option)
                         <option value="{{ $option->id }}">{{ $option->full_name }}</option>
                     @endforeach
                 </select>
 
-                <select wire:model.live="status" class="select select-bordered w-full block w-full border-base-300 focus:border-primary focus:ring-primary rounded-md shadow-sm">
+                <label for="asset-status-filter" class="sr-only">{{ __('Status') }}</label>
+                <select wire:model.live="status" id="asset-status-filter" class="select select-bordered w-full border-base-300 shadow-sm focus:border-primary focus:ring-primary">
                     <option value="">{{ __('All statuses') }}</option>
                     @foreach ($statuses as $option)
                         <option value="{{ $option->value }}">{{ $option->label() }}</option>
                     @endforeach
                 </select>
 
-                <select wire:model.live="condition" class="select select-bordered w-full block w-full border-base-300 focus:border-primary focus:ring-primary rounded-md shadow-sm">
+                <label for="asset-condition-filter" class="sr-only">{{ __('Condition') }}</label>
+                <select wire:model.live="condition" id="asset-condition-filter" class="select select-bordered w-full border-base-300 shadow-sm focus:border-primary focus:ring-primary">
                     <option value="">{{ __('All conditions') }}</option>
                     @foreach ($conditions as $option)
                         <option value="{{ $option->value }}">{{ $option->label() }}</option>
                     @endforeach
                 </select>
+            </div>
 
-                <div class="flex items-center">
-                    <button type="button" wire:click="resetFilters" class="text-sm text-base-content/70 hover:text-base-content">
-                        {{ __('Reset filters') }}
+            <div class="mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-base-200 pt-3">
+                <p class="text-xs text-base-content/55" aria-live="polite">
+                    {{ __('Showing :from–:to of :total assets', ['from' => $assets->firstItem() ?? 0, 'to' => $assets->lastItem() ?? 0, 'total' => $assets->total()]) }}
+                    <span wire:loading class="ms-1 text-primary">{{ __('Updating…') }}</span>
+                </p>
+
+                @if ($search !== '' || $category || $location || $status !== '' || $condition !== '')
+                    <button type="button" wire:click="resetFilters" class="btn btn-ghost btn-xs rounded-lg text-base-content/70">
+                        {{ __('Clear filters') }}
                     </button>
-                </div>
+                @endif
             </div>
         </div>
 
