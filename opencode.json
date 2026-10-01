@@ -1,5 +1,18 @@
 {
-  "$schema": "https://opencode.ai/config.json",
-  "model": "deepseek/deepseek-flash",
-  "instructions": ["AGENTS.md"]
+    "$schema": "https://opencode.ai/config.json",
+    "model": "deepseek/deepseek-flash",
+    "instructions": [
+        "AGENTS.md"
+    ],
+    "mcp": {
+        "laravel-boost": {
+            "type": "local",
+            "enabled": true,
+            "command": [
+                "php",
+                "artisan",
+                "boost:mcp"
+            ]
+        }
+    }
 }
