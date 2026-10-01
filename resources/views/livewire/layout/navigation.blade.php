@@ -25,26 +25,31 @@ new class extends Component
                 <div class="hidden items-center gap-1 lg:flex">
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate>{{ __('Dashboard') }}</x-nav-link>
                     <x-nav-link :href="route('assets.index')" :active="request()->routeIs('assets.*')" wire:navigate>{{ __('Assets') }}</x-nav-link>
-                    <x-nav-link :href="route('assignments.index')" :active="request()->routeIs('assignments.*')" wire:navigate>{{ __('Assignments') }}</x-nav-link>
-                    <x-nav-link :href="route('maintenance.index')" :active="request()->routeIs('maintenance.*')" wire:navigate>{{ __('Maintenance') }}</x-nav-link>
-                    <x-nav-link :href="route('labels.index')" :active="request()->routeIs('labels.*')" wire:navigate>{{ __('Labels') }}</x-nav-link>
 
-                    @can('manage-assets')
-                        <x-nav-link :href="route('imports.assets')" :active="request()->routeIs('imports.*')" wire:navigate>{{ __('Import') }}</x-nav-link>
-                    @endcan
+                    <x-nav-group :label="__('Operations')" :active="request()->routeIs('assignments.*', 'maintenance.*', 'labels.*', 'imports.*')">
+                        <x-dropdown-link :href="route('assignments.index')" wire:navigate>{{ __('Assignments') }}</x-dropdown-link>
+                        <x-dropdown-link :href="route('maintenance.index')" wire:navigate>{{ __('Maintenance') }}</x-dropdown-link>
+                        <x-dropdown-link :href="route('labels.index')" wire:navigate>{{ __('Labels') }}</x-dropdown-link>
+                        @can('manage-assets')
+                            <x-dropdown-link :href="route('imports.assets')" wire:navigate>{{ __('Import') }}</x-dropdown-link>
+                        @endcan
+                    </x-nav-group>
 
                     @can('view-reports')
-                        <x-nav-link :href="route('reports.index')" :active="request()->routeIs('reports.*')" wire:navigate>{{ __('Reports') }}</x-nav-link>
-                        <x-nav-link :href="route('activity.index')" :active="request()->routeIs('activity.*')" wire:navigate>{{ __('Activity') }}</x-nav-link>
+                        <x-nav-group :label="__('Insights')" :active="request()->routeIs('reports.*', 'activity.*')">
+                            <x-dropdown-link :href="route('reports.index')" wire:navigate>{{ __('Reports') }}</x-dropdown-link>
+                            <x-dropdown-link :href="route('activity.index')" wire:navigate>{{ __('Activity') }}</x-dropdown-link>
+                        </x-nav-group>
                     @endcan
 
                     @can('manage-catalog')
-                        <x-nav-link :href="route('categories.index')" :active="request()->routeIs('categories.*')" wire:navigate>{{ __('Categories') }}</x-nav-link>
-                        <x-nav-link :href="route('locations.index')" :active="request()->routeIs('locations.*')" wire:navigate>{{ __('Locations') }}</x-nav-link>
-                    @endcan
-
-                    @can('manage-settings')
-                        <x-nav-link :href="route('settings')" :active="request()->routeIs('settings')" wire:navigate>{{ __('Settings') }}</x-nav-link>
+                        <x-nav-group :label="__('Admin')" :active="request()->routeIs('categories.*', 'locations.*', 'settings')">
+                            <x-dropdown-link :href="route('categories.index')" wire:navigate>{{ __('Categories') }}</x-dropdown-link>
+                            <x-dropdown-link :href="route('locations.index')" wire:navigate>{{ __('Locations') }}</x-dropdown-link>
+                            @can('manage-settings')
+                                <x-dropdown-link :href="route('settings')" wire:navigate>{{ __('Settings') }}</x-dropdown-link>
+                            @endcan
+                        </x-nav-group>
                     @endcan
                 </div>
             </div>
@@ -93,26 +98,28 @@ new class extends Component
         <div class="mx-auto max-w-7xl space-y-1 px-4 py-3 sm:px-6">
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate>{{ __('Dashboard') }}</x-responsive-nav-link>
             <x-responsive-nav-link :href="route('assets.index')" :active="request()->routeIs('assets.*')" wire:navigate>{{ __('Assets') }}</x-responsive-nav-link>
+
+            <p class="px-3 pt-3 pb-1 text-xs font-semibold uppercase tracking-wide text-base-content/40">{{ __('Operations') }}</p>
             <x-responsive-nav-link :href="route('assignments.index')" :active="request()->routeIs('assignments.*')" wire:navigate>{{ __('Assignments') }}</x-responsive-nav-link>
             <x-responsive-nav-link :href="route('maintenance.index')" :active="request()->routeIs('maintenance.*')" wire:navigate>{{ __('Maintenance') }}</x-responsive-nav-link>
             <x-responsive-nav-link :href="route('labels.index')" :active="request()->routeIs('labels.*')" wire:navigate>{{ __('Labels') }}</x-responsive-nav-link>
-
             @can('manage-assets')
                 <x-responsive-nav-link :href="route('imports.assets')" :active="request()->routeIs('imports.*')" wire:navigate>{{ __('Import') }}</x-responsive-nav-link>
             @endcan
 
             @can('view-reports')
+                <p class="px-3 pt-3 pb-1 text-xs font-semibold uppercase tracking-wide text-base-content/40">{{ __('Insights') }}</p>
                 <x-responsive-nav-link :href="route('reports.index')" :active="request()->routeIs('reports.*')" wire:navigate>{{ __('Reports') }}</x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('activity.index')" :active="request()->routeIs('activity.*')" wire:navigate>{{ __('Activity') }}</x-responsive-nav-link>
             @endcan
 
             @can('manage-catalog')
+                <p class="px-3 pt-3 pb-1 text-xs font-semibold uppercase tracking-wide text-base-content/40">{{ __('Admin') }}</p>
                 <x-responsive-nav-link :href="route('categories.index')" :active="request()->routeIs('categories.*')" wire:navigate>{{ __('Categories') }}</x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('locations.index')" :active="request()->routeIs('locations.*')" wire:navigate>{{ __('Locations') }}</x-responsive-nav-link>
-            @endcan
-
-            @can('manage-settings')
-                <x-responsive-nav-link :href="route('settings')" :active="request()->routeIs('settings')" wire:navigate>{{ __('Settings') }}</x-responsive-nav-link>
+                @can('manage-settings')
+                    <x-responsive-nav-link :href="route('settings')" :active="request()->routeIs('settings')" wire:navigate>{{ __('Settings') }}</x-responsive-nav-link>
+                @endcan
             @endcan
 
             <div class="mt-2 border-t border-base-300 pt-2 sm:hidden">
