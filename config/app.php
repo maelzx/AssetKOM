@@ -56,6 +56,19 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Development Server Port
+    |--------------------------------------------------------------------------
+    |
+    | The port used by the local development server started via the "dev"
+    | Artisan command. Kept out of the 8000 range to avoid clashing with
+    | other local services (e.g. PHP-FPM on 9000).
+    |
+    */
+
+    'port' => env('APP_PORT', 8000),
+
+    /*
+    |--------------------------------------------------------------------------
     | Application Timezone
     |--------------------------------------------------------------------------
     |
@@ -65,7 +78,7 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    'timezone' => env('APP_TIMEZONE', 'UTC'),
 
     /*
     |--------------------------------------------------------------------------
