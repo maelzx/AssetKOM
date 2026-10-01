@@ -27,8 +27,8 @@ new #[Layout('layouts.app')] class extends Component
             'available' => (int) ($statusCounts[AssetStatus::Available->value] ?? 0),
             'assigned' => (int) ($statusCounts[AssetStatus::Assigned->value] ?? 0),
             'underMaintenance' => (int) ($statusCounts[AssetStatus::Maintenance->value] ?? 0),
-            'byCategory' => Category::withCount('assets')->orderByDesc('assets_count')->take(6)->get(),
-            'byLocation' => Location::withCount('assets')->orderByDesc('assets_count')->take(6)->get(),
+            'byCategory' => Category::with('parent')->withCount('assets')->orderByDesc('assets_count')->take(6)->get(),
+            'byLocation' => Location::with('parent')->withCount('assets')->orderByDesc('assets_count')->take(6)->get(),
             'warrantyExpiring' => Asset::whereNotNull('warranty_expiry')
                 ->whereBetween('warranty_expiry', [today(), today()->addDays(30)])
                 ->count(),

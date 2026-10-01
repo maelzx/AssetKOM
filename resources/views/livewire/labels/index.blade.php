@@ -34,8 +34,8 @@ new #[Layout('layouts.app')] class extends Component
         $total = (clone $query)->count();
 
         return [
-            'categories' => Category::orderBy('name')->get(),
-            'locations' => Location::orderBy('full_name')->get(),
+            'categories' => Category::with('parent')->orderBy('name')->get(),
+            'locations' => Location::with('parent')->get()->sortBy('full_name'),
             'statuses' => AssetStatus::cases(),
             'total' => $total,
             'preview' => $query->limit(12)->get()->map(fn (Asset $asset): array => [

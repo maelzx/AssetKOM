@@ -44,6 +44,8 @@ new #[Layout('layouts.app')] class extends Component
 
     public function parse(AssetCsvImporter $importer): void
     {
+        Gate::authorize('manage-assets');
+
         $this->validate([
             'file' => ['required', 'file', 'max:5120', 'mimes:csv,txt'],
         ]);
@@ -59,6 +61,8 @@ new #[Layout('layouts.app')] class extends Component
 
     public function dryRun(AssetCsvImporter $importer): void
     {
+        Gate::authorize('manage-assets');
+
         if (! $this->ensureParsed()) {
             return;
         }
@@ -69,6 +73,8 @@ new #[Layout('layouts.app')] class extends Component
 
     public function import(AssetCsvImporter $importer): void
     {
+        Gate::authorize('manage-assets');
+
         if (! $this->ensureParsed()) {
             return;
         }

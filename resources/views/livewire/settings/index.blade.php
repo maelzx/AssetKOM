@@ -2,6 +2,7 @@
 
 use App\Enums\Currency;
 use App\Models\Setting;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\Rule;
 use Livewire\Attributes\Layout;
 use Livewire\Volt\Component;
@@ -20,6 +21,8 @@ new #[Layout('layouts.app')] class extends Component
 
     public function mount(): void
     {
+        Gate::authorize('manage-settings');
+
         $this->org_name = (string) Setting::get('org_name', 'AssetKOM');
         $this->default_currency = (string) Setting::get('default_currency', Currency::MYR->value);
         $this->base_currency = (string) Setting::get('base_currency', Currency::MYR->value);
@@ -29,6 +32,8 @@ new #[Layout('layouts.app')] class extends Component
 
     public function save(): void
     {
+        Gate::authorize('manage-settings');
+
         $validated = $this->validate([
             'org_name' => ['required', 'string', 'max:255'],
             'default_currency' => ['required', Rule::in(Currency::values())],

@@ -29,7 +29,7 @@ Volt::route('activity', 'activity.index')
     ->middleware(['auth', 'verified', 'can:view-reports'])
     ->name('activity.index');
 
-Route::middleware(['auth', 'verified', 'can:view-reports'])->group(function (): void {
+Route::middleware(['auth', 'verified', 'can:view-reports', 'throttle:30,1'])->group(function (): void {
     Route::get('exports/assets', [ExportController::class, 'assets'])->name('exports.assets');
     Route::get('exports/assignments', [ExportController::class, 'assignments'])->name('exports.assignments');
     Route::get('exports/maintenance', [ExportController::class, 'maintenance'])->name('exports.maintenance');
@@ -60,7 +60,7 @@ Volt::route('maintenance', 'maintenance.index')
     ->name('maintenance.index');
 
 Route::get('attachments/{attachment}', AttachmentDownloadController::class)
-    ->middleware('auth')
+    ->middleware(['auth', 'throttle:60,1'])
     ->name('attachments.download');
 
 Volt::route('labels', 'labels.index')
@@ -71,7 +71,7 @@ Volt::route('imports/assets', 'imports.assets')
     ->middleware(['auth', 'verified', 'can:manage-assets'])
     ->name('imports.assets');
 
-Route::middleware('auth')->group(function (): void {
+Route::middleware(['auth', 'throttle:30,1'])->group(function (): void {
     Route::get('a/{asset:asset_tag}', fn (Asset $asset) => redirect()->route('assets.show', $asset))
         ->name('scan.show');
 

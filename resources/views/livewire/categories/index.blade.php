@@ -111,7 +111,7 @@ new #[Layout('layouts.app')] class extends Component
 
         return [
             'categories' => Category::with('parent')->withCount('assets')->get()->sortBy('full_name'),
-            'parents' => Category::whereNotIn('id', $excluded)->get()->sortBy('full_name'),
+            'parents' => Category::with('parent')->whereNotIn('id', $excluded)->get()->sortBy('full_name'),
         ];
     }
 }; ?>

@@ -26,8 +26,8 @@ new #[Layout('layouts.app')] class extends Component
     {
         return [
             'statusCounts' => Asset::query()->selectRaw('status, count(*) as total')->groupBy('status')->pluck('total', 'status'),
-            'byCategory' => Category::withCount('assets')->orderByDesc('assets_count')->get(),
-            'byLocation' => Location::withCount('assets')->orderByDesc('assets_count')->get(),
+            'byCategory' => Category::with('parent')->withCount('assets')->orderByDesc('assets_count')->get(),
+            'byLocation' => Location::with('parent')->withCount('assets')->orderByDesc('assets_count')->get(),
             'maintenanceCounts' => Maintenance::query()->selectRaw('status, count(*) as total')->groupBy('status')->pluck('total', 'status'),
             'purchaseTotals' => Asset::query()
                 ->selectRaw('currency, sum(purchase_cost) as total')

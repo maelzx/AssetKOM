@@ -44,8 +44,8 @@ new #[Layout('layouts.app')] class extends Component
     protected function refreshAsset(): void
     {
         $this->asset = $this->asset->fresh()->load([
-            'category',
-            'location',
+            'category.parent',
+            'location.parent',
             'creator',
             'activeAssignment.assignable',
             'assignments.assignable',
@@ -178,7 +178,7 @@ new #[Layout('layouts.app')] class extends Component
 
         return [
             'users' => User::orderBy('name')->get(),
-            'locations' => Location::orderBy('full_name')->get(),
+            'locations' => Location::with('parent')->get()->sortBy('full_name'),
             'qr' => AssetQrCode::dataUri($this->asset, 200),
             'isDepreciable' => $depreciation->isDepreciable($this->asset),
             'annualDepreciation' => $depreciation->annualAmount($this->asset),

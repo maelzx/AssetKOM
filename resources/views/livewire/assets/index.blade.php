@@ -76,8 +76,8 @@ new #[Layout('layouts.app')] class extends Component
 
         return [
             'assets' => $assets,
-            'categories' => Category::orderBy('name')->get(),
-            'locations' => Location::orderBy('name')->get(),
+            'categories' => Category::with('parent')->orderBy('name')->get(),
+            'locations' => Location::with('parent')->orderBy('name')->get(),
             'statuses' => AssetStatus::cases(),
             'conditions' => AssetCondition::cases(),
         ];

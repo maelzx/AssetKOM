@@ -141,12 +141,13 @@ Notes:
 - [x] Column mapping UI + dry-run + per-row error report
 - [x] Idempotent by `asset_tag`
 
-### Phase 10 — Hardening & QA
-- [ ] Full permission matrix test coverage
-- [ ] Responsive/mobile pass (scanning is phone-first)
-- [ ] Performance: indexes, N+1 audit, pagination
-- [ ] Security review: authorization on every action, rate limiting, public endpoint exposure
-- [ ] `./vendor/bin/pint`, full suite green, docs updated
+### Phase 10 — Hardening & QA ✅
+- [x] Full permission matrix test coverage ([PermissionMatrixTest])
+- [x] Responsive/mobile pass (responsive grids, overflow-wrapped tables, mobile nav)
+- [x] Performance: query indexes (warranty/status/scheduled), N+1 enforced in tests, pagination
+- [x] Security review: authorization on every action, rate limits on export/label/scan/download,
+      auth-only scan route and authorized attachment downloads, no unescaped output
+- [x] `./vendor/bin/pint`, full suite green (158 tests), README updated
 
 ### Phase 11 — UI Polish & Design System
 Decisions (locked): **daisyUI 5**, **modern spacious / card-based**, placeholder branding
