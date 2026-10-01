@@ -84,12 +84,12 @@ new #[Layout('layouts.app')] class extends Component
     }
 }; ?>
 
-<div class="py-12">
+<div class="py-8 sm:py-10">
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
         <x-page-header :title="__('Assets')" :subtitle="__('Browse and manage the asset registry.')">
             <x-slot name="actions">
                 @can('create', \App\Models\Asset::class)
-                    <a href="{{ route('assets.create') }}" wire:navigate class="inline-flex items-center rounded-md bg-primary px-4 py-2 text-sm font-semibold text-white hover:bg-primary">
+                    <a href="{{ route('assets.create') }}" wire:navigate class="btn btn-primary btn-sm">
                         {{ __('New asset') }}
                     </a>
                 @endcan
@@ -138,8 +138,8 @@ new #[Layout('layouts.app')] class extends Component
             </div>
         </div>
 
-        <div class="card bg-base-100 shadow-sm overflow-hidden">
-            <div class="overflow-x-auto">
+        <x-data-table :paginator="$assets">
+            <x-slot name="table">
                 <table class="table table-sm">
                     <thead class="bg-base-200">
                         <tr>
@@ -164,12 +164,12 @@ new #[Layout('layouts.app')] class extends Component
                                 <td class="px-4 py-3 text-sm"><x-status-badge :status="$asset->status" /></td>
                                 <td class="px-4 py-3 text-sm text-base-content/60">{{ $asset->condition?->label() ?? '—' }}</td>
                                 <td class="px-4 py-3 text-right text-sm whitespace-nowrap">
-                                    <a href="{{ route('assets.show', $asset) }}" wire:navigate class="text-primary hover:text-primary">{{ __('View') }}</a>
+                                    <a href="{{ route('assets.show', $asset) }}" wire:navigate class="text-primary hover:opacity-80">{{ __('View') }}</a>
                                     @can('update', $asset)
                                         <a href="{{ route('assets.edit', $asset) }}" wire:navigate class="ms-3 text-base-content/70 hover:text-base-content">{{ __('Edit') }}</a>
                                     @endcan
                                     @can('delete', $asset)
-                                        <button wire:click="delete({{ $asset->id }})" wire:confirm="{{ __('Delete this asset?') }}" class="ms-3 text-red-600 hover:text-red-900">{{ __('Delete') }}</button>
+                                        <button wire:click="delete({{ $asset->id }})" wire:confirm="{{ __('Delete this asset?') }}" class="ms-3 text-error hover:opacity-80">{{ __('Delete') }}</button>
                                     @endcan
                                 </td>
                             </tr>
@@ -180,13 +180,41 @@ new #[Layout('layouts.app')] class extends Component
                         @endforelse
                     </tbody>
                 </table>
-            </div>
+            </x-slot>
 
-            @if ($assets->hasPages())
-                <div class="border-t border-base-300 px-4 py-3">
-                    {{ $assets->links() }}
-                </div>
-            @endif
-        </div>
+            <x-slot name="cards">
+                <ul class="divide-y divide-base-300">
+                    @forelse ($assets as $asset)
+                        <li class="space-y-2 p-4" wire:key="asset-card-{{ $asset->id }}">
+                            <div class="flex items-start justify-between gap-3">
+                                <div class="min-w-0">
+                                    <a href="{{ route('assets.show', $asset) }}" wire:navigate class="font-medium text-base-content hover:text-primary">{{ $asset->name }}</a>
+                                    <p class="font-mono text-xs text-base-content/50">{{ $asset->asset_tag }}</p>
+                                </div>
+                                <x-status-badge :status="$asset->status" />
+                            </div>
+
+                            <dl class="grid grid-cols-2 gap-x-4 gap-y-1 text-xs text-base-content/60">
+                                <div><dt class="inline text-base-content/40">{{ __('Category') }}:</dt> {{ $asset->category?->name ?? '—' }}</div>
+                                <div><dt class="inline text-base-content/40">{{ __('Location') }}:</dt> {{ $asset->location?->name ?? '—' }}</div>
+                                <div><dt class="inline text-base-content/40">{{ __('Condition') }}:</dt> {{ $asset->condition?->label() ?? '—' }}</div>
+                            </dl>
+
+                            <div class="flex items-center gap-4 pt-1 text-sm">
+                                <a href="{{ route('assets.show', $asset) }}" wire:navigate class="text-primary hover:opacity-80">{{ __('View') }}</a>
+                                @can('update', $asset)
+                                    <a href="{{ route('assets.edit', $asset) }}" wire:navigate class="text-base-content/70 hover:text-base-content">{{ __('Edit') }}</a>
+                                @endcan
+                                @can('delete', $asset)
+                                    <button wire:click="delete({{ $asset->id }})" wire:confirm="{{ __('Delete this asset?') }}" class="text-error hover:opacity-80">{{ __('Delete') }}</button>
+                                @endcan
+                            </div>
+                        </li>
+                    @empty
+                        <li class="p-8 text-center text-sm text-base-content/60">{{ __('No assets found.') }}</li>
+                    @endforelse
+                </ul>
+            </x-slot>
+        </x-data-table>
     </div>
 </div>

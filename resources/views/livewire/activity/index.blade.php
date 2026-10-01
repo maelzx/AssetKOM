@@ -53,7 +53,7 @@ new #[Layout('layouts.app')] class extends Component
     }
 }; ?>
 
-<div class="py-12">
+<div class="py-8 sm:py-10">
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
         <x-page-header :title="__('Activity')" :subtitle="__('Audit trail of changes across the system.')" />
 
@@ -71,8 +71,8 @@ new #[Layout('layouts.app')] class extends Component
             </div>
         </div>
 
-        <div class="card bg-base-100 shadow-sm overflow-hidden">
-            <div class="overflow-x-auto">
+        <x-data-table :paginator="$activities">
+            <x-slot name="table">
                 <table class="table table-sm">
                     <thead class="bg-base-200">
                         <tr>
@@ -106,13 +106,29 @@ new #[Layout('layouts.app')] class extends Component
                         @endforelse
                     </tbody>
                 </table>
-            </div>
+            </x-slot>
 
-            @if ($activities->hasPages())
-                <div class="border-t border-base-300 px-4 py-3">
-                    {{ $activities->links() }}
-                </div>
-            @endif
-        </div>
+            <x-slot name="cards">
+                <ul class="divide-y divide-base-300">
+                    @forelse ($activities as $activity)
+                        <li class="space-y-1 p-4" wire:key="activity-card-{{ $activity->id }}">
+                            <div class="flex items-center justify-between gap-2 text-xs text-base-content/50">
+                                <span>{{ $activity->created_at?->format('d M Y H:i') }}</span>
+                                <span>{{ $activity->log_name ? ucfirst($activity->log_name) : '—' }} · {{ $activity->event ? ucfirst($activity->event) : '—' }}</span>
+                            </div>
+                            <p class="text-sm text-base-content">
+                                {{ $activity->description }}
+                                @if ($activity->subject)
+                                    <span class="block text-xs text-base-content/50">{{ class_basename($activity->subject_type) }} #{{ $activity->subject_id }}</span>
+                                @endif
+                            </p>
+                            <p class="text-xs text-base-content/50">{{ __('By') }} {{ $activity->causer?->name ?? __('System') }}</p>
+                        </li>
+                    @empty
+                        <li class="p-8 text-center text-sm text-base-content/60">{{ __('No activity recorded.') }}</li>
+                    @endforelse
+                </ul>
+            </x-slot>
+        </x-data-table>
     </div>
 </div>

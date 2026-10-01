@@ -46,7 +46,7 @@ new #[Layout('layouts.app')] class extends Component
     }
 }; ?>
 
-<div class="py-12">
+<div class="py-8 sm:py-10">
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
         <x-page-header :title="__('QR Labels')" :subtitle="__('Generate scannable labels for your assets.')">
             <x-slot name="actions">
@@ -54,7 +54,7 @@ new #[Layout('layouts.app')] class extends Component
                     <a
                         href="{{ route('labels.bulk', array_filter(['category' => $category, 'location' => $location, 'status' => $status])) }}"
                         target="_blank"
-                        class="inline-flex items-center rounded-md bg-primary px-4 py-2 text-sm font-semibold text-white hover:bg-primary"
+                        class="btn btn-primary btn-sm"
                     >
                         {{ __('Download PDF (:count)', ['count' => min($total, 300)]) }}
                     </a>

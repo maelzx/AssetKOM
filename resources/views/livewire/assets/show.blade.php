@@ -196,7 +196,7 @@ new #[Layout('layouts.app')] class extends Component
     }
 }; ?>
 
-<div class="py-12">
+<div class="py-8 sm:py-10">
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
         @if (session('status'))
             <div class="rounded-md bg-green-50 p-4 text-sm text-green-800">{{ session('status') }}</div>
@@ -206,12 +206,12 @@ new #[Layout('layouts.app')] class extends Component
             <x-slot name="actions">
                 <x-status-badge :status="$asset->status" />
                 @can('update', $asset)
-                    <a href="{{ route('assets.edit', $asset) }}" wire:navigate class="inline-flex items-center rounded-md bg-primary px-4 py-2 text-sm font-semibold text-white hover:bg-primary">
+                    <a href="{{ route('assets.edit', $asset) }}" wire:navigate class="btn btn-primary btn-sm">
                         {{ __('Edit') }}
                     </a>
                 @endcan
                 @can('delete', $asset)
-                    <button wire:click="delete" wire:confirm="{{ __('Delete this asset?') }}" class="inline-flex items-center rounded-md border border-red-300 px-4 py-2 text-sm font-semibold text-red-700 hover:bg-red-50">
+                    <button wire:click="delete" wire:confirm="{{ __('Delete this asset?') }}" class="btn btn-outline btn-error btn-sm">
                         {{ __('Delete') }}
                     </button>
                 @endcan
@@ -512,7 +512,7 @@ new #[Layout('layouts.app')] class extends Component
                     <h3 class="text-lg font-medium text-base-content">{{ __('QR label') }}</h3>
                     <img src="{{ $qr }}" class="mx-auto mt-3 h-40 w-40" alt="{{ $asset->asset_tag }}">
                     <p class="mt-2 font-mono text-xs text-base-content/60">{{ $asset->asset_tag }}</p>
-                    <a href="{{ route('labels.single', $asset) }}" target="_blank" class="mt-3 inline-flex items-center rounded-md bg-base-100 px-4 py-2 text-sm font-semibold text-base-content/80 shadow-sm hover:bg-base-200">
+                    <a href="{{ route('labels.single', $asset) }}" target="_blank" class="mt-3 btn btn-outline btn-sm">
                         {{ __('Print label') }}
                     </a>
                 </div>

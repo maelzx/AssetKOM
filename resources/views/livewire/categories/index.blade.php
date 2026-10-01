@@ -116,7 +116,7 @@ new #[Layout('layouts.app')] class extends Component
     }
 }; ?>
 
-<div class="py-12">
+<div class="py-8 sm:py-10">
     <div class="max-w-5xl mx-auto sm:px-6 lg:px-8 space-y-6">
         <x-page-header :title="__('Categories')" :subtitle="__('Organise assets into a hierarchy.')" />
 
@@ -160,32 +160,53 @@ new #[Layout('layouts.app')] class extends Component
             </form>
         </div>
 
-        <div class="card bg-base-100 shadow-sm overflow-hidden">
-            <table class="table table-sm">
-                <thead class="bg-base-200">
-                    <tr>
-                        <th class="px-4 py-2 text-left text-xs font-medium text-base-content/60 uppercase tracking-wider">{{ __('Name') }}</th>
-                        <th class="px-4 py-2 text-left text-xs font-medium text-base-content/60 uppercase tracking-wider">{{ __('Assets') }}</th>
-                        <th class="px-4 py-2"></th>
-                    </tr>
-                </thead>
-                <tbody class="divide-y divide-base-300">
-                    @forelse ($categories as $category)
-                        <tr wire:key="category-{{ $category->id }}">
-                            <td class="px-4 py-2 text-sm text-base-content">{{ $category->full_name }}</td>
-                            <td class="px-4 py-2 text-sm text-base-content/60">{{ $category->assets_count }}</td>
-                            <td class="px-4 py-2 text-right text-sm whitespace-nowrap">
-                                <button wire:click="edit({{ $category->id }})" class="text-primary hover:text-primary">{{ __('Edit') }}</button>
-                                <button wire:click="delete({{ $category->id }})" wire:confirm="{{ __('Delete this category?') }}" class="ms-3 text-red-600 hover:text-red-900">{{ __('Delete') }}</button>
-                            </td>
-                        </tr>
-                    @empty
+        <x-data-table>
+            <x-slot name="table">
+                <table class="table table-sm">
+                    <thead class="bg-base-200">
                         <tr>
-                            <td colspan="3" class="px-4 py-6 text-center text-sm text-base-content/60">{{ __('No categories yet.') }}</td>
+                            <th class="px-4 py-2 text-left text-xs font-medium text-base-content/60 uppercase tracking-wider">{{ __('Name') }}</th>
+                            <th class="px-4 py-2 text-left text-xs font-medium text-base-content/60 uppercase tracking-wider">{{ __('Assets') }}</th>
+                            <th class="px-4 py-2"></th>
                         </tr>
+                    </thead>
+                    <tbody class="divide-y divide-base-300">
+                        @forelse ($categories as $category)
+                            <tr wire:key="category-{{ $category->id }}">
+                                <td class="px-4 py-2 text-sm text-base-content">{{ $category->full_name }}</td>
+                                <td class="px-4 py-2 text-sm text-base-content/60">{{ $category->assets_count }}</td>
+                                <td class="px-4 py-2 text-right text-sm whitespace-nowrap">
+                                    <button wire:click="edit({{ $category->id }})" class="text-primary hover:opacity-80">{{ __('Edit') }}</button>
+                                    <button wire:click="delete({{ $category->id }})" wire:confirm="{{ __('Delete this category?') }}" class="ms-3 text-error hover:opacity-80">{{ __('Delete') }}</button>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="3" class="px-4 py-6 text-center text-sm text-base-content/60">{{ __('No categories yet.') }}</td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </x-slot>
+
+            <x-slot name="cards">
+                <ul class="divide-y divide-base-300">
+                    @forelse ($categories as $category)
+                        <li class="flex items-center justify-between gap-3 p-4" wire:key="category-card-{{ $category->id }}">
+                            <div class="min-w-0">
+                                <p class="truncate text-sm font-medium text-base-content">{{ $category->full_name }}</p>
+                                <p class="text-xs text-base-content/50">{{ trans_choice(':count asset|:count assets', $category->assets_count) }}</p>
+                            </div>
+                            <div class="flex shrink-0 items-center gap-4 text-sm">
+                                <button wire:click="edit({{ $category->id }})" class="text-primary hover:opacity-80">{{ __('Edit') }}</button>
+                                <button wire:click="delete({{ $category->id }})" wire:confirm="{{ __('Delete this category?') }}" class="text-error hover:opacity-80">{{ __('Delete') }}</button>
+                            </div>
+                        </li>
+                    @empty
+                        <li class="p-8 text-center text-sm text-base-content/60">{{ __('No categories yet.') }}</li>
                     @endforelse
-                </tbody>
-            </table>
-        </div>
+                </ul>
+            </x-slot>
+        </x-data-table>
     </div>
 </div>

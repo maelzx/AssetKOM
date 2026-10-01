@@ -65,13 +65,13 @@ new #[Layout('layouts.app')] class extends Component
     }
 }; ?>
 
-<div class="py-12">
+<div class="py-8 sm:py-10">
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
         <x-page-header :title="__('Reports')" :subtitle="__('Summary figures and data exports.')">
             <x-slot name="actions">
-                <a href="{{ route('exports.assets') }}" class="inline-flex items-center rounded-md bg-primary px-4 py-2 text-sm font-semibold text-white hover:bg-primary">{{ __('Export assets') }}</a>
-                <a href="{{ route('exports.assignments') }}" class="inline-flex items-center rounded-md bg-base-100 px-4 py-2 text-sm font-semibold text-base-content/80 shadow-sm hover:bg-base-200">{{ __('Export assignments') }}</a>
-                <a href="{{ route('exports.maintenance') }}" class="inline-flex items-center rounded-md bg-base-100 px-4 py-2 text-sm font-semibold text-base-content/80 shadow-sm hover:bg-base-200">{{ __('Export maintenance') }}</a>
+                <a href="{{ route('exports.assets') }}" class="btn btn-primary btn-sm">{{ __('Export assets') }}</a>
+                <a href="{{ route('exports.assignments') }}" class="btn btn-outline btn-sm">{{ __('Export assignments') }}</a>
+                <a href="{{ route('exports.maintenance') }}" class="btn btn-outline btn-sm">{{ __('Export maintenance') }}</a>
             </x-slot>
         </x-page-header>
 

@@ -58,7 +58,7 @@ new #[Layout('layouts.app')] class extends Component
     }
 }; ?>
 
-<div class="py-12">
+<div class="py-8 sm:py-10">
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
         <x-page-header :title="__('Maintenance')" :subtitle="__('Scheduled and completed maintenance across all assets.')" />
 
@@ -85,8 +85,8 @@ new #[Layout('layouts.app')] class extends Component
             </div>
         </div>
 
-        <div class="card bg-base-100 shadow-sm overflow-hidden">
-            <div class="overflow-x-auto">
+        <x-data-table :paginator="$records">
+            <x-slot name="table">
                 <table class="table table-sm">
                     <thead class="bg-base-200">
                         <tr>
@@ -108,7 +108,7 @@ new #[Layout('layouts.app')] class extends Component
                                 </td>
                                 <td class="px-4 py-3 text-sm text-base-content/60">{{ $record->type->label() }}</td>
                                 <td class="px-4 py-3 text-sm text-base-content">{{ $record->title }}</td>
-                                <td class="px-4 py-3 text-sm {{ $record->isOverdue() ? 'font-semibold text-red-600' : 'text-base-content/60' }}">
+                                <td class="px-4 py-3 text-sm {{ $record->isOverdue() ? 'font-semibold text-error' : 'text-base-content/60' }}">
                                     {{ $record->scheduled_at?->format('d M Y') ?? '—' }}
                                     @if ($record->isOverdue())
                                         <span class="block text-xs">{{ __('overdue') }}</span>
@@ -124,7 +124,7 @@ new #[Layout('layouts.app')] class extends Component
                                 </td>
                                 <td class="px-4 py-3 text-right text-sm whitespace-nowrap">
                                     @if ($record->asset)
-                                        <a href="{{ route('assets.show', $record->asset) }}" wire:navigate class="text-primary hover:text-primary">{{ __('View asset') }}</a>
+                                        <a href="{{ route('assets.show', $record->asset) }}" wire:navigate class="text-primary hover:opacity-80">{{ __('View asset') }}</a>
                                     @endif
                                 </td>
                             </tr>
@@ -135,13 +135,38 @@ new #[Layout('layouts.app')] class extends Component
                         @endforelse
                     </tbody>
                 </table>
-            </div>
+            </x-slot>
 
-            @if ($records->hasPages())
-                <div class="border-t border-base-300 px-4 py-3">
-                    {{ $records->links() }}
-                </div>
-            @endif
-        </div>
+            <x-slot name="cards">
+                <ul class="divide-y divide-base-300">
+                    @forelse ($records as $record)
+                        <li class="space-y-2 p-4" wire:key="maintenance-card-{{ $record->id }}">
+                            <div class="flex items-start justify-between gap-3">
+                                <div class="min-w-0">
+                                    <p class="font-medium text-base-content">{{ $record->title }}</p>
+                                    <p class="text-xs text-base-content/60">{{ $record->type->label() }}</p>
+                                </div>
+                                <span class="inline-flex shrink-0 items-center rounded-full px-2 py-0.5 text-xs font-medium {{ $record->status->color() }}">
+                                    {{ $record->status->label() }}
+                                </span>
+                            </div>
+                            <dl class="grid grid-cols-2 gap-x-4 gap-y-1 text-xs text-base-content/60">
+                                <div><dt class="inline text-base-content/40">{{ __('Asset') }}:</dt> {{ $record->asset?->asset_tag ?? '—' }}</div>
+                                <div><dt class="inline text-base-content/40">{{ __('Cost') }}:</dt> {{ $record->cost !== null ? \App\Support\Money::format($record->cost, $record->currency) : '—' }}</div>
+                                <div class="{{ $record->isOverdue() ? 'font-semibold text-error' : '' }}">
+                                    <dt class="inline font-normal text-base-content/40">{{ __('Scheduled') }}:</dt> {{ $record->scheduled_at?->format('d M Y') ?? '—' }}
+                                    @if ($record->isOverdue()) ({{ __('overdue') }}) @endif
+                                </div>
+                            </dl>
+                            @if ($record->asset)
+                                <a href="{{ route('assets.show', $record->asset) }}" wire:navigate class="inline-block text-sm text-primary hover:opacity-80">{{ __('View asset') }}</a>
+                            @endif
+                        </li>
+                    @empty
+                        <li class="p-8 text-center text-sm text-base-content/60">{{ __('No maintenance records found.') }}</li>
+                    @endforelse
+                </ul>
+            </x-slot>
+        </x-data-table>
     </div>
 </div>

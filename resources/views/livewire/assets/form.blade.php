@@ -188,7 +188,7 @@ new #[Layout('layouts.app')] class extends Component
     }
 }; ?>
 
-<div class="py-12">
+<div class="py-8 sm:py-10">
     <div class="max-w-4xl mx-auto sm:px-6 lg:px-8 space-y-6">
         <x-page-header
             :title="$asset?->exists ? __('Edit asset') : __('New asset')"

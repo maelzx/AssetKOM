@@ -120,7 +120,7 @@ new #[Layout('layouts.app')] class extends Component
     }
 }; ?>
 
-<div class="py-12">
+<div class="py-8 sm:py-10">
     <div class="max-w-5xl mx-auto sm:px-6 lg:px-8 space-y-6">
         <x-page-header :title="__('Locations')" :subtitle="__('Track where assets physically live.')" />
 
@@ -170,34 +170,57 @@ new #[Layout('layouts.app')] class extends Component
             </form>
         </div>
 
-        <div class="card bg-base-100 shadow-sm overflow-hidden">
-            <table class="table table-sm">
-                <thead class="bg-base-200">
-                    <tr>
-                        <th class="px-4 py-2 text-left text-xs font-medium text-base-content/60 uppercase tracking-wider">{{ __('Name') }}</th>
-                        <th class="px-4 py-2 text-left text-xs font-medium text-base-content/60 uppercase tracking-wider">{{ __('Code') }}</th>
-                        <th class="px-4 py-2 text-left text-xs font-medium text-base-content/60 uppercase tracking-wider">{{ __('Assets') }}</th>
-                        <th class="px-4 py-2"></th>
-                    </tr>
-                </thead>
-                <tbody class="divide-y divide-base-300">
-                    @forelse ($locations as $location)
-                        <tr wire:key="location-{{ $location->id }}">
-                            <td class="px-4 py-2 text-sm text-base-content">{{ $location->full_name }}</td>
-                            <td class="px-4 py-2 text-sm text-base-content/60">{{ $location->code ?: '—' }}</td>
-                            <td class="px-4 py-2 text-sm text-base-content/60">{{ $location->assets_count }}</td>
-                            <td class="px-4 py-2 text-right text-sm whitespace-nowrap">
-                                <button wire:click="edit({{ $location->id }})" class="text-primary hover:text-primary">{{ __('Edit') }}</button>
-                                <button wire:click="delete({{ $location->id }})" wire:confirm="{{ __('Delete this location?') }}" class="ms-3 text-red-600 hover:text-red-900">{{ __('Delete') }}</button>
-                            </td>
-                        </tr>
-                    @empty
+        <x-data-table>
+            <x-slot name="table">
+                <table class="table table-sm">
+                    <thead class="bg-base-200">
                         <tr>
-                            <td colspan="4" class="px-4 py-6 text-center text-sm text-base-content/60">{{ __('No locations yet.') }}</td>
+                            <th class="px-4 py-2 text-left text-xs font-medium text-base-content/60 uppercase tracking-wider">{{ __('Name') }}</th>
+                            <th class="px-4 py-2 text-left text-xs font-medium text-base-content/60 uppercase tracking-wider">{{ __('Code') }}</th>
+                            <th class="px-4 py-2 text-left text-xs font-medium text-base-content/60 uppercase tracking-wider">{{ __('Assets') }}</th>
+                            <th class="px-4 py-2"></th>
                         </tr>
+                    </thead>
+                    <tbody class="divide-y divide-base-300">
+                        @forelse ($locations as $location)
+                            <tr wire:key="location-{{ $location->id }}">
+                                <td class="px-4 py-2 text-sm text-base-content">{{ $location->full_name }}</td>
+                                <td class="px-4 py-2 text-sm text-base-content/60">{{ $location->code ?: '—' }}</td>
+                                <td class="px-4 py-2 text-sm text-base-content/60">{{ $location->assets_count }}</td>
+                                <td class="px-4 py-2 text-right text-sm whitespace-nowrap">
+                                    <button wire:click="edit({{ $location->id }})" class="text-primary hover:opacity-80">{{ __('Edit') }}</button>
+                                    <button wire:click="delete({{ $location->id }})" wire:confirm="{{ __('Delete this location?') }}" class="ms-3 text-error hover:opacity-80">{{ __('Delete') }}</button>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="4" class="px-4 py-6 text-center text-sm text-base-content/60">{{ __('No locations yet.') }}</td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </x-slot>
+
+            <x-slot name="cards">
+                <ul class="divide-y divide-base-300">
+                    @forelse ($locations as $location)
+                        <li class="flex items-center justify-between gap-3 p-4" wire:key="location-card-{{ $location->id }}">
+                            <div class="min-w-0">
+                                <p class="truncate text-sm font-medium text-base-content">{{ $location->full_name }}</p>
+                                <p class="text-xs text-base-content/50">
+                                    {{ $location->code ?: '—' }} · {{ trans_choice(':count asset|:count assets', $location->assets_count) }}
+                                </p>
+                            </div>
+                            <div class="flex shrink-0 items-center gap-4 text-sm">
+                                <button wire:click="edit({{ $location->id }})" class="text-primary hover:opacity-80">{{ __('Edit') }}</button>
+                                <button wire:click="delete({{ $location->id }})" wire:confirm="{{ __('Delete this location?') }}" class="text-error hover:opacity-80">{{ __('Delete') }}</button>
+                            </div>
+                        </li>
+                    @empty
+                        <li class="p-8 text-center text-sm text-base-content/60">{{ __('No locations yet.') }}</li>
                     @endforelse
-                </tbody>
-            </table>
-        </div>
+                </ul>
+            </x-slot>
+        </x-data-table>
     </div>
 </div>
