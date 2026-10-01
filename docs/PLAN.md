@@ -124,10 +124,10 @@ Notes:
 
 > **MVP milestone reached here.**
 
-### Phase 6 — QR Labels
-- [ ] QR generation per asset
-- [ ] Printable label PDF (single + bulk)
-- [ ] Scan-to-view page (access model per open question #3)
+### Phase 6 — QR Labels ✅
+- [x] QR generation per asset
+- [x] Printable label PDF (single + bulk)
+- [x] Scan-to-view page (authentication required)
 
 ### Phase 7 — Depreciation
 - [ ] Straight-line book value calculation

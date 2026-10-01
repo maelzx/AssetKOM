@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\AttachmentDownloadController;
 use App\Http\Controllers\ExportController;
+use App\Http\Controllers\LabelController;
+use App\Models\Asset;
 use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
 
@@ -60,6 +62,18 @@ Volt::route('maintenance', 'maintenance.index')
 Route::get('attachments/{attachment}', AttachmentDownloadController::class)
     ->middleware('auth')
     ->name('attachments.download');
+
+Volt::route('labels', 'labels.index')
+    ->middleware(['auth', 'verified'])
+    ->name('labels.index');
+
+Route::middleware('auth')->group(function (): void {
+    Route::get('a/{asset:asset_tag}', fn (Asset $asset) => redirect()->route('assets.show', $asset))
+        ->name('scan.show');
+
+    Route::get('assets/{asset}/label', [LabelController::class, 'single'])->name('labels.single');
+    Route::get('labels/pdf', [LabelController::class, 'bulk'])->name('labels.bulk');
+});
 
 Volt::route('assets/create', 'assets.form')
     ->middleware(['auth', 'verified', 'can:manage-assets'])

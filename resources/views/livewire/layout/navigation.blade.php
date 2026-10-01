@@ -46,6 +46,10 @@ new class extends Component
                         {{ __('Maintenance') }}
                     </x-nav-link>
 
+                    <x-nav-link :href="route('labels.index')" :active="request()->routeIs('labels.*')" wire:navigate>
+                        {{ __('Labels') }}
+                    </x-nav-link>
+
                     @can('view-reports')
                         <x-nav-link :href="route('reports.index')" :active="request()->routeIs('reports.*')" wire:navigate>
                             {{ __('Reports') }}
@@ -133,6 +137,10 @@ new class extends Component
 
             <x-responsive-nav-link :href="route('maintenance.index')" :active="request()->routeIs('maintenance.*')" wire:navigate>
                 {{ __('Maintenance') }}
+            </x-responsive-nav-link>
+
+            <x-responsive-nav-link :href="route('labels.index')" :active="request()->routeIs('labels.*')" wire:navigate>
+                {{ __('Labels') }}
             </x-responsive-nav-link>
 
             @can('view-reports')

@@ -6,6 +6,7 @@ use App\Models\Asset;
 use App\Models\Location;
 use App\Models\User;
 use App\Services\AssetAssignmentService;
+use App\Support\AssetQrCode;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\Rule;
 use Livewire\Attributes\Layout;
@@ -176,6 +177,7 @@ new #[Layout('layouts.app')] class extends Component
         return [
             'users' => User::orderBy('name')->get(),
             'locations' => Location::orderBy('full_name')->get(),
+            'qr' => AssetQrCode::dataUri($this->asset, 200),
             'activities' => \Spatie\Activitylog\Models\Activity::query()
                 ->where('subject_type', $this->asset->getMorphClass())
                 ->where('subject_id', $this->asset->getKey())
@@ -449,6 +451,15 @@ new #[Layout('layouts.app')] class extends Component
                             </button>
                         @endif
                     @endif
+                </div>
+
+                <div class="bg-white shadow sm:rounded-lg p-6 text-center">
+                    <h3 class="text-lg font-medium text-gray-900">{{ __('QR label') }}</h3>
+                    <img src="{{ $qr }}" class="mx-auto mt-3 h-40 w-40" alt="{{ $asset->asset_tag }}">
+                    <p class="mt-2 font-mono text-xs text-gray-500">{{ $asset->asset_tag }}</p>
+                    <a href="{{ route('labels.single', $asset) }}" target="_blank" class="mt-3 inline-flex items-center rounded-md bg-white px-4 py-2 text-sm font-semibold text-gray-700 shadow-sm hover:bg-gray-50">
+                        {{ __('Print label') }}
+                    </a>
                 </div>
 
                 <div class="bg-white shadow sm:rounded-lg p-6">
