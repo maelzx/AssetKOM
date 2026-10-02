@@ -1,10 +1,10 @@
 @import 'tailwindcss';
 @plugin '@tailwindcss/forms';
 @plugin 'daisyui' {
-    themes: light --default, dark --prefersdark;
+    themes: assetkom --default, assetkom-dark --prefersdark;
 }
 @plugin 'daisyui/theme' {
-    name: 'light';
+    name: 'assetkom';
     default: true;
     prefersdark: false;
     color-scheme: light;
@@ -40,7 +40,7 @@
     --noise: 0;
 }
 @plugin 'daisyui/theme' {
-    name: 'dark';
+    name: 'assetkom-dark';
     default: false;
     prefersdark: true;
     color-scheme: dark;
@@ -78,7 +78,7 @@
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 
-@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
+@custom-variant dark (&:where([data-theme=assetkom-dark], [data-theme=assetkom-dark] *));
 
 @theme {
     --font-sans: 'Fira Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';

@@ -10,6 +10,8 @@
             (function () {
                 try {
                     var t = localStorage.getItem('theme');
+                    if (t === 'dark') t = 'assetkom-dark';
+                    if (t === 'light') t = 'assetkom';
                     if (t) document.documentElement.setAttribute('data-theme', t);
                 } catch (e) {}
             })();

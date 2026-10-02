@@ -62,7 +62,7 @@ new class extends Component
                     type="button"
                     class="btn btn-ghost btn-circle"
                     aria-label="{{ __('Toggle theme') }}"
-                    onclick="(function(){var r=document.documentElement;var c=r.getAttribute('data-theme');var d=c?c==='dark':window.matchMedia('(prefers-color-scheme: dark)').matches;var n=d?'light':'dark';r.setAttribute('data-theme',n);try{localStorage.setItem('theme',n)}catch(e){}})()"
+                    onclick="(function(){var r=document.documentElement;var c=r.getAttribute('data-theme');var d=c?c==='assetkom-dark':window.matchMedia('(prefers-color-scheme: dark)').matches;var n=d?'assetkom':'assetkom-dark';r.setAttribute('data-theme',n);try{localStorage.setItem('theme',n)}catch(e){}})()"
                 >
                     <svg class="h-5 w-5 dark:hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
                     <svg class="hidden h-5 w-5 dark:block" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.36 6.36l-.71-.71M6.34 6.34l-.71-.71m12.73 0l-.71.71M6.34 17.66l-.71.71M12 8a4 4 0 100 8 4 4 0 000-8z"/></svg>
