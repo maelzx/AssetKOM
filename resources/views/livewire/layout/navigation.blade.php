@@ -27,30 +27,30 @@ new class extends Component
                     <x-nav-link :href="route('assets.index')" :active="request()->routeIs('assets.*')" wire:navigate>{{ __('Assets') }}</x-nav-link>
 
                     <x-nav-group :label="__('Operations')" :active="request()->routeIs('assignments.*', 'maintenance.*', 'labels.*', 'imports.*')">
-                        <x-dropdown-link :href="route('assignments.index')" wire:navigate>{{ __('Assignments') }}</x-dropdown-link>
-                        <x-dropdown-link :href="route('maintenance.index')" wire:navigate>{{ __('Maintenance') }}</x-dropdown-link>
-                        <x-dropdown-link :href="route('labels.index')" wire:navigate>{{ __('Labels') }}</x-dropdown-link>
+                        <x-dropdown-link :href="route('assignments.index')" :active="request()->routeIs('assignments.*')" wire:navigate>{{ __('Assignments') }}</x-dropdown-link>
+                        <x-dropdown-link :href="route('maintenance.index')" :active="request()->routeIs('maintenance.*')" wire:navigate>{{ __('Maintenance') }}</x-dropdown-link>
+                        <x-dropdown-link :href="route('labels.index')" :active="request()->routeIs('labels.*')" wire:navigate>{{ __('Labels') }}</x-dropdown-link>
                         @can('manage-assets')
-                            <x-dropdown-link :href="route('imports.assets')" wire:navigate>{{ __('Import') }}</x-dropdown-link>
+                            <x-dropdown-link :href="route('imports.assets')" :active="request()->routeIs('imports.*')" wire:navigate>{{ __('Import') }}</x-dropdown-link>
                         @endcan
                     </x-nav-group>
 
                     @can('view-reports')
                         <x-nav-group :label="__('Insights')" :active="request()->routeIs('reports.*', 'activity.*')">
-                            <x-dropdown-link :href="route('reports.index')" wire:navigate>{{ __('Reports') }}</x-dropdown-link>
-                            <x-dropdown-link :href="route('activity.index')" wire:navigate>{{ __('Activity') }}</x-dropdown-link>
+                            <x-dropdown-link :href="route('reports.index')" :active="request()->routeIs('reports.*')" wire:navigate>{{ __('Reports') }}</x-dropdown-link>
+                            <x-dropdown-link :href="route('activity.index')" :active="request()->routeIs('activity.*')" wire:navigate>{{ __('Activity') }}</x-dropdown-link>
                         </x-nav-group>
                     @endcan
 
                     @can('manage-catalog')
                         <x-nav-group :label="__('Admin')" :active="request()->routeIs('categories.*', 'locations.*', 'settings', 'users.*')">
                             @can('manage-users')
-                                <x-dropdown-link :href="route('users.index')" wire:navigate>{{ __('Users') }}</x-dropdown-link>
+                                <x-dropdown-link :href="route('users.index')" :active="request()->routeIs('users.*')" wire:navigate>{{ __('Users') }}</x-dropdown-link>
                             @endcan
-                            <x-dropdown-link :href="route('categories.index')" wire:navigate>{{ __('Categories') }}</x-dropdown-link>
-                            <x-dropdown-link :href="route('locations.index')" wire:navigate>{{ __('Locations') }}</x-dropdown-link>
+                            <x-dropdown-link :href="route('categories.index')" :active="request()->routeIs('categories.*')" wire:navigate>{{ __('Categories') }}</x-dropdown-link>
+                            <x-dropdown-link :href="route('locations.index')" :active="request()->routeIs('locations.*')" wire:navigate>{{ __('Locations') }}</x-dropdown-link>
                             @can('manage-settings')
-                                <x-dropdown-link :href="route('settings')" wire:navigate>{{ __('Settings') }}</x-dropdown-link>
+                                <x-dropdown-link :href="route('settings')" :active="request()->routeIs('settings')" wire:navigate>{{ __('Settings') }}</x-dropdown-link>
                             @endcan
                         </x-nav-group>
                     @endcan
@@ -79,7 +79,7 @@ new class extends Component
                         </x-slot>
 
                         <x-slot name="content">
-                            <x-dropdown-link :href="route('profile')" wire:navigate>{{ __('Profile') }}</x-dropdown-link>
+                            <x-dropdown-link :href="route('profile')" :active="request()->routeIs('profile')" wire:navigate>{{ __('Profile') }}</x-dropdown-link>
 
                             <button wire:click="logout" class="w-full text-start">
                                 <x-dropdown-link>{{ __('Log Out') }}</x-dropdown-link>
@@ -135,7 +135,7 @@ new class extends Component
                     <div class="text-sm text-base-content/60">{{ auth()->user()->email }}</div>
                 </div>
 
-                <x-responsive-nav-link :href="route('profile')" wire:navigate>{{ __('Profile') }}</x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('profile')" :active="request()->routeIs('profile')" wire:navigate>{{ __('Profile') }}</x-responsive-nav-link>
 
                 <button wire:click="logout" class="w-full text-start">
                     <x-responsive-nav-link>{{ __('Log Out') }}</x-responsive-nav-link>
