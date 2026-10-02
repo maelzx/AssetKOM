@@ -19,8 +19,8 @@
 
 | Role | Hex | CSS Variable |
 |------|-----|--------------|
-| Primary | `#0D9488` | `--color-primary` |
-| On Primary | `#000000` | `--color-on-primary` |
+| Primary | `#0F766E` | `--color-primary` |
+| On Primary | `#FFFFFF` | `--color-on-primary` |
 | Secondary | `#14B8A6` | `--color-secondary` |
 | On Secondary | `#0F172A` | `--color-on-secondary` |
 | Accent/CTA | `#EA580C` | `--color-accent` |
@@ -34,7 +34,7 @@
 | Border | `#99F6E4` | `--color-border` |
 | Destructive | `#DC2626` | `--color-destructive` |
 | On Destructive | `#FFFFFF` | `--color-on-destructive` |
-| Ring | `#0D9488` | `--color-ring` |
+| Ring | `#0F766E` | `--color-ring` |
 
 **Color Notes:** Teal focus + action orange [Accent adjusted from #F97316]
 
@@ -99,8 +99,8 @@
 /* Secondary Button */
 .btn-secondary {
   background: transparent;
-  color: #0D9488;
-  border: 2px solid #0D9488;
+  color: #0F766E;
+  border: 2px solid #0F766E;
   padding: 12px 24px;
   border-radius: 8px;
   font-weight: 600;
@@ -139,9 +139,9 @@
 }
 
 .input:focus {
-  border-color: #0D9488;
+  border-color: #0F766E;
   outline: none;
-  box-shadow: 0 0 0 3px #0D948820;
+  box-shadow: 0 0 0 3px #0F766E20;
 }
 ```
 
