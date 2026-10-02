@@ -35,9 +35,12 @@ new #[Layout('layouts.app')] class extends Component
 
     public string $checkinNotes = '';
 
+    public ?string $asOf = null;
+
     public function mount(Asset $asset): void
     {
         $this->asset = $asset;
+        $this->asOf = now()->toDateString();
         $this->refreshAsset();
     }
 
@@ -175,15 +178,17 @@ new #[Layout('layouts.app')] class extends Component
     public function with(): array
     {
         $depreciation = app(\App\Services\DepreciationCalculator::class);
+        $asOf = $this->asOf ? \Illuminate\Support\Carbon::parse($this->asOf) : null;
 
         return [
             'users' => User::orderBy('name')->get(),
             'locations' => Location::with('parent')->get()->sortBy('full_name'),
             'qr' => AssetQrCode::dataUri($this->asset, 200),
+            'depreciationMethod' => $depreciation->method(),
             'isDepreciable' => $depreciation->isDepreciable($this->asset),
             'annualDepreciation' => $depreciation->annualAmount($this->asset),
-            'accumulatedDepreciation' => $depreciation->accumulated($this->asset),
-            'bookValue' => $depreciation->bookValue($this->asset),
+            'accumulatedDepreciation' => $depreciation->accumulated($this->asset, $asOf),
+            'bookValue' => $depreciation->bookValue($this->asset, $asOf),
             'depreciationSchedule' => $depreciation->schedule($this->asset),
             'activities' => \Spatie\Activitylog\Models\Activity::query()
                 ->where('subject_type', $this->asset->getMorphClass())
@@ -303,7 +308,16 @@ new #[Layout('layouts.app')] class extends Component
                 </div>
 
                 <div class="card bg-base-100 p-6 space-y-4">
-                    <h3 class="text-lg font-medium text-base-content">{{ __('Depreciation') }}</h3>
+                    <div class="flex flex-wrap items-end justify-between gap-3">
+                        <div>
+                            <h3 class="text-lg font-medium text-base-content">{{ __('Depreciation') }}</h3>
+                            <p class="text-xs text-base-content/50">{{ __('Method') }}: {{ $depreciationMethod === 'reducing_balance' ? __('Reducing balance') : __('Straight-line') }}</p>
+                        </div>
+                        <div>
+                            <x-input-label for="asOf" :value="__('Value as of')" />
+                            <x-text-input wire:model.live="asOf" id="asOf" type="date" class="mt-1 block w-full" />
+                        </div>
+                    </div>
 
                     @if ($isDepreciable)
                         <dl class="grid grid-cols-1 sm:grid-cols-3 gap-x-6 gap-y-3 text-sm">

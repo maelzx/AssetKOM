@@ -4,12 +4,16 @@ namespace Tests\Unit;
 
 use App\Enums\Currency;
 use App\Models\Asset;
+use App\Models\Setting;
 use App\Services\DepreciationCalculator;
 use Carbon\CarbonImmutable;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class DepreciationCalculatorTest extends TestCase
 {
+    use RefreshDatabase;
+
     private DepreciationCalculator $calculator;
 
     protected function setUp(): void
@@ -83,5 +87,41 @@ class DepreciationCalculatorTest extends TestCase
         $this->assertCount(5, $schedule);
         $this->assertSame(200.0, $schedule[0]['depreciation']);
         $this->assertSame(200.0, $schedule[4]['closing']);
+    }
+
+    public function test_reducing_balance_uses_configured_rate(): void
+    {
+        Setting::set('depreciation_method', 'reducing_balance');
+        Setting::set('depreciation_rate', 25, 'float');
+
+        $calculator = new DepreciationCalculator;
+        $asset = $this->asset(['salvage_value' => 0]);
+
+        // 25% of 1200 in year one.
+        $this->assertSame(300.0, $calculator->annualAmount($asset));
+        $this->assertEqualsWithDelta(900.0, $calculator->bookValue($asset, CarbonImmutable::parse('2021-01-01')), 5.0);
+        $this->assertEqualsWithDelta(675.0, $calculator->bookValue($asset, CarbonImmutable::parse('2022-01-01')), 5.0);
+    }
+
+    public function test_reducing_balance_without_a_rate_uses_double_declining(): void
+    {
+        Setting::set('depreciation_method', 'reducing_balance');
+        Setting::set('depreciation_rate', 0, 'float');
+
+        $calculator = new DepreciationCalculator;
+        $asset = $this->asset(['salvage_value' => 0, 'useful_life_years' => 5]);
+
+        // Double-declining on a 5-year life = 40% p.a.
+        $this->assertSame(480.0, $calculator->annualAmount($asset));
+    }
+
+    public function test_as_of_date_changes_book_value(): void
+    {
+        $asset = $this->asset();
+
+        $atPurchase = $this->calculator->bookValue($asset, CarbonImmutable::parse('2020-01-01'));
+        $threeYears = $this->calculator->bookValue($asset, CarbonImmutable::parse('2023-01-01'));
+
+        $this->assertGreaterThan($threeYears, $atPurchase);
     }
 }

@@ -17,9 +17,13 @@ use Livewire\Volt\Component;
 
 new #[Layout('layouts.app')] class extends Component
 {
+    public ?string $asOf = null;
+
     public function mount(): void
     {
         Gate::authorize('view-reports');
+
+        $this->asOf = now()->toDateString();
     }
 
     /**
@@ -27,7 +31,8 @@ new #[Layout('layouts.app')] class extends Component
      */
     public function with(): array
     {
-        $depreciationTotals = $this->depreciationTotals();
+        $asOf = $this->asOf ? \Illuminate\Support\Carbon::parse($this->asOf) : null;
+        $depreciationTotals = $this->depreciationTotals($asOf);
         $baseCurrency = Currency::tryFrom((string) Setting::get('base_currency', Currency::MYR->value)) ?? Currency::MYR;
         $converter = app(CurrencyConverter::class);
 
@@ -59,7 +64,7 @@ new #[Layout('layouts.app')] class extends Component
     /**
      * @return array<string, array{purchase: float, accumulated: float, book: float}>
      */
-    protected function depreciationTotals(): array
+    protected function depreciationTotals(?\Carbon\CarbonInterface $asOf = null): array
     {
         $calculator = app(\App\Services\DepreciationCalculator::class);
         $totals = [];
@@ -69,12 +74,12 @@ new #[Layout('layouts.app')] class extends Component
             ->whereNotNull('purchase_date')
             ->whereNotNull('useful_life_years')
             ->cursor()
-            ->each(function (Asset $asset) use ($calculator, &$totals): void {
+            ->each(function (Asset $asset) use ($calculator, $asOf, &$totals): void {
                 $currency = $asset->currency->value;
                 $totals[$currency] ??= ['purchase' => 0.0, 'accumulated' => 0.0, 'book' => 0.0];
                 $totals[$currency]['purchase'] += (float) $asset->purchase_cost;
-                $totals[$currency]['accumulated'] += $calculator->accumulated($asset) ?? 0.0;
-                $totals[$currency]['book'] += $calculator->bookValue($asset) ?? 0.0;
+                $totals[$currency]['accumulated'] += $calculator->accumulated($asset, $asOf) ?? 0.0;
+                $totals[$currency]['book'] += $calculator->bookValue($asset, $asOf) ?? 0.0;
             });
 
         return $totals;
@@ -142,8 +147,12 @@ new #[Layout('layouts.app')] class extends Component
         </div>
 
         <div class="card bg-base-100 overflow-hidden">
-            <div class="border-b border-base-300 px-6 py-4">
-                <h3 class="text-lg font-medium text-base-content">{{ __('Depreciation (straight-line)') }}</h3>
+            <div class="flex flex-wrap items-end justify-between gap-3 border-b border-base-300 px-6 py-4">
+                <h3 class="text-lg font-medium text-base-content">{{ __('Depreciation') }}</h3>
+                <div>
+                    <x-input-label for="report_as_of" :value="__('Value as of')" />
+                    <x-text-input wire:model.live="asOf" id="report_as_of" type="date" class="mt-1 block w-full" />
+                </div>
             </div>
             <div class="overflow-x-auto">
                 <table class="table table-sm">

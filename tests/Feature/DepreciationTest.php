@@ -51,7 +51,7 @@ class DepreciationTest extends TestCase
         $this->actingAs($manager)
             ->get('/reports')
             ->assertOk()
-            ->assertSee('Depreciation (straight-line)');
+            ->assertSee('Depreciation');
     }
 
     public function test_assets_export_includes_book_value(): void

@@ -61,4 +61,20 @@ class SettingsScreenTest extends TestCase
             ->call('save')
             ->assertHasErrors(['default_currency']);
     }
+
+    public function test_manager_can_change_the_depreciation_method(): void
+    {
+        $manager = User::factory()->manager()->create();
+
+        $this->actingAs($manager);
+
+        Volt::test('settings.index')
+            ->set('depreciation_method', 'reducing_balance')
+            ->set('depreciation_rate', 30)
+            ->call('save')
+            ->assertHasNoErrors();
+
+        $this->assertSame('reducing_balance', Setting::get('depreciation_method'));
+        $this->assertEquals(30.0, Setting::get('depreciation_rate'));
+    }
 }

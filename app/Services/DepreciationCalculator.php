@@ -3,16 +3,27 @@
 namespace App\Services;
 
 use App\Models\Asset;
+use App\Models\Setting;
 use Carbon\CarbonInterface;
 
 /**
- * Straight-line depreciation.
+ * Depreciation calculation.
  *
- * Depreciable base = purchase cost − salvage value, spread evenly across the
- * useful life. Book value is clamped so it never falls below salvage value.
+ * Method is taken from the `depreciation_method` setting:
+ *  - straight_line:    (cost − salvage) spread evenly across the useful life.
+ *  - reducing_balance: opening book value × rate each year, floored at salvage.
+ *    The rate comes from the `depreciation_rate` setting (% p.a.); if unset,
+ *    double-declining (2 / useful life) is used.
+ *
+ * Values are calculated on demand (never stored), so they always reflect the
+ * supplied "as of" date.
  */
 class DepreciationCalculator
 {
+    private ?string $method = null;
+
+    private ?float $rate = null;
+
     public function isDepreciable(Asset $asset): bool
     {
         return $asset->purchase_cost !== null
@@ -22,72 +33,87 @@ class DepreciationCalculator
             && $asset->purchase_date !== null;
     }
 
-    public function depreciableBase(Asset $asset): ?float
+    public function method(): string
+    {
+        return $this->method ??= (string) Setting::get('depreciation_method', 'straight_line');
+    }
+
+    /**
+     * First-year depreciation (for display).
+     */
+    public function annualAmount(Asset $asset): ?float
     {
         if (! $this->isDepreciable($asset)) {
             return null;
         }
 
-        return max(0.0, (float) $asset->purchase_cost - (float) ($asset->salvage_value ?? 0));
-    }
+        $cost = (float) $asset->purchase_cost;
+        $salvage = (float) ($asset->salvage_value ?? 0);
 
-    public function annualAmount(Asset $asset): ?float
-    {
-        $base = $this->depreciableBase($asset);
-
-        if ($base === null) {
-            return null;
+        if ($this->method() === 'reducing_balance') {
+            return round(min($cost - $salvage, $cost * $this->effectiveRate($asset)), 2);
         }
 
-        return round($base / $asset->useful_life_years, 2);
-    }
-
-    public function accumulated(Asset $asset, ?CarbonInterface $asOf = null): ?float
-    {
-        $base = $this->depreciableBase($asset);
-
-        if ($base === null) {
-            return null;
-        }
-
-        $asOf ??= now();
-
-        $accumulated = $this->elapsedYears($asset, $asOf) / $asset->useful_life_years * $base;
-
-        return round(min($accumulated, $base), 2);
+        return round(($cost - $salvage) / $asset->useful_life_years, 2);
     }
 
     public function bookValue(Asset $asset, ?CarbonInterface $asOf = null): ?float
     {
-        $accumulated = $this->accumulated($asset, $asOf);
-
-        if ($accumulated === null) {
+        if (! $this->isDepreciable($asset)) {
             return null;
         }
 
-        return round((float) $asset->purchase_cost - $accumulated, 2);
+        $asOf ??= now();
+        $cost = (float) $asset->purchase_cost;
+        $salvage = (float) ($asset->salvage_value ?? 0);
+        $years = $this->elapsedYears($asset, $asOf);
+
+        $book = $this->method() === 'reducing_balance'
+            ? $this->reducingBalanceBook($cost, $years, $asset)
+            : $cost - ($cost - $salvage) * min(1.0, $years / $asset->useful_life_years);
+
+        return round(max($salvage, $book), 2);
+    }
+
+    public function accumulated(Asset $asset, ?CarbonInterface $asOf = null): ?float
+    {
+        $book = $this->bookValue($asset, $asOf);
+
+        if ($book === null) {
+            return null;
+        }
+
+        return round((float) $asset->purchase_cost - $book, 2);
     }
 
     /**
-     * Year-by-year straight-line schedule for display.
+     * Year-by-year schedule for the configured method.
      *
      * @return array<int, array{year: int, opening: float, depreciation: float, accumulated: float, closing: float}>
      */
     public function schedule(Asset $asset): array
     {
-        $base = $this->depreciableBase($asset);
-
-        if ($base === null) {
+        if (! $this->isDepreciable($asset)) {
             return [];
         }
 
-        $annual = $base / $asset->useful_life_years;
-        $opening = (float) $asset->purchase_cost;
+        $cost = (float) $asset->purchase_cost;
+        $salvage = (float) ($asset->salvage_value ?? 0);
+        $rate = $this->effectiveRate($asset);
+
+        if ($this->method() === 'reducing_balance') {
+            $annual = fn (float $opening): float => min($opening - $salvage, $opening * $rate);
+        } else {
+            $straight = ($cost - $salvage) / $asset->useful_life_years;
+            $annual = fn (float $opening) => $straight;
+        }
+
+        $opening = $cost;
         $accumulated = 0.0;
         $rows = [];
 
         for ($year = 1; $year <= $asset->useful_life_years; $year++) {
-            $depreciation = min($annual, $base - $accumulated);
+            $depreciation = max(0.0, $annual($opening));
             $accumulated += $depreciation;
             $closing = $opening - $depreciation;
 
@@ -103,6 +129,32 @@ class DepreciationCalculator
         }
 
         return $rows;
+    }
+
+    protected function reducingBalanceBook(float $cost, float $years, Asset $asset): float
+    {
+        return $cost * ((1 - $this->effectiveRate($asset)) ** $years);
+    }
+
+    /**
+     * Annual reducing-balance rate: configured percent, else double-declining.
+     */
+    protected function effectiveRate(Asset $asset): float
+    {
+        $configured = $this->rate ??= $this->configuredRate();
+
+        if ($configured !== null && $configured > 0) {
+            return min($configured / 100, 1.0);
+        }
+
+        return min(2 / $asset->useful_life_years, 1.0);
+    }
+
+    protected function configuredRate(): ?float
+    {
+        $rate = Setting::get('depreciation_rate');
+
+        return is_numeric($rate) ? (float) $rate : null;
     }
 
     /**

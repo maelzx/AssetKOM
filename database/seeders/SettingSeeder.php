@@ -21,6 +21,7 @@ class SettingSeeder extends Seeder
             'asset_tag_prefix' => ['AST', 'string'],
             'asset_tag_sequence' => [0, 'integer'],
             'depreciation_method' => ['straight_line', 'string'],
+            'depreciation_rate' => [20, 'float'],
         ];
 
         foreach ($defaults as $key => [$value, $type]) {

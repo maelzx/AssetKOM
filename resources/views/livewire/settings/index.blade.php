@@ -19,6 +19,10 @@ new #[Layout('layouts.app')] class extends Component
 
     public string $asset_tag_prefix = 'AST';
 
+    public string $depreciation_method = 'straight_line';
+
+    public float $depreciation_rate = 20.0;
+
     public function mount(): void
     {
         Gate::authorize('manage-settings');
@@ -28,6 +32,8 @@ new #[Layout('layouts.app')] class extends Component
         $this->base_currency = (string) Setting::get('base_currency', Currency::MYR->value);
         $this->usd_to_myr_rate = (float) Setting::get('usd_to_myr_rate', 4.70);
         $this->asset_tag_prefix = (string) Setting::get('asset_tag_prefix', 'AST');
+        $this->depreciation_method = (string) Setting::get('depreciation_method', 'straight_line');
+        $this->depreciation_rate = (float) Setting::get('depreciation_rate', 20);
     }
 
     public function save(): void
@@ -40,10 +46,12 @@ new #[Layout('layouts.app')] class extends Component
             'base_currency' => ['required', Rule::in(Currency::values())],
             'usd_to_myr_rate' => ['required', 'numeric', 'min:0.01'],
             'asset_tag_prefix' => ['required', 'string', 'max:10', 'alpha_num'],
+            'depreciation_method' => ['required', Rule::in(['straight_line', 'reducing_balance'])],
+            'depreciation_rate' => ['required', 'numeric', 'min:0', 'max:100'],
         ]);
 
         foreach ($validated as $key => $value) {
-            Setting::set($key, $value, $key === 'usd_to_myr_rate' ? 'float' : 'string');
+            Setting::set($key, $value, in_array($key, ['usd_to_myr_rate', 'depreciation_rate'], true) ? 'float' : 'string');
         }
 
         $this->dispatch('settings-saved');
@@ -93,6 +101,31 @@ new #[Layout('layouts.app')] class extends Component
                     <x-input-label for="asset_tag_prefix" :value="__('Asset tag prefix')" />
                     <x-text-input wire:model="asset_tag_prefix" id="asset_tag_prefix" type="text" class="mt-1 block w-full" />
                     <x-input-error :messages="$errors->get('asset_tag_prefix')" class="mt-2" />
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div>
+                    <x-input-label for="depreciation_method" :value="__('Depreciation method')" />
+                    <select wire:model.live="depreciation_method" id="depreciation_method" class="select select-bordered mt-1 block w-full">
+                        <option value="straight_line">{{ __('Straight-line') }}</option>
+                        <option value="reducing_balance">{{ __('Reducing balance') }}</option>
+                    </select>
+                    <p class="mt-1 text-xs text-base-content/50">{{ __('Applies to all assets (per-asset values still come from the asset).') }}</p>
+                    <x-input-error :messages="$errors->get('depreciation_method')" class="mt-2" />
+                </div>
+
+                <div>
+                    <x-input-label for="depreciation_rate" :value="__('Reducing-balance rate (% per year)')" />
+                    <x-text-input wire:model="depreciation_rate" id="depreciation_rate" type="number" step="0.1" min="0" max="100" class="mt-1 block w-full" />
+                    <p class="mt-1 text-xs text-base-content/50">
+                        @if ($depreciation_method === 'reducing_balance')
+                            {{ __('Used for the reducing-balance method. 0 uses double-declining (2 ÷ useful life).') }}
+                        @else
+                            {{ __('Only used when the reducing-balance method is selected.') }}
+                        @endif
+                    </p>
+                    <x-input-error :messages="$errors->get('depreciation_rate')" class="mt-2" />
                 </div>
             </div>
 
