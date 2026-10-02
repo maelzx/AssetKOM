@@ -8,30 +8,42 @@ use Illuminate\Database\Seeder;
 class LocationSeeder extends Seeder
 {
     /**
-     * Seed a sample location tree.
+     * Seed a small-office location tree.
      */
     public function run(): void
     {
         $tree = [
-            'Head Office' => ['HQ — Floor 1', 'HQ — Floor 2'],
-            'Warehouse' => ['Warehouse — Racking A', 'Warehouse — Racking B'],
-            'Branch Office' => [],
+            'Head Office' => [
+                'Reception',
+                'Open Office',
+                'Meeting Room',
+                'Server Room',
+                'Pantry',
+                'Management Office',
+            ],
+            'Store Room' => [],
         ];
 
         $codes = [
             'Head Office' => 'HQ',
-            'HQ — Floor 1' => 'HQ-F1',
-            'HQ — Floor 2' => 'HQ-F2',
-            'Warehouse' => 'WH',
-            'Warehouse — Racking A' => 'WH-A',
-            'Warehouse — Racking B' => 'WH-B',
-            'Branch Office' => 'BR',
+            'Reception' => 'HQ-REC',
+            'Open Office' => 'HQ-OFF',
+            'Meeting Room' => 'HQ-MTG',
+            'Server Room' => 'HQ-SRV',
+            'Pantry' => 'HQ-PAN',
+            'Management Office' => 'HQ-MGT',
+            'Store Room' => 'STORE',
+        ];
+
+        $addresses = [
+            'Head Office' => 'Level 12, Menara Prestige, Jalan Pinang, 50450 Kuala Lumpur',
+            'Store Room' => 'Level B1, Menara Prestige, Jalan Pinang, 50450 Kuala Lumpur',
         ];
 
         foreach ($tree as $parent => $children) {
             $parentModel = Location::updateOrCreate(
                 ['code' => $codes[$parent]],
-                ['name' => $parent, 'parent_id' => null],
+                ['name' => $parent, 'parent_id' => null, 'address' => $addresses[$parent] ?? null],
             );
 
             foreach ($children as $child) {

@@ -21,7 +21,12 @@ class UserSeeder extends Seeder
         $users = [
             ['name' => 'System Administrator', 'email' => 'admin@assetkom.test', 'role' => Role::Admin, 'notify' => true],
             ['name' => 'Asset Manager', 'email' => 'manager@assetkom.test', 'role' => Role::Manager, 'notify' => true],
-            ['name' => 'General Staff', 'email' => 'staff@assetkom.test', 'role' => Role::Staff, 'notify' => false],
+            ['name' => 'Nurul Aisyah', 'email' => 'nurul@assetkom.test', 'role' => Role::Staff, 'notify' => false],
+            ['name' => 'Tan Wei Ming', 'email' => 'weiming@assetkom.test', 'role' => Role::Staff, 'notify' => false],
+            ['name' => 'Arun Kumar', 'email' => 'arun@assetkom.test', 'role' => Role::Staff, 'notify' => false],
+            ['name' => 'Siti Aminah', 'email' => 'siti@assetkom.test', 'role' => Role::Staff, 'notify' => false],
+            ['name' => 'Daniel Lim', 'email' => 'daniel@assetkom.test', 'role' => Role::Staff, 'notify' => false],
+            ['name' => 'Farah Nadia', 'email' => 'farah@assetkom.test', 'role' => Role::Staff, 'notify' => false],
         ];
 
         foreach ($users as $user) {

@@ -9,14 +9,22 @@ use Illuminate\Support\Str;
 class CategorySeeder extends Seeder
 {
     /**
-     * Seed a general-purpose category tree.
+     * Seed a small-office category tree.
      */
     public function run(): void
     {
         $tree = [
-            'Electronics' => ['Laptops', 'Desktops', 'Monitors', 'Peripherals', 'Networking'],
-            'Furniture' => ['Desks', 'Chairs', 'Storage'],
-            'Vehicles' => ['Cars', 'Motorcycles'],
+            'IT Equipment' => [
+                'Laptops',
+                'Desktops & Monitors',
+                'Peripherals',
+                'Printing & Scanning',
+                'Networking',
+                'Servers & Storage',
+            ],
+            'Mobile Devices' => ['Smartphones', 'Tablets'],
+            'Furniture' => ['Desks', 'Chairs', 'Cabinets', 'Meeting Room'],
+            'Appliances' => ['Pantry', 'Air Conditioning'],
             'Software Licenses' => [],
         ];
 

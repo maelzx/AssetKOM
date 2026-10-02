@@ -64,7 +64,9 @@ Demo accounts (password `password`):
 |---|---|
 | `admin@assetkom.test` | Administrator |
 | `manager@assetkom.test` | Manager |
-| `staff@assetkom.test` | Staff |
+| `nurul@assetkom.test` | Staff |
+
+Additional staff accounts (`weiming@`, `arun@`, `siti@`, `daniel@`, `farah@assetkom.test`) are seeded for the demo dataset. All use password `password`.
 
 ## Production notes
 
