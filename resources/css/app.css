@@ -3,13 +3,86 @@
 @plugin 'daisyui' {
     themes: light --default, dark --prefersdark;
 }
+@plugin 'daisyui/theme' {
+    name: 'light';
+    default: true;
+    prefersdark: false;
+    color-scheme: light;
+
+    --color-base-100: #ffffff;
+    --color-base-200: #f0fdfa;
+    --color-base-300: #ccfbf1;
+    --color-base-content: #134e4a;
+
+    --color-primary: #0d9488;
+    --color-primary-content: #000000;
+    --color-secondary: #14b8a6;
+    --color-secondary-content: #0f172a;
+    --color-accent: #ea580c;
+    --color-accent-content: #000000;
+    --color-neutral: #134e4a;
+    --color-neutral-content: #f0fdfa;
+
+    --color-info: #0284c7;
+    --color-info-content: #ffffff;
+    --color-success: #16a34a;
+    --color-success-content: #ffffff;
+    --color-warning: #d97706;
+    --color-warning-content: #000000;
+    --color-error: #dc2626;
+    --color-error-content: #ffffff;
+
+    --radius-selector: 0.5rem;
+    --radius-field: 0.5rem;
+    --radius-box: 0.85rem;
+    --border: 1px;
+    --depth: 0;
+    --noise: 0;
+}
+@plugin 'daisyui/theme' {
+    name: 'dark';
+    default: false;
+    prefersdark: true;
+    color-scheme: dark;
+
+    --color-base-100: #042f2e;
+    --color-base-200: #063a37;
+    --color-base-300: #0b4a45;
+    --color-base-content: #ccfbf1;
+
+    --color-primary: #2dd4bf;
+    --color-primary-content: #00201e;
+    --color-secondary: #5eead4;
+    --color-secondary-content: #042f2e;
+    --color-accent: #fb923c;
+    --color-accent-content: #000000;
+    --color-neutral: #134e4a;
+    --color-neutral-content: #ccfbf1;
+
+    --color-info: #38bdf8;
+    --color-info-content: #042f2e;
+    --color-success: #4ade80;
+    --color-success-content: #042f2e;
+    --color-warning: #fbbf24;
+    --color-warning-content: #042f2e;
+    --color-error: #f87171;
+    --color-error-content: #042f2e;
+
+    --radius-selector: 0.5rem;
+    --radius-field: 0.5rem;
+    --radius-box: 0.85rem;
+    --border: 1px;
+    --depth: 0;
+    --noise: 0;
+}
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 
 @custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
 
 @theme {
-    --font-sans: 'Figtree', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-sans: 'Fira Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-mono: 'Fira Code', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 }
 
 @layer base {
@@ -20,9 +93,9 @@
         -moz-osx-font-smoothing: grayscale;
     }
 
-    body {
-        background-image: radial-gradient(ellipse at top, color-mix(in oklab, var(--color-primary) 5%, transparent), transparent 34rem);
-        background-attachment: fixed;
+    button:not(:disabled),
+    [role='button']:not([aria-disabled='true']) {
+        cursor: pointer;
     }
 
     :focus-visible {
@@ -31,15 +104,16 @@
     }
 
     ::selection {
-        background-color: color-mix(in oklab, var(--color-primary) 22%, white);
+        background-color: color-mix(in oklab, var(--color-primary) 24%, transparent);
     }
 }
 
 @layer components {
+    /* Flat design: separation via borders, not shadows. */
     .card {
-        border: 1px solid color-mix(in oklab, var(--color-base-300) 78%, transparent);
-        border-radius: 1rem;
-        box-shadow: 0 1px 2px rgb(15 23 42 / 0.035), 0 8px 24px -18px rgb(15 23 42 / 0.2);
+        border: 1px solid var(--color-base-300);
+        border-radius: var(--radius-box);
+        box-shadow: none;
     }
 
     .btn,

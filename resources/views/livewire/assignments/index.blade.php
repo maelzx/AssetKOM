@@ -57,7 +57,7 @@ new #[Layout('layouts.app')] class extends Component
             @foreach (['active' => __('Active'), 'overdue' => __('Overdue'), 'returned' => __('Returned'), 'all' => __('All')] as $key => $label)
                 <button
                     wire:click="setFilter('{{ $key }}')"
-                    class="rounded-md px-3 py-1.5 text-sm font-medium {{ $filter === $key ? 'bg-primary text-white' : 'bg-base-100 text-base-content/80 shadow-sm hover:bg-base-200' }}"
+                    class="rounded-md px-3 py-1.5 text-sm font-medium {{ $filter === $key ? 'bg-primary text-white' : 'bg-base-100 text-base-content/80 hover:bg-base-200' }}"
                 >
                     {{ $label }}
                     @if (isset($counts[$key]))

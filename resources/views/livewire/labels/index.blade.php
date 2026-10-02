@@ -62,23 +62,23 @@ new #[Layout('layouts.app')] class extends Component
             </x-slot>
         </x-page-header>
 
-        <div class="card bg-base-100 shadow-sm p-4">
+        <div class="card bg-base-100 p-4">
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                <select wire:model.live="category" class="select select-bordered w-full block w-full border-base-300 focus:border-primary focus:ring-primary rounded-md shadow-sm">
+                <select wire:model.live="category" class="select select-bordered w-full block w-full border-base-300 focus:border-primary focus:ring-primary rounded-md">
                     <option value="">{{ __('All categories') }}</option>
                     @foreach ($categories as $option)
                         <option value="{{ $option->id }}">{{ $option->full_name }}</option>
                     @endforeach
                 </select>
 
-                <select wire:model.live="location" class="select select-bordered w-full block w-full border-base-300 focus:border-primary focus:ring-primary rounded-md shadow-sm">
+                <select wire:model.live="location" class="select select-bordered w-full block w-full border-base-300 focus:border-primary focus:ring-primary rounded-md">
                     <option value="">{{ __('All locations') }}</option>
                     @foreach ($locations as $option)
                         <option value="{{ $option->id }}">{{ $option->full_name }}</option>
                     @endforeach
                 </select>
 
-                <select wire:model.live="status" class="select select-bordered w-full block w-full border-base-300 focus:border-primary focus:ring-primary rounded-md shadow-sm">
+                <select wire:model.live="status" class="select select-bordered w-full block w-full border-base-300 focus:border-primary focus:ring-primary rounded-md">
                     <option value="">{{ __('All statuses') }}</option>
                     @foreach ($statuses as $option)
                         <option value="{{ $option->value }}">{{ $option->label() }}</option>
@@ -87,7 +87,7 @@ new #[Layout('layouts.app')] class extends Component
             </div>
         </div>
 
-        <div class="card bg-base-100 shadow-sm p-6">
+        <div class="card bg-base-100 p-6">
             <p class="text-sm text-base-content/60">{{ trans_choice(':count asset matches|:count assets match', $total) }} {{ __('(previewing first 12)') }}</p>
 
             <div class="mt-4 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">

@@ -120,7 +120,7 @@ new #[Layout('layouts.app')] class extends Component
     <div class="max-w-5xl mx-auto sm:px-6 lg:px-8 space-y-6">
         <x-page-header :title="__('Categories')" :subtitle="__('Organise assets into a hierarchy.')" />
 
-        <div class="card bg-base-100 shadow-sm p-6">
+        <div class="card bg-base-100 p-6">
             <h3 class="text-lg font-medium text-base-content">
                 {{ $editingId ? __('Edit category') : __('New category') }}
             </h3>
@@ -134,7 +134,7 @@ new #[Layout('layouts.app')] class extends Component
 
                 <div>
                     <x-input-label for="parent_id" :value="__('Parent')" />
-                    <select wire:model="parent_id" id="parent_id" class="select select-bordered w-full mt-1 block w-full border-base-300 focus:border-primary focus:ring-primary rounded-md shadow-sm">
+                    <select wire:model="parent_id" id="parent_id" class="select select-bordered w-full mt-1 block w-full border-base-300 focus:border-primary focus:ring-primary rounded-md">
                         <option value="">{{ __('— None —') }}</option>
                         @foreach ($parents as $parent)
                             <option value="{{ $parent->id }}">{{ $parent->full_name }}</option>
@@ -145,7 +145,7 @@ new #[Layout('layouts.app')] class extends Component
 
                 <div class="sm:col-span-2">
                     <x-input-label for="description" :value="__('Description')" />
-                    <textarea wire:model="description" id="description" rows="2" class="textarea textarea-bordered w-full mt-1 block w-full border-base-300 focus:border-primary focus:ring-primary rounded-md shadow-sm"></textarea>
+                    <textarea wire:model="description" id="description" rows="2" class="textarea textarea-bordered w-full mt-1 block w-full border-base-300 focus:border-primary focus:ring-primary rounded-md"></textarea>
                     <x-input-error :messages="$errors->get('description')" class="mt-2" />
                 </div>
 

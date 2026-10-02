@@ -41,17 +41,17 @@ new class extends Component
 
     <form wire:submit="update" class="mt-6 space-y-3">
         <label class="flex items-center gap-2">
-            <input type="checkbox" wire:model="notify_warranty_expiry" class="rounded border-base-300 text-primary shadow-sm focus:ring-primary">
+            <input type="checkbox" wire:model="notify_warranty_expiry" class="rounded border-base-300 text-primary focus:ring-primary">
             <span class="text-sm text-base-content/80">{{ __('Warranties expiring within 30 days') }}</span>
         </label>
 
         <label class="flex items-center gap-2">
-            <input type="checkbox" wire:model="notify_maintenance_due" class="rounded border-base-300 text-primary shadow-sm focus:ring-primary">
+            <input type="checkbox" wire:model="notify_maintenance_due" class="rounded border-base-300 text-primary focus:ring-primary">
             <span class="text-sm text-base-content/80">{{ __('Maintenance due or overdue') }}</span>
         </label>
 
         <label class="flex items-center gap-2">
-            <input type="checkbox" wire:model="notify_overdue_assignments" class="rounded border-base-300 text-primary shadow-sm focus:ring-primary">
+            <input type="checkbox" wire:model="notify_overdue_assignments" class="rounded border-base-300 text-primary focus:ring-primary">
             <span class="text-sm text-base-content/80">{{ __('Overdue assignments') }}</span>
         </label>
 

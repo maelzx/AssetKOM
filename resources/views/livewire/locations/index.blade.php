@@ -124,7 +124,7 @@ new #[Layout('layouts.app')] class extends Component
     <div class="max-w-5xl mx-auto sm:px-6 lg:px-8 space-y-6">
         <x-page-header :title="__('Locations')" :subtitle="__('Track where assets physically live.')" />
 
-        <div class="card bg-base-100 shadow-sm p-6">
+        <div class="card bg-base-100 p-6">
             <h3 class="text-lg font-medium text-base-content">
                 {{ $editingId ? __('Edit location') : __('New location') }}
             </h3>
@@ -144,7 +144,7 @@ new #[Layout('layouts.app')] class extends Component
 
                 <div>
                     <x-input-label for="parent_id" :value="__('Parent')" />
-                    <select wire:model="parent_id" id="parent_id" class="select select-bordered w-full mt-1 block w-full border-base-300 focus:border-primary focus:ring-primary rounded-md shadow-sm">
+                    <select wire:model="parent_id" id="parent_id" class="select select-bordered w-full mt-1 block w-full border-base-300 focus:border-primary focus:ring-primary rounded-md">
                         <option value="">{{ __('— None —') }}</option>
                         @foreach ($parents as $parent)
                             <option value="{{ $parent->id }}">{{ $parent->full_name }}</option>

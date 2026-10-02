@@ -66,7 +66,7 @@ new #[Layout('layouts.app')] class extends Component
             @foreach (['open' => __('Open'), 'scheduled' => __('Scheduled'), 'in_progress' => __('In progress'), 'completed' => __('Completed'), 'all' => __('All')] as $key => $label)
                 <button
                     wire:click="setStatus('{{ $key }}')"
-                    class="rounded-md px-3 py-1.5 text-sm font-medium {{ $status === $key ? 'bg-primary text-white' : 'bg-base-100 text-base-content/80 shadow-sm hover:bg-base-200' }}"
+                    class="rounded-md px-3 py-1.5 text-sm font-medium {{ $status === $key ? 'bg-primary text-white' : 'bg-base-100 text-base-content/80 hover:bg-base-200' }}"
                 >
                     {{ $label }}
                     @if (isset($counts[$key]))
@@ -76,7 +76,7 @@ new #[Layout('layouts.app')] class extends Component
             @endforeach
 
             <div class="ms-auto">
-                <select wire:model.live="type" class="select select-bordered w-full border-base-300 focus:border-primary focus:ring-primary rounded-md shadow-sm text-sm">
+                <select wire:model.live="type" class="select select-bordered w-full border-base-300 focus:border-primary focus:ring-primary rounded-md text-sm">
                     <option value="">{{ __('All types') }}</option>
                     @foreach ($types as $option)
                         <option value="{{ $option->value }}">{{ $option->label() }}</option>

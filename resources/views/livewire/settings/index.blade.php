@@ -52,7 +52,7 @@ new #[Layout('layouts.app')] class extends Component
 
 <div class="py-8 sm:py-10">
     <div class="max-w-3xl mx-auto sm:px-6 lg:px-8">
-        <form wire:submit="save" class="card bg-base-100 shadow-sm p-6 space-y-6">
+        <form wire:submit="save" class="card bg-base-100 p-6 space-y-6">
             <div>
                 <x-input-label for="org_name" :value="__('Organization name')" />
                 <x-text-input wire:model="org_name" id="org_name" type="text" class="mt-1 block w-full" />
@@ -62,7 +62,7 @@ new #[Layout('layouts.app')] class extends Component
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div>
                     <x-input-label for="default_currency" :value="__('Default currency')" />
-                    <select wire:model="default_currency" id="default_currency" class="select select-bordered w-full mt-1 block w-full border-base-300 focus:border-primary focus:ring-primary rounded-md shadow-sm">
+                    <select wire:model="default_currency" id="default_currency" class="select select-bordered w-full mt-1 block w-full border-base-300 focus:border-primary focus:ring-primary rounded-md">
                         @foreach (\App\Enums\Currency::cases() as $currency)
                             <option value="{{ $currency->value }}">{{ $currency->value }} — {{ $currency->label() }}</option>
                         @endforeach
@@ -72,7 +72,7 @@ new #[Layout('layouts.app')] class extends Component
 
                 <div>
                     <x-input-label for="base_currency" :value="__('Base currency (reports)')" />
-                    <select wire:model="base_currency" id="base_currency" class="select select-bordered w-full mt-1 block w-full border-base-300 focus:border-primary focus:ring-primary rounded-md shadow-sm">
+                    <select wire:model="base_currency" id="base_currency" class="select select-bordered w-full mt-1 block w-full border-base-300 focus:border-primary focus:ring-primary rounded-md">
                         @foreach (\App\Enums\Currency::cases() as $currency)
                             <option value="{{ $currency->value }}">{{ $currency->value }} — {{ $currency->label() }}</option>
                         @endforeach

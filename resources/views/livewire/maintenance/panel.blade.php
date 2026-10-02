@@ -124,7 +124,7 @@ new class extends Component
     }
 }; ?>
 
-<div class="card bg-base-100 shadow-sm p-6 space-y-4">
+<div class="card bg-base-100 p-6 space-y-4">
     <div class="flex items-center justify-between">
         <h3 class="text-lg font-medium text-base-content">{{ __('Maintenance') }}</h3>
         @unless ($showForm)
@@ -143,7 +143,7 @@ new class extends Component
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                     <x-input-label for="mt_type" :value="__('Type')" />
-                    <select wire:model="type" id="mt_type" class="select select-bordered w-full mt-1 block w-full border-base-300 focus:border-primary focus:ring-primary rounded-md shadow-sm">
+                    <select wire:model="type" id="mt_type" class="select select-bordered w-full mt-1 block w-full border-base-300 focus:border-primary focus:ring-primary rounded-md">
                         @foreach ($types as $option)
                             <option value="{{ $option->value }}">{{ $option->label() }}</option>
                         @endforeach
@@ -169,7 +169,7 @@ new class extends Component
                 </div>
                 <div>
                     <x-input-label for="mt_performer" :value="__('Performed by')" />
-                    <select wire:model="performed_by" id="mt_performer" class="select select-bordered w-full mt-1 block w-full border-base-300 focus:border-primary focus:ring-primary rounded-md shadow-sm">
+                    <select wire:model="performed_by" id="mt_performer" class="select select-bordered w-full mt-1 block w-full border-base-300 focus:border-primary focus:ring-primary rounded-md">
                         <option value="">{{ __('— Unassigned —') }}</option>
                         @foreach ($performers as $person)
                             <option value="{{ $person->id }}">{{ $person->name }}</option>
@@ -186,7 +186,7 @@ new class extends Component
                 </div>
                 <div>
                     <x-input-label for="mt_currency" :value="__('Currency')" />
-                    <select wire:model="currency" id="mt_currency" class="select select-bordered w-full mt-1 block w-full border-base-300 focus:border-primary focus:ring-primary rounded-md shadow-sm">
+                    <select wire:model="currency" id="mt_currency" class="select select-bordered w-full mt-1 block w-full border-base-300 focus:border-primary focus:ring-primary rounded-md">
                         @foreach ($currencies as $option)
                             <option value="{{ $option->value }}">{{ $option->value }}</option>
                         @endforeach
@@ -196,7 +196,7 @@ new class extends Component
 
             <div>
                 <x-input-label for="mt_description" :value="__('Description')" />
-                <textarea wire:model="description" id="mt_description" rows="2" class="textarea textarea-bordered w-full mt-1 block w-full border-base-300 focus:border-primary focus:ring-primary rounded-md shadow-sm"></textarea>
+                <textarea wire:model="description" id="mt_description" rows="2" class="textarea textarea-bordered w-full mt-1 block w-full border-base-300 focus:border-primary focus:ring-primary rounded-md"></textarea>
             </div>
 
             <div class="flex items-center gap-3">

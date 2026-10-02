@@ -96,7 +96,7 @@ new #[Layout('layouts.app')] class extends Component
             </x-slot>
         </x-page-header>
 
-        <div class="card bg-base-100 shadow-sm p-4">
+        <div class="card bg-base-100 p-4">
             <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-6">
                 <div class="lg:col-span-2">
                     <label for="asset-search" class="sr-only">{{ __('Search assets') }}</label>
@@ -104,7 +104,7 @@ new #[Layout('layouts.app')] class extends Component
                 </div>
 
                 <label for="asset-category-filter" class="sr-only">{{ __('Category') }}</label>
-                <select wire:model.live="category" id="asset-category-filter" class="select select-bordered w-full border-base-300 shadow-sm focus:border-primary focus:ring-primary">
+                <select wire:model.live="category" id="asset-category-filter" class="select select-bordered w-full border-base-300 focus:border-primary focus:ring-primary">
                     <option value="">{{ __('All categories') }}</option>
                     @foreach ($categories as $option)
                         <option value="{{ $option->id }}">{{ $option->full_name }}</option>
@@ -112,7 +112,7 @@ new #[Layout('layouts.app')] class extends Component
                 </select>
 
                 <label for="asset-location-filter" class="sr-only">{{ __('Location') }}</label>
-                <select wire:model.live="location" id="asset-location-filter" class="select select-bordered w-full border-base-300 shadow-sm focus:border-primary focus:ring-primary">
+                <select wire:model.live="location" id="asset-location-filter" class="select select-bordered w-full border-base-300 focus:border-primary focus:ring-primary">
                     <option value="">{{ __('All locations') }}</option>
                     @foreach ($locations as $option)
                         <option value="{{ $option->id }}">{{ $option->full_name }}</option>
@@ -120,7 +120,7 @@ new #[Layout('layouts.app')] class extends Component
                 </select>
 
                 <label for="asset-status-filter" class="sr-only">{{ __('Status') }}</label>
-                <select wire:model.live="status" id="asset-status-filter" class="select select-bordered w-full border-base-300 shadow-sm focus:border-primary focus:ring-primary">
+                <select wire:model.live="status" id="asset-status-filter" class="select select-bordered w-full border-base-300 focus:border-primary focus:ring-primary">
                     <option value="">{{ __('All statuses') }}</option>
                     @foreach ($statuses as $option)
                         <option value="{{ $option->value }}">{{ $option->label() }}</option>
@@ -128,7 +128,7 @@ new #[Layout('layouts.app')] class extends Component
                 </select>
 
                 <label for="asset-condition-filter" class="sr-only">{{ __('Condition') }}</label>
-                <select wire:model.live="condition" id="asset-condition-filter" class="select select-bordered w-full border-base-300 shadow-sm focus:border-primary focus:ring-primary">
+                <select wire:model.live="condition" id="asset-condition-filter" class="select select-bordered w-full border-base-300 focus:border-primary focus:ring-primary">
                     <option value="">{{ __('All conditions') }}</option>
                     @foreach ($conditions as $option)
                         <option value="{{ $option->value }}">{{ $option->label() }}</option>

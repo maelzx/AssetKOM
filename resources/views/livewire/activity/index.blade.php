@@ -57,9 +57,9 @@ new #[Layout('layouts.app')] class extends Component
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
         <x-page-header :title="__('Activity')" :subtitle="__('Audit trail of changes across the system.')" />
 
-        <div class="card bg-base-100 shadow-sm p-4">
+        <div class="card bg-base-100 p-4">
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                <select wire:model.live="log" class="select select-bordered w-full block w-full border-base-300 focus:border-primary focus:ring-primary rounded-md shadow-sm">
+                <select wire:model.live="log" class="select select-bordered w-full block w-full border-base-300 focus:border-primary focus:ring-primary rounded-md">
                     <option value="">{{ __('All logs') }}</option>
                     @foreach ($logs as $name)
                         <option value="{{ $name }}">{{ ucfirst($name) }}</option>

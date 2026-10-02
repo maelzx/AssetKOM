@@ -76,7 +76,7 @@ new #[Layout('layouts.app')] class extends Component
         </x-page-header>
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div class="card bg-base-100 shadow-sm p-6">
+            <div class="card bg-base-100 p-6">
                 <h3 class="text-lg font-medium text-base-content">{{ __('Assets by status') }}</h3>
                 <ul class="mt-4 space-y-2">
                     @foreach (AssetStatus::cases() as $status)
@@ -88,7 +88,7 @@ new #[Layout('layouts.app')] class extends Component
                 </ul>
             </div>
 
-            <div class="card bg-base-100 shadow-sm p-6">
+            <div class="card bg-base-100 p-6">
                 <h3 class="text-lg font-medium text-base-content">{{ __('Maintenance by status') }}</h3>
                 <ul class="mt-4 space-y-2">
                     @foreach (MaintenanceStatus::cases() as $status)
@@ -100,7 +100,7 @@ new #[Layout('layouts.app')] class extends Component
                 </ul>
             </div>
 
-            <div class="card bg-base-100 shadow-sm p-6">
+            <div class="card bg-base-100 p-6">
                 <h3 class="text-lg font-medium text-base-content">{{ __('Purchase value') }}</h3>
                 <ul class="mt-4 space-y-2">
                     @forelse ($purchaseTotals as $currency => $total)
@@ -125,7 +125,7 @@ new #[Layout('layouts.app')] class extends Component
             </div>
         </div>
 
-        <div class="card bg-base-100 shadow-sm overflow-hidden">
+        <div class="card bg-base-100 overflow-hidden">
             <div class="border-b border-base-300 px-6 py-4">
                 <h3 class="text-lg font-medium text-base-content">{{ __('Depreciation (straight-line)') }}</h3>
             </div>
@@ -156,7 +156,7 @@ new #[Layout('layouts.app')] class extends Component
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <div class="card bg-base-100 shadow-sm overflow-hidden">
+            <div class="card bg-base-100 overflow-hidden">
                 <div class="border-b border-base-300 px-6 py-4">
                     <h3 class="text-lg font-medium text-base-content">{{ __('Assets by category') }}</h3>
                 </div>
@@ -174,7 +174,7 @@ new #[Layout('layouts.app')] class extends Component
                 </table>
             </div>
 
-            <div class="card bg-base-100 shadow-sm overflow-hidden">
+            <div class="card bg-base-100 overflow-hidden">
                 <div class="border-b border-base-300 px-6 py-4">
                     <h3 class="text-lg font-medium text-base-content">{{ __('Assets by location') }}</h3>
                 </div>

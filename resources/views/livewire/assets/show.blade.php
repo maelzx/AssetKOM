@@ -220,7 +220,7 @@ new #[Layout('layouts.app')] class extends Component
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <div class="lg:col-span-2 space-y-6">
-                <div class="card bg-base-100 shadow-sm p-6 space-y-4">
+                <div class="card bg-base-100 p-6 space-y-4">
                     <h3 class="text-lg font-medium text-base-content">{{ __('Overview') }}</h3>
 
                     @if ($asset->image_path)
@@ -270,7 +270,7 @@ new #[Layout('layouts.app')] class extends Component
                     @endif
                 </div>
 
-                <div class="card bg-base-100 shadow-sm p-6 space-y-4">
+                <div class="card bg-base-100 p-6 space-y-4">
                     <h3 class="text-lg font-medium text-base-content">{{ __('Financials') }}</h3>
 
                     <dl class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3 text-sm">
@@ -302,7 +302,7 @@ new #[Layout('layouts.app')] class extends Component
                     </dl>
                 </div>
 
-                <div class="card bg-base-100 shadow-sm p-6 space-y-4">
+                <div class="card bg-base-100 p-6 space-y-4">
                     <h3 class="text-lg font-medium text-base-content">{{ __('Depreciation') }}</h3>
 
                     @if ($isDepreciable)
@@ -351,7 +351,7 @@ new #[Layout('layouts.app')] class extends Component
                 </div>
 
                 @if (! empty($asset->custom_fields))
-                    <div class="card bg-base-100 shadow-sm p-6 space-y-4">
+                    <div class="card bg-base-100 p-6 space-y-4">
                         <h3 class="text-lg font-medium text-base-content">{{ __('Custom fields') }}</h3>
 
                         <dl class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3 text-sm">
@@ -365,7 +365,7 @@ new #[Layout('layouts.app')] class extends Component
                     </div>
                 @endif
 
-                <div class="card bg-base-100 shadow-sm p-6 space-y-4">
+                <div class="card bg-base-100 p-6 space-y-4">
                     <h3 class="text-lg font-medium text-base-content">{{ __('Assignment history') }}</h3>
 
                     @forelse ($asset->assignments as $assignment)
@@ -404,7 +404,7 @@ new #[Layout('layouts.app')] class extends Component
             </div>
 
             <div class="space-y-6">
-                <div class="card bg-base-100 shadow-sm p-6 space-y-3">
+                <div class="card bg-base-100 p-6 space-y-3">
                     <h3 class="text-lg font-medium text-base-content">{{ __('Assignment') }}</h3>
 
                     @error('assignment')
@@ -430,7 +430,7 @@ new #[Layout('layouts.app')] class extends Component
                             <form wire:submit="checkin" class="space-y-3 border-t border-base-300 pt-3">
                                 <div>
                                     <x-input-label for="conditionIn" :value="__('Condition on return')" />
-                                    <select wire:model="conditionIn" id="conditionIn" class="select select-bordered w-full mt-1 block w-full border-base-300 focus:border-primary focus:ring-primary rounded-md shadow-sm">
+                                    <select wire:model="conditionIn" id="conditionIn" class="select select-bordered w-full mt-1 block w-full border-base-300 focus:border-primary focus:ring-primary rounded-md">
                                         @foreach (\App\Enums\AssetCondition::cases() as $condition)
                                             <option value="{{ $condition->value }}">{{ $condition->label() }}</option>
                                         @endforeach
@@ -439,7 +439,7 @@ new #[Layout('layouts.app')] class extends Component
                                 </div>
                                 <div>
                                     <x-input-label for="checkinNotes" :value="__('Notes')" />
-                                    <textarea wire:model="checkinNotes" id="checkinNotes" rows="2" class="textarea textarea-bordered w-full mt-1 block w-full border-base-300 focus:border-primary focus:ring-primary rounded-md shadow-sm"></textarea>
+                                    <textarea wire:model="checkinNotes" id="checkinNotes" rows="2" class="textarea textarea-bordered w-full mt-1 block w-full border-base-300 focus:border-primary focus:ring-primary rounded-md"></textarea>
                                 </div>
                                 <div class="flex items-center gap-3">
                                     <x-primary-button>{{ __('Check in') }}</x-primary-button>
@@ -458,7 +458,7 @@ new #[Layout('layouts.app')] class extends Component
                             <form wire:submit="checkout" class="space-y-3 border-t border-base-300 pt-3">
                                 <div>
                                     <x-input-label for="assignableType" :value="__('Assign to')" />
-                                    <select wire:model.live="assignableType" id="assignableType" class="select select-bordered w-full mt-1 block w-full border-base-300 focus:border-primary focus:ring-primary rounded-md shadow-sm">
+                                    <select wire:model.live="assignableType" id="assignableType" class="select select-bordered w-full mt-1 block w-full border-base-300 focus:border-primary focus:ring-primary rounded-md">
                                         <option value="user">{{ __('A person') }}</option>
                                         <option value="location">{{ __('A location') }}</option>
                                     </select>
@@ -466,7 +466,7 @@ new #[Layout('layouts.app')] class extends Component
 
                                 <div>
                                     <x-input-label for="assignableId" :value="$assignableType === 'user' ? __('Person') : __('Location')" />
-                                    <select wire:model="assignableId" id="assignableId" class="select select-bordered w-full mt-1 block w-full border-base-300 focus:border-primary focus:ring-primary rounded-md shadow-sm">
+                                    <select wire:model="assignableId" id="assignableId" class="select select-bordered w-full mt-1 block w-full border-base-300 focus:border-primary focus:ring-primary rounded-md">
                                         <option value="">{{ __('— Select —') }}</option>
                                         @foreach ($assignableType === 'user' ? $users : $locations as $option)
                                             <option value="{{ $option->id }}">{{ $option->name }}</option>
@@ -483,7 +483,7 @@ new #[Layout('layouts.app')] class extends Component
 
                                 <div>
                                     <x-input-label for="conditionOut" :value="__('Condition out')" />
-                                    <select wire:model="conditionOut" id="conditionOut" class="select select-bordered w-full mt-1 block w-full border-base-300 focus:border-primary focus:ring-primary rounded-md shadow-sm">
+                                    <select wire:model="conditionOut" id="conditionOut" class="select select-bordered w-full mt-1 block w-full border-base-300 focus:border-primary focus:ring-primary rounded-md">
                                         @foreach (\App\Enums\AssetCondition::cases() as $condition)
                                             <option value="{{ $condition->value }}">{{ $condition->label() }}</option>
                                         @endforeach
@@ -492,7 +492,7 @@ new #[Layout('layouts.app')] class extends Component
 
                                 <div>
                                     <x-input-label for="checkoutNotes" :value="__('Notes')" />
-                                    <textarea wire:model="checkoutNotes" id="checkoutNotes" rows="2" class="textarea textarea-bordered w-full mt-1 block w-full border-base-300 focus:border-primary focus:ring-primary rounded-md shadow-sm"></textarea>
+                                    <textarea wire:model="checkoutNotes" id="checkoutNotes" rows="2" class="textarea textarea-bordered w-full mt-1 block w-full border-base-300 focus:border-primary focus:ring-primary rounded-md"></textarea>
                                 </div>
 
                                 <div class="flex items-center gap-3">
@@ -508,7 +508,7 @@ new #[Layout('layouts.app')] class extends Component
                     @endif
                 </div>
 
-                <div class="card bg-base-100 shadow-sm p-6 text-center">
+                <div class="card bg-base-100 p-6 text-center">
                     <h3 class="text-lg font-medium text-base-content">{{ __('QR label') }}</h3>
                     <img src="{{ $qr }}" class="mx-auto mt-3 h-40 w-40" alt="{{ $asset->asset_tag }}">
                     <p class="mt-2 font-mono text-xs text-base-content/60">{{ $asset->asset_tag }}</p>
@@ -517,11 +517,11 @@ new #[Layout('layouts.app')] class extends Component
                     </a>
                 </div>
 
-                <div class="card bg-base-100 shadow-sm p-6">
+                <div class="card bg-base-100 p-6">
                     <livewire:attachments.panel :attachable="$asset" wire:key="attachments-asset-{{ $asset->id }}" />
                 </div>
 
-                <div class="card bg-base-100 shadow-sm p-6">
+                <div class="card bg-base-100 p-6">
                     <h3 class="text-lg font-medium text-base-content">{{ __('Activity') }}</h3>
                     <ul class="mt-3 space-y-2">
                         @forelse ($activities as $activity)

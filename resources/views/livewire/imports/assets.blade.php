@@ -135,7 +135,7 @@ new #[Layout('layouts.app')] class extends Component
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
         <x-page-header :title="__('Import assets')" :subtitle="__('Upload a CSV, map the columns, dry-run, then import. Existing tags are updated.')" />
 
-        <div class="card bg-base-100 shadow-sm p-6 space-y-4">
+        <div class="card bg-base-100 p-6 space-y-4">
             <div class="flex flex-wrap items-end gap-3">
                 <div>
                     <x-input-label for="csv" :value="__('CSV file')" />
@@ -151,14 +151,14 @@ new #[Layout('layouts.app')] class extends Component
         </div>
 
         @if ($headers !== [])
-            <div class="card bg-base-100 shadow-sm p-6 space-y-4">
+            <div class="card bg-base-100 p-6 space-y-4">
                 <h3 class="text-lg font-medium text-base-content">{{ __('Column mapping') }}</h3>
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     @foreach ($fields as $field => $label)
                         <div>
                             <x-input-label :for="'map_'.$field" :value="$label" />
-                            <select wire:model="mapping.{{ $field }}" id="map_{{ $field }}" class="select select-bordered w-full mt-1 block w-full border-base-300 focus:border-primary focus:ring-primary rounded-md shadow-sm text-sm">
+                            <select wire:model="mapping.{{ $field }}" id="map_{{ $field }}" class="select select-bordered w-full mt-1 block w-full border-base-300 focus:border-primary focus:ring-primary rounded-md text-sm">
                                 <option value="">{{ __('— none —') }}</option>
                                 @foreach ($headers as $header)
                                     <option value="{{ $header }}">{{ $header }}</option>
@@ -200,7 +200,7 @@ new #[Layout('layouts.app')] class extends Component
         @endif
 
         @if ($report)
-            <div class="card bg-base-100 shadow-sm p-6 space-y-4">
+            <div class="card bg-base-100 p-6 space-y-4">
                 <h3 class="text-lg font-medium text-base-content">{{ __('Dry-run report') }}</h3>
                 <div class="flex flex-wrap gap-4 text-sm">
                     <span class="text-green-700">{{ __('Create') }}: <strong>{{ $report['summary']['create'] }}</strong></span>

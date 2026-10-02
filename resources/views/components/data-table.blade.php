@@ -1,6 +1,6 @@
 @props(['paginator' => null])
 
-<div class="card overflow-hidden border border-base-300 bg-base-100 shadow-sm">
+<div class="card overflow-hidden border border-base-300 bg-base-100">
     <div class="hidden overflow-x-auto md:block">
         {{ $table }}
     </div>

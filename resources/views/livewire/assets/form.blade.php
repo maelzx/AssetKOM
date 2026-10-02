@@ -196,7 +196,7 @@ new #[Layout('layouts.app')] class extends Component
         />
 
         <form wire:submit="save" class="space-y-6">
-            <div class="card bg-base-100 shadow-sm p-6 space-y-4">
+            <div class="card bg-base-100 p-6 space-y-4">
                 <h3 class="text-lg font-medium text-base-content">{{ __('Identity') }}</h3>
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -214,7 +214,7 @@ new #[Layout('layouts.app')] class extends Component
 
                     <div>
                         <x-input-label for="category_id" :value="__('Category')" />
-                        <select wire:model="category_id" id="category_id" class="select select-bordered w-full mt-1 block w-full border-base-300 focus:border-primary focus:ring-primary rounded-md shadow-sm">
+                        <select wire:model="category_id" id="category_id" class="select select-bordered w-full mt-1 block w-full border-base-300 focus:border-primary focus:ring-primary rounded-md">
                             <option value="">{{ __('— None —') }}</option>
                             @foreach ($categories as $option)
                                 <option value="{{ $option->id }}">{{ $option->full_name }}</option>
@@ -225,7 +225,7 @@ new #[Layout('layouts.app')] class extends Component
 
                     <div>
                         <x-input-label for="location_id" :value="__('Current location')" />
-                        <select wire:model="location_id" id="location_id" class="select select-bordered w-full mt-1 block w-full border-base-300 focus:border-primary focus:ring-primary rounded-md shadow-sm">
+                        <select wire:model="location_id" id="location_id" class="select select-bordered w-full mt-1 block w-full border-base-300 focus:border-primary focus:ring-primary rounded-md">
                             <option value="">{{ __('— None —') }}</option>
                             @foreach ($locations as $option)
                                 <option value="{{ $option->id }}">{{ $option->full_name }}</option>
@@ -236,7 +236,7 @@ new #[Layout('layouts.app')] class extends Component
 
                     <div>
                         <x-input-label for="status" :value="__('Status')" />
-                        <select wire:model="status" id="status" class="select select-bordered w-full mt-1 block w-full border-base-300 focus:border-primary focus:ring-primary rounded-md shadow-sm">
+                        <select wire:model="status" id="status" class="select select-bordered w-full mt-1 block w-full border-base-300 focus:border-primary focus:ring-primary rounded-md">
                             @foreach ($statuses as $option)
                                 <option value="{{ $option->value }}">{{ $option->label() }}</option>
                             @endforeach
@@ -246,7 +246,7 @@ new #[Layout('layouts.app')] class extends Component
 
                     <div>
                         <x-input-label for="condition" :value="__('Condition')" />
-                        <select wire:model="condition" id="condition" class="select select-bordered w-full mt-1 block w-full border-base-300 focus:border-primary focus:ring-primary rounded-md shadow-sm">
+                        <select wire:model="condition" id="condition" class="select select-bordered w-full mt-1 block w-full border-base-300 focus:border-primary focus:ring-primary rounded-md">
                             @foreach ($conditions as $option)
                                 <option value="{{ $option->value }}">{{ $option->label() }}</option>
                             @endforeach
@@ -256,13 +256,13 @@ new #[Layout('layouts.app')] class extends Component
 
                     <div class="sm:col-span-2">
                         <x-input-label for="description" :value="__('Description')" />
-                        <textarea wire:model="description" id="description" rows="3" class="textarea textarea-bordered w-full mt-1 block w-full border-base-300 focus:border-primary focus:ring-primary rounded-md shadow-sm"></textarea>
+                        <textarea wire:model="description" id="description" rows="3" class="textarea textarea-bordered w-full mt-1 block w-full border-base-300 focus:border-primary focus:ring-primary rounded-md"></textarea>
                         <x-input-error :messages="$errors->get('description')" class="mt-2" />
                     </div>
                 </div>
             </div>
 
-            <div class="card bg-base-100 shadow-sm p-6 space-y-4">
+            <div class="card bg-base-100 p-6 space-y-4">
                 <h3 class="text-lg font-medium text-base-content">{{ __('Hardware details') }}</h3>
 
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -298,7 +298,7 @@ new #[Layout('layouts.app')] class extends Component
                 </div>
             </div>
 
-            <div class="card bg-base-100 shadow-sm p-6 space-y-4">
+            <div class="card bg-base-100 p-6 space-y-4">
                 <h3 class="text-lg font-medium text-base-content">{{ __('Financials') }}</h3>
 
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -316,7 +316,7 @@ new #[Layout('layouts.app')] class extends Component
 
                     <div>
                         <x-input-label for="currency" :value="__('Currency')" />
-                        <select wire:model="currency" id="currency" class="select select-bordered w-full mt-1 block w-full border-base-300 focus:border-primary focus:ring-primary rounded-md shadow-sm">
+                        <select wire:model="currency" id="currency" class="select select-bordered w-full mt-1 block w-full border-base-300 focus:border-primary focus:ring-primary rounded-md">
                             @foreach ($currencies as $option)
                                 <option value="{{ $option->value }}">{{ $option->value }} — {{ $option->label() }}</option>
                             @endforeach
@@ -350,7 +350,7 @@ new #[Layout('layouts.app')] class extends Component
                 </div>
             </div>
 
-            <div class="card bg-base-100 shadow-sm p-6 space-y-4">
+            <div class="card bg-base-100 p-6 space-y-4">
                 <div class="flex items-center justify-between">
                     <h3 class="text-lg font-medium text-base-content">{{ __('Custom fields') }}</h3>
                     <button type="button" wire:click="addCustomField" class="text-sm text-primary hover:text-primary">
