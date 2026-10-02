@@ -13,6 +13,11 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
+        // Never seed demo accounts outside local/testing.
+        if (! app()->environment(['local', 'testing'])) {
+            return;
+        }
+
         $users = [
             ['name' => 'System Administrator', 'email' => 'admin@assetkom.test', 'role' => Role::Admin, 'notify' => true],
             ['name' => 'Asset Manager', 'email' => 'manager@assetkom.test', 'role' => Role::Manager, 'notify' => true],

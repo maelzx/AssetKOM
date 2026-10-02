@@ -5,8 +5,8 @@ use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
 
 Route::middleware('guest')->group(function () {
-    Volt::route('register', 'pages.auth.register')
-        ->name('register');
+    // Public registration is disabled for this internal tool.
+    // Accounts are provisioned by an administrator (see `php artisan admin:create`).
 
     Volt::route('login', 'pages.auth.login')
         ->name('login');

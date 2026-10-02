@@ -69,6 +69,11 @@ Demo accounts (password `password`):
 ## Production notes
 
 - Set `DB_CONNECTION=mysql` with connection credentials.
+- **Create the first administrator explicitly** — public registration is disabled:
+  `php artisan admin:create admin@yourorg.com` (prompts for a password).
+- Demo seeders (users/catalog/assets/assignments/maintenance) only run in `local`/`testing`;
+  production seeding applies settings only.
+- All pages require a **verified** account; unverified users are redirected to verification.
 - Configure SMTP: `MAIL_MAILER=smtp` plus host/port/username/password.
 - Run a queue worker (`php artisan queue:work`) under a supervisor for alert emails.
 - Schedule `php artisan schedule:run` every minute (daily alerts run at 08:00).

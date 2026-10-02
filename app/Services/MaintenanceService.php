@@ -33,6 +33,16 @@ class MaintenanceService
                 throw new MaintenanceException(__('Check the asset in before starting maintenance.'));
             }
 
+            $conflict = Maintenance::query()
+                ->where('asset_id', $locked->asset_id)
+                ->where('status', MaintenanceStatus::InProgress->value)
+                ->whereKeyNot($locked->getKey())
+                ->exists();
+
+            if ($conflict) {
+                throw new MaintenanceException(__('Another maintenance record is already in progress for this asset.'));
+            }
+
             if ($asset->status !== AssetStatus::Maintenance) {
                 if (! in_array(AssetStatus::Maintenance, $this->assetTransitions->transitionsFor($asset->status), true)) {
                     throw new MaintenanceException(
@@ -103,10 +113,21 @@ class MaintenanceService
     }
 
     /**
-     * Return the asset to available if it was placed under maintenance.
+     * Return the asset to available, but only when no other maintenance
+     * record is still in progress for it.
      */
     protected function releaseAsset(Maintenance $maintenance): void
     {
+        $stillInProgress = Maintenance::query()
+            ->where('asset_id', $maintenance->asset_id)
+            ->where('status', MaintenanceStatus::InProgress->value)
+            ->whereKeyNot($maintenance->getKey())
+            ->exists();
+
+        if ($stillInProgress) {
+            return;
+        }
+
         $asset = Asset::whereKey($maintenance->asset_id)->lockForUpdate()->firstOrFail();
 
         if ($asset->status === AssetStatus::Maintenance

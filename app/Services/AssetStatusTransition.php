@@ -14,6 +14,14 @@ use InvalidArgumentException;
 class AssetStatusTransition
 {
     /**
+     * Statuses an asset may be created with. All other statuses are
+     * lifecycle-driven (assignment / maintenance / retirement flows).
+     *
+     * @var array<int, string>
+     */
+    public const INITIAL_STATUSES = ['available', 'retired', 'lost'];
+
+    /**
      * Allowed target statuses keyed by the current status.
      *
      * @var array<string, array<int, AssetStatus>>

@@ -149,4 +149,31 @@ class AttachmentTest extends TestCase
         $this->assertDatabaseMissing('attachments', ['id' => $attachment->id]);
         Storage::disk('local')->assertMissing($attachment->file_path);
     }
+
+    public function test_unverified_users_cannot_download_attachments(): void
+    {
+        $attachment = Attachment::factory()->create();
+
+        $this->actingAs(User::factory()->unverified()->create())
+            ->get(route('attachments.download', $attachment))
+            ->assertRedirect(route('verification.notice'));
+    }
+
+    public function test_every_role_can_download_attachments(): void
+    {
+        Storage::fake('local');
+
+        $asset = Asset::factory()->create();
+        $attachment = Attachment::factory()->create([
+            'attachable_type' => $asset->getMorphClass(),
+            'attachable_id' => $asset->id,
+        ]);
+        Storage::disk('local')->put($attachment->file_path, 'contents');
+
+        foreach (['staff', 'manager', 'admin'] as $role) {
+            $this->actingAs(User::factory()->{$role}()->create())
+                ->get(route('attachments.download', $attachment))
+                ->assertOk();
+        }
+    }
 }

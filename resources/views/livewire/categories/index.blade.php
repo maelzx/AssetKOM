@@ -73,7 +73,15 @@ new #[Layout('layouts.app')] class extends Component
     {
         Gate::authorize('manage-catalog');
 
-        Category::findOrFail($id)->delete();
+        $category = Category::withCount(['assets', 'children'])->findOrFail($id);
+
+        if ($category->assets_count > 0 || $category->children_count > 0) {
+            $this->addError('delete', __('Move or remove the assets and sub-categories first.'));
+
+            return;
+        }
+
+        $category->delete();
 
         if ($this->editingId === $id) {
             $this->cancel();
@@ -159,6 +167,10 @@ new #[Layout('layouts.app')] class extends Component
                 </div>
             </form>
         </div>
+
+        @error('delete')
+            <div class="rounded-lg border border-error/40 bg-error/10 p-3 text-sm text-error">{{ $message }}</div>
+        @enderror
 
         <x-data-table>
             <x-slot name="table">

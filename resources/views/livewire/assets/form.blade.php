@@ -7,6 +7,7 @@ use App\Models\Asset;
 use App\Models\Category;
 use App\Models\Location;
 use App\Models\Setting;
+use App\Services\AssetStatusTransition;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
@@ -137,6 +138,23 @@ new #[Layout('layouts.app')] class extends Component
             'customFields.*.key' => ['nullable', 'string', 'max:100'],
             'customFields.*.value' => ['nullable', 'string', 'max:1000'],
         ]);
+
+        $to = AssetStatus::from($this->status);
+
+        if ($this->asset?->exists) {
+            if ($to !== $this->asset->status && ! app(AssetStatusTransition::class)->canTransition($this->asset->status, $to)) {
+                $this->addError('status', __('This asset cannot move from ":from" to ":to".', [
+                    'from' => $this->asset->status->label(),
+                    'to' => $to->label(),
+                ]));
+
+                return;
+            }
+        } elseif (! in_array($to->value, AssetStatusTransition::INITIAL_STATUSES, true)) {
+            $this->addError('status', __('A new asset must start as available, retired or lost.'));
+
+            return;
+        }
 
         $custom = [];
 

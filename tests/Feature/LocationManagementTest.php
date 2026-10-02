@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Asset;
 use App\Models\Location;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -68,5 +69,20 @@ class LocationManagementTest extends TestCase
         Volt::test('locations.index')->call('delete', $location->id);
 
         $this->assertSoftDeleted('locations', ['id' => $location->id]);
+    }
+
+    public function test_location_with_assets_cannot_be_deleted(): void
+    {
+        $manager = User::factory()->manager()->create();
+        $location = Location::factory()->create();
+        Asset::factory()->create(['location_id' => $location->id]);
+
+        $this->actingAs($manager);
+
+        Volt::test('locations.index')
+            ->call('delete', $location->id)
+            ->assertHasErrors(['delete']);
+
+        $this->assertNotSoftDeleted('locations', ['id' => $location->id]);
     }
 }

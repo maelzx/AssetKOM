@@ -66,6 +66,7 @@ class AssetImportTest extends TestCase
     public function test_import_creates_and_is_idempotent_by_asset_tag(): void
     {
         $category = Category::factory()->create(['name' => 'Laptops']);
+        Category::factory()->create(['name' => 'Monitors']);
         $location = Location::factory()->create(['name' => 'Head Office']);
 
         $path = $this->csvFile(
@@ -146,5 +147,69 @@ class AssetImportTest extends TestCase
             'name' => 'Imported Thing',
             'created_by' => $manager->id,
         ]);
+    }
+
+    public function test_zero_purchase_values_are_preserved(): void
+    {
+        $path = $this->csvFile("Asset Tag,Name,Cost,Salvage\nAST-9,Freebie,0,0\n");
+
+        $mapping = ['asset_tag' => 'Asset Tag', 'name' => 'Name', 'purchase_cost' => 'Cost', 'salvage_value' => 'Salvage'];
+
+        app(AssetCsvImporter::class)->import($path, $mapping);
+
+        $asset = Asset::query()->where('asset_tag', 'AST-9')->firstOrFail();
+
+        $this->assertSame('0.00', $asset->purchase_cost);
+        $this->assertSame('0.00', $asset->salvage_value);
+    }
+
+    public function test_unknown_category_is_reported_and_skipped(): void
+    {
+        $path = $this->csvFile("Asset Tag,Name,Category\nAST-10,Thing,Nonexistent\n");
+
+        $report = app(AssetCsvImporter::class)->dryRun($path, $this->mapping());
+
+        $this->assertSame(1, $report['summary']['errors']);
+        $this->assertStringContainsStringIgnoringCase('unknown category', implode(' ', $report['rows'][0]['errors']));
+
+        $result = app(AssetCsvImporter::class)->import($path, $this->mapping());
+
+        $this->assertSame(1, $result['skipped']);
+    }
+
+    public function test_duplicate_tags_within_a_file_are_reported_and_only_imported_once(): void
+    {
+        $path = $this->csvFile("Asset Tag,Name\nAST-11,First\nAST-11,Second\n");
+
+        $report = app(AssetCsvImporter::class)->dryRun($path, $this->mapping());
+
+        $this->assertSame(1, $report['summary']['create']);
+        $this->assertSame(1, $report['summary']['errors']);
+
+        $result = app(AssetCsvImporter::class)->import($path, $this->mapping());
+
+        $this->assertSame(1, $result['created']);
+        $this->assertSame(1, $result['skipped']);
+        $this->assertDatabaseCount('assets', 1);
+    }
+
+    public function test_soft_deleted_asset_tag_is_restored_on_reimport(): void
+    {
+        $asset = Asset::factory()->create(['asset_tag' => 'AST-12', 'name' => 'Old']);
+        $asset->delete();
+
+        $path = $this->csvFile("Asset Tag,Name\nAST-12,Refreshed\n");
+
+        $report = app(AssetCsvImporter::class)->dryRun($path, $this->mapping());
+        $this->assertSame('restore', $report['rows'][0]['action']);
+
+        $result = app(AssetCsvImporter::class)->import($path, $this->mapping());
+
+        $this->assertSame(1, $result['restored']);
+        $this->assertSame(0, $result['created']);
+
+        $restored = Asset::query()->where('asset_tag', 'AST-12')->firstOrFail();
+        $this->assertSame('Refreshed', $restored->name);
+        $this->assertNull($restored->deleted_at);
     }
 }

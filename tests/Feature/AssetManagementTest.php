@@ -147,4 +147,49 @@ class AssetManagementTest extends TestCase
 
         $this->assertSoftDeleted('assets', ['id' => $asset->id]);
     }
+
+    public function test_edit_cannot_set_an_invalid_status_transition(): void
+    {
+        $manager = User::factory()->manager()->create();
+        $asset = Asset::factory()->create(['status' => AssetStatus::Retired]);
+
+        $this->actingAs($manager);
+
+        Volt::test('assets.form', ['asset' => $asset])
+            ->set('status', AssetStatus::Assigned->value)
+            ->call('save')
+            ->assertHasErrors(['status']);
+
+        $this->assertSame(AssetStatus::Retired, $asset->fresh()->status);
+    }
+
+    public function test_edit_can_apply_a_valid_status_transition(): void
+    {
+        $manager = User::factory()->manager()->create();
+        $asset = Asset::factory()->create(['status' => AssetStatus::Available]);
+
+        $this->actingAs($manager);
+
+        Volt::test('assets.form', ['asset' => $asset])
+            ->set('status', AssetStatus::Retired->value)
+            ->call('save')
+            ->assertHasNoErrors();
+
+        $this->assertSame(AssetStatus::Retired, $asset->fresh()->status);
+    }
+
+    public function test_new_asset_cannot_start_in_a_lifecycle_status(): void
+    {
+        $manager = User::factory()->manager()->create();
+
+        $this->actingAs($manager);
+
+        Volt::test('assets.form')
+            ->set('name', 'Fresh asset')
+            ->set('status', AssetStatus::Assigned->value)
+            ->set('condition', 'good')
+            ->set('currency', 'MYR')
+            ->call('save')
+            ->assertHasErrors(['status']);
+    }
 }

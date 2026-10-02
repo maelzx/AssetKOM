@@ -136,4 +136,36 @@ class MaintenanceTest extends TestCase
         $this->assertFalse($staff->can('delete', $record));
         $this->assertTrue($admin->can('delete', $record));
     }
+
+    public function test_second_in_progress_maintenance_is_blocked(): void
+    {
+        $asset = Asset::factory()->create(['status' => AssetStatus::Available]);
+        $first = Maintenance::factory()->create(['asset_id' => $asset->id]);
+        $second = Maintenance::factory()->create(['asset_id' => $asset->id]);
+
+        $this->actingAs(User::factory()->staff()->create());
+
+        $component = Volt::test('maintenance.panel', ['asset' => $asset]);
+        $component->call('start', $first->id)->assertHasNoErrors();
+        $component->call('start', $second->id)->assertHasErrors(['maintenance']);
+
+        $this->assertSame(MaintenanceStatus::Scheduled, $second->fresh()->status);
+    }
+
+    public function test_asset_stays_under_maintenance_until_all_records_complete(): void
+    {
+        $asset = Asset::factory()->create(['status' => AssetStatus::Maintenance]);
+        $first = Maintenance::factory()->inProgress()->create(['asset_id' => $asset->id]);
+        $second = Maintenance::factory()->inProgress()->create(['asset_id' => $asset->id]);
+
+        $this->actingAs(User::factory()->staff()->create());
+
+        $component = Volt::test('maintenance.panel', ['asset' => $asset]);
+
+        $component->call('complete', $first->id)->assertHasNoErrors();
+        $this->assertSame(AssetStatus::Maintenance, $asset->fresh()->status);
+
+        $component->call('complete', $second->id)->assertHasNoErrors();
+        $this->assertSame(AssetStatus::Available, $asset->fresh()->status);
+    }
 }

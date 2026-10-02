@@ -32,7 +32,7 @@ single organization, role-based access (Admin / Manager / Staff).
 - QR scan-to-view: auth-only.
 - Currency/locale/timezone: multi-currency MYR+USD, Asia/Kuala_Lumpur, en_MY.
 
-## Permission matrix (proposed)
+## Permission matrix (current)
 
 | Capability | Admin | Manager | Staff |
 |---|---|---|---|
@@ -51,7 +51,7 @@ single organization, role-based access (Admin / Manager / Staff).
 
 - `livewire/livewire`, `livewire/volt`
 - `laravel/breeze` (dev, livewire stack)
-- `simplesoftwareio/simple-qrcode` (QR codes)
+- `endroid/qr-code` (QR codes — GD/PNG; replaced simple-qrcode which required Imagick)
 - `barryvdh/laravel-dompdf` (label + report PDFs)
 - `league/csv` (import/export)
 - `spatie/laravel-activitylog` (audit trail)
@@ -61,13 +61,13 @@ single organization, role-based access (Admin / Manager / Staff).
 
 | Table | Purpose / key fields |
 |---|---|
-| `users` | existing + `role` enum, optional `department` |
+| `users` | existing + `role` enum + `notify_*` preferences |
 | `settings` | key/value: org name, default currency, asset-tag prefix, base currency + FX rate, depreciation defaults, label template |
 | `categories` | tree (`parent_id`), `name`, `slug`, `description` |
 | `locations` | tree (`parent_id`), `name`, `code`, `address` |
 | `assets` | `asset_tag` (unique), `name`, `description`, `category_id`, `location_id` (current location), `status`, `condition`, `serial_number`, `manufacturer`, `model`, `purchase_date`, `purchase_cost`, `currency` (MYR/USD), `salvage_value`, `useful_life_years`, `warranty_expiry`, `supplier`, `custom_fields` (JSON), `image_path`, `created_by`, soft deletes |
 | `asset_assignments` | polymorphic `assignable` (User or Location), `assigned_by`, `assigned_at`, `expected_return_at`, `returned_at`, `condition_out`, `condition_in`, notes, status |
-| `maintenances` | `asset_id`, `type` (preventive/corrective/inspection), `vendor`, `cost`, `scheduled_at`, `completed_at`, `status`, notes |
+| `maintenances` | `asset_id`, `type`, `title`, `description`, `vendor`, `cost`, `currency`, `scheduled_at`, `completed_at`, `performed_by`, `notes`, `created_by`, status |
 | `attachments` | polymorphic (`asset`/`maintenance`), private disk path, original name, mime, size, `uploaded_by` |
 | `activity_log` | spatie/laravel-activitylog |
 
@@ -157,6 +157,32 @@ Decisions (locked): **daisyUI 5**, **modern spacious / card-based**, placeholder
 - [x] Replace the default Breeze app shell/nav with a branded spacious layout
 - [x] Re-skin assets list/detail, assignments, maintenance, auth screens to daisyUI components
 - [x] Placeholder logo/wordmark + accent color tokens (`AssetKOM` wordmark, primary accent)
+
+### Phase 12 — Audit Follow-ups
+
+#### Phase 12a — Security & correctness ✅
+- [x] **Prod seeding**: demo seeders gated to `local`/`testing`; `admin:create` command for a
+      secure first-admin bootstrap; README production setup documented.
+- [x] **Registration posture**: public registration disabled; `verified` added to the
+      attachment-download and label/scan routes; `User` implements `MustVerifyEmail`.
+- [x] **Attachment authorization**: tested direct download as guest / unverified / staff /
+      manager / admin.
+- [x] **CSV import fixes**: zero values preserved; soft-deleted tags restored; in-file
+      duplicate tags reported; unknown category/location reported (dry-run and import share
+      one analysis pass so they agree).
+- [x] **Maintenance conflict**: one in-progress record per asset enforced; asset returns to
+      `available` only when no in-progress maintenance remains (locks + tests).
+- [x] **Status lifecycle enforcement**: create/edit/import status changes routed through
+      `AssetStatusTransition`; initial statuses constrained to available/retired/lost.
+- [x] **Catalog deletion**: categories/locations with assets or children cannot be deleted.
+
+#### Phase 12b — Features & scope decisions (open)
+- [ ] Admin user-and-role management workflow (or documented CLI provisioning).
+- [ ] Multi-currency reporting via base currency + FX rate (define rate direction / historic
+      valuation) — or remove the unused conversion settings.
+- [ ] Stocktake / reconciliation: build (count sessions, scan capture, discrepancy review) or
+      record an explicit product-scope deferral.
+- [ ] Retirement/loss lifecycle: add dates/reason/disposal/history, or record the limitation.
 
 ## Risks / watch items
 

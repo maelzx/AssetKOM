@@ -205,6 +205,7 @@ new #[Layout('layouts.app')] class extends Component
                 <div class="flex flex-wrap gap-4 text-sm">
                     <span class="text-green-700">{{ __('Create') }}: <strong>{{ $report['summary']['create'] }}</strong></span>
                     <span class="text-blue-700">{{ __('Update') }}: <strong>{{ $report['summary']['update'] }}</strong></span>
+                    <span class="text-amber-700">{{ __('Restore') }}: <strong>{{ $report['summary']['restore'] }}</strong></span>
                     <span class="text-red-700">{{ __('Errors') }}: <strong>{{ $report['summary']['errors'] }}</strong></span>
                     <span class="text-base-content/60">{{ __('Total') }}: <strong>{{ $report['summary']['total'] }}</strong></span>
                 </div>
@@ -240,7 +241,7 @@ new #[Layout('layouts.app')] class extends Component
 
         @if ($result)
             <div class="rounded-md bg-green-50 p-4 text-sm text-green-800">
-                {{ __('Import complete — :created created, :updated updated, :skipped skipped.', $result) }}
+                {{ __('Import complete — :created created, :updated updated, :restored restored, :skipped skipped.', $result) }}
                 <a href="{{ route('assets.index') }}" wire:navigate class="ms-2 font-medium underline">{{ __('View assets') }}</a>
             </div>
         @endif

@@ -10,6 +10,7 @@ use App\Models\Category;
 use App\Models\Location;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -18,6 +19,8 @@ use League\Csv\Reader;
 /**
  * CSV asset import with column mapping, dry-run validation and
  * idempotent upserts keyed by asset tag.
+ *
+ * Dry-run and import share the same row analysis so they always agree.
  */
 class AssetCsvImporter
 {
@@ -46,13 +49,14 @@ class AssetCsvImporter
         'supplier' => 'Supplier',
     ];
 
+    public function __construct(private readonly AssetStatusTransition $transitions) {}
+
     /**
      * @return array{headers: array<int, string>, preview: array<int, array<string, string|null>>}
      */
     public function preview(string $path, int $limit = 5): array
     {
         $reader = $this->reader($path);
-
         $preview = [];
 
         foreach ($reader->getRecords() as $record) {
@@ -73,71 +77,56 @@ class AssetCsvImporter
      * Validate every row without writing anything.
      *
      * @param  array<string, string|null>  $mapping
-     * @return array{rows: array<int, array<string, mixed>>, summary: array{create: int, update: int, errors: int, total: int}}
+     * @return array{rows: array<int, array<string, mixed>>, summary: array<string, int>}
      */
     public function dryRun(string $path, array $mapping): array
     {
-        $existingTags = Asset::query()->pluck('asset_tag')->flip();
-        $rows = [];
-        $summary = ['create' => 0, 'update' => 0, 'errors' => 0, 'total' => 0];
-        $line = 1;
+        $rows = $this->analyze($path, $mapping);
+        $summary = ['create' => 0, 'update' => 0, 'restore' => 0, 'errors' => 0, 'total' => count($rows)];
 
-        foreach ($this->records($path) as $record) {
-            $line++;
-            $data = $this->mapped($record, $mapping);
-            $validator = Validator::make($data, $this->rules());
-            $errors = $validator->errors()->all();
-
-            $tag = $data['asset_tag'] ?? null;
-            $action = $tag && $existingTags->has($tag) ? 'update' : 'create';
-
-            if ($errors !== []) {
+        foreach ($rows as $row) {
+            if ($row['errors'] !== []) {
                 $summary['errors']++;
             } else {
-                $summary[$action]++;
+                $summary[$row['action']]++;
             }
-
-            $rows[] = [
-                'line' => $line,
-                'asset_tag' => $tag,
-                'name' => $data['name'] ?? null,
-                'action' => $action,
-                'errors' => $errors,
-            ];
         }
-
-        $summary['total'] = count($rows);
 
         return ['rows' => $rows, 'summary' => $summary];
     }
 
     /**
-     * Import valid rows, creating or updating by asset tag.
+     * Import valid rows, creating, updating or restoring by asset tag.
      *
      * @param  array<string, string|null>  $mapping
-     * @return array{created: int, updated: int, skipped: int}
+     * @return array{created: int, updated: int, restored: int, skipped: int}
      */
     public function import(string $path, array $mapping): array
     {
+        $rows = $this->analyze($path, $mapping);
         $categories = $this->nameMap(Category::class);
         $locations = $this->nameMap(Location::class);
 
-        $result = ['created' => 0, 'updated' => 0, 'skipped' => 0];
+        $result = ['created' => 0, 'updated' => 0, 'restored' => 0, 'skipped' => 0];
 
-        DB::transaction(function () use ($path, $mapping, $categories, $locations, &$result): void {
-            foreach ($this->records($path) as $record) {
-                $data = $this->mapped($record, $mapping);
-
-                if (Validator::make($data, $this->rules())->fails()) {
+        DB::transaction(function () use ($rows, $categories, $locations, &$result): void {
+            foreach ($rows as $row) {
+                if ($row['errors'] !== []) {
                     $result['skipped']++;
 
                     continue;
                 }
 
+                $data = $row['data'];
+                $tag = $row['asset_tag'];
                 $attributes = $this->attributes($data, $categories, $locations);
-                $tag = $data['asset_tag'] ?? null;
 
-                $asset = $tag ? Asset::firstOrNew(['asset_tag' => $tag]) : new Asset;
+                $asset = $tag ? Asset::withTrashed()->firstOrNew(['asset_tag' => $tag]) : new Asset;
+                $wasTrashed = $asset->exists && $asset->trashed();
+
+                if ($wasTrashed) {
+                    $asset->restore();
+                }
 
                 if (! $asset->exists) {
                     $asset->created_by = auth()->id();
@@ -146,11 +135,75 @@ class AssetCsvImporter
                 $asset->fill($attributes);
                 $asset->save();
 
-                $asset->wasRecentlyCreated ? $result['created']++ : $result['updated']++;
+                if ($wasTrashed) {
+                    $result['restored']++;
+                } elseif ($asset->wasRecentlyCreated) {
+                    $result['created']++;
+                } else {
+                    $result['updated']++;
+                }
             }
         });
 
         return $result;
+    }
+
+    /**
+     * Analyse every row (shared by dry-run and import).
+     *
+     * @param  array<string, string|null>  $mapping
+     * @return array<int, array{line: int, asset_tag: ?string, name: ?string, action: string, errors: array<int, string>, data: array<string, mixed>}>
+     */
+    protected function analyze(string $path, array $mapping): array
+    {
+        $categories = $this->nameMap(Category::class);
+        $locations = $this->nameMap(Location::class);
+
+        /** @var Collection<string, Asset> $existing */
+        $existing = Asset::withTrashed()->get()->keyBy('asset_tag');
+
+        $seen = [];
+        $rows = [];
+        $line = 1;
+
+        foreach ($this->records($path) as $record) {
+            $line++;
+            $data = $this->mapped($record, $mapping);
+            $errors = $this->validateRow($data, $categories, $locations);
+
+            $tag = $data['asset_tag'] ?? null;
+
+            if ($tag !== null) {
+                if (isset($seen[$tag])) {
+                    $errors[] = __('Duplicate asset tag in this file.');
+                }
+
+                $seen[$tag] = true;
+            }
+
+            $current = $tag !== null ? $existing->get($tag) : null;
+
+            if ($current && ! $current->trashed()) {
+                $errors = array_merge($errors, $this->validateTransition($data, $current));
+                $action = 'update';
+            } elseif ($current) {
+                $action = 'restore';
+            } else {
+                $errors = array_merge($errors, $this->validateInitialStatus($data));
+                $action = 'create';
+            }
+
+            $rows[] = [
+                'line' => $line,
+                'asset_tag' => $tag,
+                'name' => $data['name'] ?? null,
+                'action' => $action,
+                'errors' => array_values(array_unique($errors)),
+                'data' => $data,
+            ];
+        }
+
+        return $rows;
     }
 
     protected function reader(string $path): Reader
@@ -208,6 +261,60 @@ class AssetCsvImporter
     }
 
     /**
+     * @return array<int, string>
+     */
+    protected function validateRow(array $data, array $categories, array $locations): array
+    {
+        $errors = Validator::make($data, $this->rules())->errors()->all();
+
+        if (! empty($data['category']) && ! isset($categories[$this->normalise($data['category'])])) {
+            $errors[] = __('Unknown category: :name', ['name' => $data['category']]);
+        }
+
+        if (! empty($data['location']) && ! isset($locations[$this->normalise($data['location'])])) {
+            $errors[] = __('Unknown location: :name', ['name' => $data['location']]);
+        }
+
+        return $errors;
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    protected function validateInitialStatus(array $data): array
+    {
+        $status = $data['status'] ?? null;
+
+        if ($status === null || in_array($status, AssetStatusTransition::INITIAL_STATUSES, true)) {
+            return [];
+        }
+
+        return [__('A new asset cannot start with status ":status".', ['status' => $status])];
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    protected function validateTransition(array $data, Asset $current): array
+    {
+        $status = $data['status'] ?? null;
+        $to = $status !== null ? AssetStatus::tryFrom($status) : null;
+
+        if ($to === null || $to === $current->status) {
+            return [];
+        }
+
+        if ($this->transitions->canTransition($current->status, $to)) {
+            return [];
+        }
+
+        return [__('Cannot change status from ":from" to ":to".', [
+            'from' => $current->status->value,
+            'to' => $to->value,
+        ])];
+    }
+
+    /**
      * @return array<string, array<int, mixed>>
      */
     protected function rules(): array
@@ -246,7 +353,8 @@ class AssetCsvImporter
             'purchase_cost', 'salvage_value', 'useful_life_years', 'supplier',
             'status', 'condition', 'currency',
         ] as $field) {
-            if (! empty($data[$field])) {
+            // Preserve explicit zero values (e.g. purchase_cost = 0).
+            if (array_key_exists($field, $data) && $data[$field] !== null && $data[$field] !== '') {
                 $attributes[$field] = $data[$field];
             }
         }

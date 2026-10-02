@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Asset;
 use App\Models\Category;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -85,5 +86,35 @@ class CategoryManagementTest extends TestCase
         Volt::test('categories.index')->call('delete', $category->id);
 
         $this->assertSoftDeleted('categories', ['id' => $category->id]);
+    }
+
+    public function test_category_with_assets_cannot_be_deleted(): void
+    {
+        $manager = User::factory()->manager()->create();
+        $category = Category::factory()->create();
+        Asset::factory()->create(['category_id' => $category->id]);
+
+        $this->actingAs($manager);
+
+        Volt::test('categories.index')
+            ->call('delete', $category->id)
+            ->assertHasErrors(['delete']);
+
+        $this->assertNotSoftDeleted('categories', ['id' => $category->id]);
+    }
+
+    public function test_category_with_children_cannot_be_deleted(): void
+    {
+        $manager = User::factory()->manager()->create();
+        $parent = Category::factory()->create();
+        Category::factory()->childOf($parent)->create();
+
+        $this->actingAs($manager);
+
+        Volt::test('categories.index')
+            ->call('delete', $parent->id)
+            ->assertHasErrors(['delete']);
+
+        $this->assertNotSoftDeleted('categories', ['id' => $parent->id]);
     }
 }

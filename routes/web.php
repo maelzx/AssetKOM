@@ -60,7 +60,7 @@ Volt::route('maintenance', 'maintenance.index')
     ->name('maintenance.index');
 
 Route::get('attachments/{attachment}', AttachmentDownloadController::class)
-    ->middleware(['auth', 'throttle:60,1'])
+    ->middleware(['auth', 'verified', 'throttle:60,1'])
     ->name('attachments.download');
 
 Volt::route('labels', 'labels.index')
@@ -71,7 +71,7 @@ Volt::route('imports/assets', 'imports.assets')
     ->middleware(['auth', 'verified', 'can:manage-assets'])
     ->name('imports.assets');
 
-Route::middleware(['auth', 'throttle:30,1'])->group(function (): void {
+Route::middleware(['auth', 'verified', 'throttle:30,1'])->group(function (): void {
     Route::get('a/{asset:asset_tag}', fn (Asset $asset) => redirect()->route('assets.show', $asset))
         ->name('scan.show');
 
