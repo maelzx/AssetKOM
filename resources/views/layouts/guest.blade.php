@@ -20,8 +20,30 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Fira+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
 
+        <meta name="asset-version" content="{{ \Illuminate\Support\Facades\Vite::asset('resources/css/app.css') }}">
+
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+        <script>
+            (function () {
+                function checkAssetVersion() {
+                    var meta = document.querySelector('meta[name="asset-version"]');
+                    if (!meta) return;
+                    var current = meta.getAttribute('content');
+                    var stored = null;
+                    try { stored = localStorage.getItem('asset-version'); } catch (e) {}
+                    if (stored && stored !== current) {
+                        try { localStorage.setItem('asset-version', current); } catch (e) {}
+                        window.location.reload();
+                        return;
+                    }
+                    try { localStorage.setItem('asset-version', current); } catch (e) {}
+                }
+                document.addEventListener('DOMContentLoaded', checkAssetVersion);
+                document.addEventListener('livewire:navigated', checkAssetVersion);
+            })();
+        </script>
     </head>
     <body class="min-h-screen bg-base-200 font-sans text-base-content antialiased">
         <div class="flex min-h-screen flex-col items-center justify-center px-4 py-10">
