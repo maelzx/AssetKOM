@@ -1,12 +1,15 @@
 <?php
 
 use App\Enums\AssetStatus;
+use App\Enums\Currency;
 use App\Enums\MaintenanceStatus;
 use App\Models\Asset;
 use App\Models\AssetAssignment;
 use App\Models\Category;
 use App\Models\Location;
 use App\Models\Maintenance;
+use App\Models\Setting;
+use App\Services\CurrencyConverter;
 use App\Support\Money;
 use Illuminate\Support\Facades\Gate;
 use Livewire\Attributes\Layout;
@@ -24,6 +27,16 @@ new #[Layout('layouts.app')] class extends Component
      */
     public function with(): array
     {
+        $depreciationTotals = $this->depreciationTotals();
+        $baseCurrency = Currency::tryFrom((string) Setting::get('base_currency', Currency::MYR->value)) ?? Currency::MYR;
+        $converter = app(CurrencyConverter::class);
+
+        $bookValueBase = 0.0;
+
+        foreach ($depreciationTotals as $currency => $totals) {
+            $bookValueBase += $converter->convert($totals['book'], Currency::from($currency), $baseCurrency);
+        }
+
         return [
             'statusCounts' => Asset::query()->selectRaw('status, count(*) as total')->groupBy('status')->pluck('total', 'status'),
             'byCategory' => Category::with('parent')->withCount('assets')->orderByDesc('assets_count')->get(),
@@ -36,7 +49,10 @@ new #[Layout('layouts.app')] class extends Component
                 ->pluck('total', 'currency'),
             'activeAssignments' => AssetAssignment::active()->count(),
             'overdueAssignments' => AssetAssignment::overdue()->count(),
-            'depreciationTotals' => $this->depreciationTotals(),
+            'depreciationTotals' => $depreciationTotals,
+            'baseCurrency' => $baseCurrency,
+            'bookValueBase' => round($bookValueBase, 2),
+            'fxRate' => (float) Setting::get('usd_to_myr_rate', 4.70),
         ];
     }
 
@@ -153,6 +169,14 @@ new #[Layout('layouts.app')] class extends Component
                     </tbody>
                 </table>
             </div>
+
+            @if (count($depreciationTotals) > 1)
+                <div class="border-t border-base-300 px-6 py-3 text-xs text-base-content/60">
+                    {{ __('Indicative total book value') }}:
+                    <span class="font-medium text-base-content">{{ Money::format($bookValueBase, $baseCurrency) }}</span>
+                    ({{ __('converted to :base at USD→MYR :rate; no historical rates)', ['base' => $baseCurrency->value, 'rate' => $fxRate]) }})
+                </div>
+            @endif
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">

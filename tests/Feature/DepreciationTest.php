@@ -65,4 +65,27 @@ class DepreciationTest extends TestCase
         $this->assertStringContainsString('Book Value', $csv);
         $this->assertStringContainsString('Accumulated Depreciation', $csv);
     }
+
+    public function test_reports_show_an_indicative_base_currency_total(): void
+    {
+        Asset::factory()->create([
+            'currency' => 'MYR',
+            'purchase_cost' => 1000,
+            'salvage_value' => 0,
+            'useful_life_years' => 5,
+            'purchase_date' => now()->subYear()->toDateString(),
+        ]);
+        Asset::factory()->create([
+            'currency' => 'USD',
+            'purchase_cost' => 1000,
+            'salvage_value' => 0,
+            'useful_life_years' => 5,
+            'purchase_date' => now()->subYear()->toDateString(),
+        ]);
+
+        $this->actingAs(User::factory()->manager()->create())
+            ->get('/reports')
+            ->assertOk()
+            ->assertSee('Indicative total book value');
+    }
 }

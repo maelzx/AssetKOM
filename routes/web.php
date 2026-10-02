@@ -39,6 +39,10 @@ Volt::route('settings', 'settings.index')
     ->middleware(['auth', 'verified', 'can:manage-settings'])
     ->name('settings');
 
+Volt::route('users', 'users.index')
+    ->middleware(['auth', 'verified', 'can:manage-users'])
+    ->name('users.index');
+
 Volt::route('categories', 'categories.index')
     ->middleware(['auth', 'verified', 'can:manage-catalog'])
     ->name('categories.index');

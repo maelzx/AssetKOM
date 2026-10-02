@@ -43,7 +43,10 @@ new class extends Component
                     @endcan
 
                     @can('manage-catalog')
-                        <x-nav-group :label="__('Admin')" :active="request()->routeIs('categories.*', 'locations.*', 'settings')">
+                        <x-nav-group :label="__('Admin')" :active="request()->routeIs('categories.*', 'locations.*', 'settings', 'users.*')">
+                            @can('manage-users')
+                                <x-dropdown-link :href="route('users.index')" wire:navigate>{{ __('Users') }}</x-dropdown-link>
+                            @endcan
                             <x-dropdown-link :href="route('categories.index')" wire:navigate>{{ __('Categories') }}</x-dropdown-link>
                             <x-dropdown-link :href="route('locations.index')" wire:navigate>{{ __('Locations') }}</x-dropdown-link>
                             @can('manage-settings')
@@ -116,6 +119,9 @@ new class extends Component
 
             @can('manage-catalog')
                 <p class="px-3 pt-3 pb-1 text-xs font-semibold uppercase tracking-wide text-base-content/40">{{ __('Admin') }}</p>
+                @can('manage-users')
+                    <x-responsive-nav-link :href="route('users.index')" :active="request()->routeIs('users.*')" wire:navigate>{{ __('Users') }}</x-responsive-nav-link>
+                @endcan
                 <x-responsive-nav-link :href="route('categories.index')" :active="request()->routeIs('categories.*')" wire:navigate>{{ __('Categories') }}</x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('locations.index')" :active="request()->routeIs('locations.*')" wire:navigate>{{ __('Locations') }}</x-responsive-nav-link>
                 @can('manage-settings')

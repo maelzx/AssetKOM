@@ -83,8 +83,9 @@ new #[Layout('layouts.app')] class extends Component
 
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div>
-                    <x-input-label for="usd_to_myr_rate" :value="__('USD → MYR rate')" />
+                    <x-input-label for="usd_to_myr_rate" :value="__('USD → MYR rate (MYR per 1 USD)')" />
                     <x-text-input wire:model="usd_to_myr_rate" id="usd_to_myr_rate" type="number" step="0.0001" min="0.01" class="mt-1 block w-full" />
+                    <p class="mt-1 text-xs text-base-content/50">{{ __('Used for indicative base-currency totals in reports (no historical rates).') }}</p>
                     <x-input-error :messages="$errors->get('usd_to_myr_rate')" class="mt-2" />
                 </div>
 

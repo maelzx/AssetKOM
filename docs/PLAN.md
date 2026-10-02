@@ -176,13 +176,21 @@ Decisions (locked): **daisyUI 5**, **modern spacious / card-based**, placeholder
       `AssetStatusTransition`; initial statuses constrained to available/retired/lost.
 - [x] **Catalog deletion**: categories/locations with assets or children cannot be deleted.
 
-#### Phase 12b — Features & scope decisions (open)
-- [ ] Admin user-and-role management workflow (or documented CLI provisioning).
-- [ ] Multi-currency reporting via base currency + FX rate (define rate direction / historic
-      valuation) — or remove the unused conversion settings.
-- [ ] Stocktake / reconciliation: build (count sessions, scan capture, discrepancy review) or
-      record an explicit product-scope deferral.
-- [ ] Retirement/loss lifecycle: add dates/reason/disposal/history, or record the limitation.
+#### Phase 12b — Features & scope decisions
+- [x] **Admin user management**: `/users` (admin-only) to create accounts, change roles, and
+      delete users — with last-admin and self-delete guards.
+- [x] **Multi-currency reporting**: `CurrencyConverter` using the configured rate (MYR per USD);
+      reports show per-currency figures plus an **indicative** base-currency book-value total
+      (no historical rates stored — clearly labelled).
+- [ ] **Stocktake / reconciliation**: **deferred** (explicit product-scope decision). Would
+      need count sessions, scan/count capture, discrepancy review and resolution history.
+- [ ] **Retirement/loss lifecycle**: **deferred** (explicit limitation). Status is captured and
+      audited via the activity log, but dedicated disposal/recovery fields and a retirement
+      workflow are not yet built.
+
+> **Deferred / out of scope (v1):** stocktake & reconciliation; full retirement/disposal
+> lifecycle; live FX rates and historical currency valuation; user self-service profile
+> (avatar, name changes beyond Breeze defaults); 1D barcode labels.
 
 ## Risks / watch items
 
