@@ -8,7 +8,7 @@ AssetKOM was built **purely as an AI-assisted development experiment** — could
 human, working together, take a real business application from an empty folder to a finished,
 tested, production-hardened system?
 
-The answer, after twelve implementation phases of planning, coding, reviewing, and hardening, is
+The answer, after fourteen implementation phases of planning, coding, reviewing, and hardening, is
 yes. Every feature here — from the asset registry to QR labels, CSV imports, deprecation
 schedules, and the daily alert digests — was designed and built with AI pair development
 (Laravel Boost, Livewire Volt, and agent-guided testing), then reviewed by a human before
@@ -39,8 +39,8 @@ track it all:
 - **Maintenance** — scheduled / in-progress / completed records with cost tracking; drives the
   asset status lifecycle.
 - **Attachments** — polymorphic document uploads stored on a private disk with authorized downloads.
-- **QR labels** — scannable asset QR codes, single and bulk printable label PDFs, auth-only
-  scan-to-view.
+- **Labels** — printable 1D barcode + asset-tag labels (single and bulk PDFs), with optional
+  QR codes, plus a scan/type **code lookup** to jump straight to an asset.
 - **Depreciation** — straight-line (configurable method) book value and yearly schedule.
 - **Dashboard & reports** — estate overview, alerts, per-currency summaries and CSV exports.
 - **Audit log** — activity trail on assets, assignments and maintenance.
@@ -62,8 +62,9 @@ track it all:
 
 ## Tech stack
 
-Laravel 13 · PHP 8.4 · Livewire 3 + Volt · Tailwind CSS · Vite · SQLite (dev) / MySQL (prod) ·
-PHPUnit test suite · dompdf, endroid/qr-code, league/csv, spatie/laravel-activitylog.
+Laravel 13 · PHP 8.4 · Livewire 3 + Volt · Tailwind CSS + daisyUI · Vite · SQLite (dev) / MySQL (prod) ·
+PHPUnit test suite · dompdf, picqer/php-barcode-generator, endroid/qr-code, league/csv,
+spatie/laravel-activitylog.
 
 ## Try it locally
 
@@ -104,7 +105,7 @@ Everything you need to run AssetKOM for a real organization:
 - **MySQL/MariaDB** (migrations are engine-portable; SQLite is for development only)
 - **Composer** and **Node 20+** (Node is only needed to build frontend assets — run
   `npm ci && npm run build` at deploy time and ship the `public/build` output)
-- A process supervisor (systemd/supervisoretc) for the **queue worker**
+- A process supervisor (systemd/supervisor) for the **queue worker**
 - `cron` access for the **scheduler**
 - Write access for PHP to `storage/` and `bootstrap/cache/`
 
