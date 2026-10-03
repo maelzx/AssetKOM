@@ -86,16 +86,14 @@
 }
 
 @layer base {
-    html {
+    :root {
         /* Reserve the scrollbar gutter so pages of different heights don't
            shift horizontally when the vertical scrollbar appears/disappears.
-           overflow-y: scroll is the cross-browser fallback for browsers that
-           don't support scrollbar-gutter. */
+           Must target :root (not html) to match daisyUI's specificity.
+           overflow-y: scroll is the cross-browser fallback. */
         scrollbar-gutter: stable;
         overflow-y: scroll;
-    }
 
-    :root {
         font-synthesis: none;
         text-rendering: optimizeLegibility;
         -webkit-font-smoothing: antialiased;
