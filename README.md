@@ -14,6 +14,17 @@ schedules, and the daily alert digests — was designed and built with AI pair d
 (Laravel Boost, Livewire Volt, and agent-guided testing), then reviewed by a human before
 shipping. The repo itself is the proof of what that workflow can produce.
 
+### Built with
+
+The implementation was driven by AI pair development across three models:
+
+- **DeepSeek 4.1 Flash** — primary driver, responsible for roughly **90%** of the planning, code,
+  reviews and fixes.
+- **OpenAI GPT-6 Luna** — supporting development and review.
+- **Alibaba Qwen 3.8 Flash** — supporting development and review.
+
+A human set the direction, reviewed each phase, and approved every change before it shipped.
+
 ## Who this is for
 
 Small and medium enterprises that have quietly started to **accumulate assets** — laptops,
