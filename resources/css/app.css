@@ -86,6 +86,12 @@
 }
 
 @layer base {
+    html {
+        /* Reserve the scrollbar gutter so pages of different heights don't
+           shift horizontally when the vertical scrollbar appears/disappears. */
+        scrollbar-gutter: stable;
+    }
+
     :root {
         font-synthesis: none;
         text-rendering: optimizeLegibility;
