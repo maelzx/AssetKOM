@@ -55,8 +55,8 @@
             })();
         </script>
     </head>
-    <body class="min-h-screen bg-base-200 font-sans text-base-content antialiased">
-        <div class="flex min-h-screen flex-col">
+    <body class="h-dvh overflow-hidden bg-base-200 font-sans text-base-content antialiased">
+        <div class="flex h-dvh flex-col">
             <livewire:layout.navigation />
 
             @if (isset($header))
@@ -67,16 +67,18 @@
                 </header>
             @endif
 
-            <main class="flex-1">
+            {{-- The document never scrolls; content scrolls here with a permanent
+                 gutter so pages of different heights keep an identical width. --}}
+            <main class="flex-1 overflow-y-scroll [scrollbar-gutter:stable]">
                 {{ $slot }}
-            </main>
 
-            <footer class="mt-8 border-t border-base-300/70 bg-base-100/40">
-                <div class="mx-auto flex w-full max-w-7xl flex-col gap-1 px-4 py-5 text-xs text-base-content/50 sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8">
-                    <span>{{ config('app.name', 'AssetKOM') }}</span>
-                    <span>{{ __('Asset management workspace') }} · {{ now()->year }}</span>
-                </div>
-            </footer>
+                <footer class="mt-8 border-t border-base-300/70 bg-base-100/40">
+                    <div class="mx-auto flex w-full max-w-7xl flex-col gap-1 px-4 py-5 text-xs text-base-content/50 sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8">
+                        <span>{{ config('app.name', 'AssetKOM') }}</span>
+                        <span>{{ __('Asset management workspace') }} · {{ now()->year }}</span>
+                    </div>
+                </footer>
+            </main>
         </div>
     </body>
 </html>
