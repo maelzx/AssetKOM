@@ -195,9 +195,9 @@ Decisions (locked): **daisyUI 5**, **modern spacious / card-based**, placeholder
 ## Risks / watch items
 
 - **Tailwind v3 → v4 + daisyUI (done)**: upgraded to v4.3 and reskinned to daisyUI 5.
-  Theme is daisyUI `light` (default) + `dark` (prefers-color-scheme) with a persisted toggle;
-  indigo utilities were mapped to `primary`. Swap the `primary` token + `AssetKOM` wordmark
-  for real branding when available.
+  Theme is daisyUI `assetkom` (light) + `assetkom-dark` (prefers-color-scheme) with a persisted
+  toggle. Real brand assets applied: app icon, wordmark (light/dark), favicon, apple-touch and
+  PWA icons under `public/images/brand` and `public/icons`.
 - **Scope**: "all features in v1" is large; MVP line at Phase 5 protects a usable release.
 - **DB portability**: code runs on SQLite (dev) and MySQL (prod) — avoid engine-specific
   SQL; keep a MySQL smoke test in CI.
