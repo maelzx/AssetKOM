@@ -54,7 +54,7 @@ new #[Layout('layouts.app')] class extends Component
 }; ?>
 
 <div class="py-7 sm:py-9">
-    <div class="mx-auto max-w-7xl space-y-7 px-4 sm:px-6 lg:px-8">
+    <div class="mx-auto max-w-7xl space-y-6 px-4 sm:px-6 lg:px-8">
         <x-page-header :title="__('Dashboard')" :subtitle="__('Overview of your asset estate.')">
             <x-slot name="actions">
                 <a href="{{ route('assets.index') }}" wire:navigate class="btn btn-outline btn-sm rounded-xl">{{ __('Browse assets') }}</a>

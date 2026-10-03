@@ -59,7 +59,8 @@ new #[Layout('layouts.app')] class extends Component
 }; ?>
 
 <div class="py-8 sm:py-10">
-    <div class="max-w-3xl mx-auto sm:px-6 lg:px-8">
+    <div class="mx-auto max-w-7xl space-y-6 px-4 sm:px-6 lg:px-8">
+        <div class="mx-auto max-w-3xl">
         <form wire:submit="save" class="card bg-base-100 p-6 space-y-6">
             <div>
                 <x-input-label for="org_name" :value="__('Organization name')" />
@@ -134,5 +135,6 @@ new #[Layout('layouts.app')] class extends Component
                 <x-action-message on="settings-saved">{{ __('Saved.') }}</x-action-message>
             </div>
         </form>
+        </div>
     </div>
 </div>

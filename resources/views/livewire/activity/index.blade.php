@@ -54,7 +54,7 @@ new #[Layout('layouts.app')] class extends Component
 }; ?>
 
 <div class="py-8 sm:py-10">
-    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
+    <div class="mx-auto max-w-7xl space-y-6 px-4 sm:px-6 lg:px-8">
         <x-page-header :title="__('Activity')" :subtitle="__('Audit trail of changes across the system.')" />
 
         <div class="card bg-base-100 p-4">

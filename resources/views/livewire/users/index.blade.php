@@ -102,7 +102,7 @@ new #[Layout('layouts.app')] class extends Component
 }; ?>
 
 <div class="py-8 sm:py-10">
-    <div class="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
+    <div class="mx-auto max-w-7xl space-y-6 px-4 sm:px-6 lg:px-8">
         <x-page-header :title="__('Users')" :subtitle="__('Provision accounts and manage roles.')" />
 
         <div class="card bg-base-100 p-6">

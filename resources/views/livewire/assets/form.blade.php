@@ -207,7 +207,8 @@ new #[Layout('layouts.app')] class extends Component
 }; ?>
 
 <div class="py-8 sm:py-10">
-    <div class="max-w-4xl mx-auto sm:px-6 lg:px-8 space-y-6">
+    <div class="mx-auto max-w-7xl space-y-6 px-4 sm:px-6 lg:px-8">
+        <div class="mx-auto max-w-4xl space-y-6">
         <x-page-header
             :title="$asset?->exists ? __('Edit asset') : __('New asset')"
             :subtitle="$asset?->exists ? $asset->asset_tag : __('Leave the tag blank to auto-generate one.')"
@@ -398,5 +399,6 @@ new #[Layout('layouts.app')] class extends Component
                 <a href="{{ route('assets.index') }}" wire:navigate class="text-sm text-base-content/70 hover:text-base-content">{{ __('Cancel') }}</a>
             </div>
         </form>
+        </div>
     </div>
 </div>
