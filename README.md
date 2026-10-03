@@ -1,46 +1,35 @@
 # AssetKOM
 
-> Every company starts with a spreadsheet. Then the spreadsheet starts lying to you.
+Open-source asset management for small and medium organisations.
 
-## The story behind this project
+Track your company's laptops, equipment, vehicles, furniture, tools and other assets — without
+spreadsheets.
 
-AssetKOM was built **purely as an AI-assisted development experiment** — could an AI agent and a
-human, working together, take a real business application from an empty folder to a finished,
-tested, production-hardened system?
+## Why AssetKOM?
 
-The answer, after fourteen implementation phases of planning, coding, reviewing, and hardening, is
-yes. Every feature here — from the asset registry to QR labels, CSV imports, deprecation
-schedules, and the daily alert digests — was designed and built with AI pair development
-(Laravel Boost, Livewire Volt, and agent-guided testing), then reviewed by a human before
-shipping. The repo itself is the proof of what that workflow can produce.
+- ✓ Know **who has every asset**, and where it is
+- ✓ **Barcode labels** + scan/type **code lookup** (QR optional)
+- ✓ **Check-in / check-out** with full history
+- ✓ **Maintenance & warranty tracking**
+- ✓ **Depreciation** (straight-line or reducing balance)
+- ✓ **Audit history**
+- ✓ **CSV import** (column mapping, dry-run, idempotent)
+- ✓ **Location hierarchy**
+- ✓ **Role-based access** (Admin / Manager / Staff)
 
-### Built with
+## Screenshots
 
-The implementation was driven by AI pair development across three models:
+| Dashboard | Asset registry |
+|---|---|
+| ![Dashboard](screenshots/dashboard.png) | ![Assets](screenshots/assets.png) |
 
-- **DeepSeek 4.1 Flash** — primary driver, responsible for roughly **90%** of the planning, code,
-  reviews and fixes.
-- **OpenAI GPT-6 Luna** — supporting development and review.
-- **Alibaba Qwen 3.8 Flash** — supporting development and review.
+| Labels (1D barcode + tag) | Reports & depreciation |
+|---|---|
+| ![Labels](screenshots/labels.png) | ![Reports](screenshots/reports.png) |
 
-A human set the direction, reviewed each phase, and approved every change before it shipped.
-
-## Who this is for
-
-Small and medium enterprises that have quietly started to **accumulate assets** — laptops,
-monitors, printers, tools, vehicles, furniture, network gear, anything with a serial number — and
-are still tracking them in Excel.
-
-You know how it goes: one sheet for IT equipment, another for office furniture, a tab nobody
-remembers exists, and nobody knows who has the projector. AssetKOM gives you one honest place to
-track it all:
-
-- You always know **who has what, and where it is** (transactional check-out / check-in with
-  full history).
-- **Scannable QR / barcode labels** mean physical inventory stops being a two-day nightmare.
-- **Warranty and maintenance alerts** arrive in your inbox daily instead of after the damage.
-- **Book value and depreciation** give finance real numbers, not guesses.
-- **CSV import** means migrating off that spreadsheet takes an afternoon, not a quarter.
+| New asset | Login |
+|---|---|
+| ![New asset](screenshots/new-asset.png) | ![Login](screenshots/login.png) |
 
 ## Features
 
@@ -52,7 +41,8 @@ track it all:
 - **Attachments** — polymorphic document uploads stored on a private disk with authorized downloads.
 - **Labels** — printable 1D barcode + asset-tag labels (single and bulk PDFs), with optional
   QR codes, plus a scan/type **code lookup** to jump straight to an asset.
-- **Depreciation** — straight-line (configurable method) book value and yearly schedule.
+- **Depreciation** — straight-line or reducing-balance book value, with a configurable rate and a
+  "value as of" date.
 - **Dashboard & reports** — estate overview, alerts, per-currency summaries and CSV exports.
 - **Audit log** — activity trail on assets, assignments and maintenance.
 - **Daily alerts** — queued email digests for warranty expiry, maintenance due and overdue
@@ -144,39 +134,64 @@ Everything you need to run AssetKOM for a real organization:
 8. Set `APP_TIMEZONE`, `APP_LOCALE`, default currency and asset-tag prefix in **Settings**.
 9. **Back up the database and `storage/app/private`** (attachments live on a private disk).
 
-## Common commands
+## Commercial services
 
-```sh
-php artisan test           # test suite
-./vendor/bin/pint          # format PHP
-npm run build              # build frontend assets
-php artisan alerts:send    # queue the daily alert digests now
-```
+AssetKOM is free and open source (MIT). If you'd like help putting it to work, paid assistance is
+available:
 
-## Requests, contributions & paid work
+- Installation & server setup
+- Data migration (from spreadsheets or another system)
+- Customisation & integrations
+- Hosting & maintenance
+- Support & training
 
-The learning experiment is done and the project is open source — use it however you like.
-What happens next is up to the community:
+**Contact:** [borang.digital/maelzx/assetkom-contact](https://borang.digital/maelzx/assetkom-contact)
 
-- **Feature requests / bug reports:** [open a GitHub issue](../../issues). Tell us about your
-  asset mess; the best features here started as "we wish it could…".
-- **Pull requests:** welcome. Follow the existing conventions (run `php artisan test` and
-  `./vendor/bin/pint` before submitting).
-- **Need it adapted for your business?** Custom development, deployment, hosting setup,
-  integrations and training can be arranged as **paid work** — reach out via a GitHub issue or
-  the maintainer's profile and we'll scope it together.
+## Roadmap
 
-## Conventions (for contributors)
+Built and shipped: asset registry, assignments, maintenance, attachments, labels + code lookup,
+depreciation, dashboard & reports, audit log, email alerts, CSV import, roles/permissions, and a
+daisyUI design system with dark mode.
 
-- Run `./vendor/bin/pint` before committing PHP changes.
-- Keep the SQLite database local; do not commit `database/*.sqlite` or `.env`.
+Planned / deferred:
 
-## Disclaimer
+- Camera-based scanning (phones) on top of the existing code lookup
+- Stocktake / reconciliation (count sessions, discrepancy review)
+- Retirement / disposal lifecycle (dates, reason, disposal value & notes)
+- Historical & live FX rates for multi-currency book values
+- Profile extras (avatar upload)
 
-AssetKOM is provided **as-is**, under the [MIT license](LICENSE), with no warranty of any kind.
-It was built as a learning project — review it, test it, and run it responsibly.
+## The story behind this project
+
+AssetKOM was built **purely as an AI-assisted development experiment** — could an AI agent and a
+human, working together, take a real business application from an empty folder to a finished,
+tested, production-hardened system?
+
+The answer, after fourteen implementation phases of planning, coding, reviewing, and hardening, is
+yes. Every feature here — from the asset registry to barcode labels, CSV imports, depreciation
+schedules, and the daily alert digests — was designed and built with AI pair development
+(Laravel Boost, Livewire Volt, and agent-guided testing), then reviewed by a human before
+shipping. The repo itself is the proof of what that workflow can produce.
+
+### Built with
+
+The implementation was driven by AI pair development across three models:
+
+- **DeepSeek 4.1 Flash** — primary driver, responsible for roughly **90%** of the planning, code,
+  reviews and fixes.
+- **OpenAI GPT-6 Luna** — supporting development and review.
+- **Alibaba Qwen 3.8 Flash** — supporting development and review.
+
+A human set the direction, reviewed each phase, and approved every change before it shipped.
+
+## Contributing
+
+- **Feature requests / bug reports:** [open an issue](https://github.com/maelzx/AssetKOM/issues).
+- **Pull requests:** welcome. Follow the existing conventions — run `php artisan test` and
+  `./vendor/bin/pint` before submitting.
+- Run `./vendor/bin/pint` before committing PHP changes; keep the SQLite database local.
 
 ## License
 
-[MIT](LICENSE) — use it, fork it, sell it to your own clients. We're not responsible, and that's
-the deal.
+[MIT](LICENSE) — use it, fork it, sell it to your own clients. Provided as-is, with no warranty of
+any kind.
