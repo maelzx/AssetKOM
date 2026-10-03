@@ -88,8 +88,11 @@
 @layer base {
     html {
         /* Reserve the scrollbar gutter so pages of different heights don't
-           shift horizontally when the vertical scrollbar appears/disappears. */
+           shift horizontally when the vertical scrollbar appears/disappears.
+           overflow-y: scroll is the cross-browser fallback for browsers that
+           don't support scrollbar-gutter. */
         scrollbar-gutter: stable;
+        overflow-y: scroll;
     }
 
     :root {
