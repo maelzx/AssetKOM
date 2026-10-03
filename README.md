@@ -95,4 +95,6 @@ php artisan alerts:send    # queue the daily alert digests now
 - Keep the SQLite database local; do not commit `database/*.sqlite` or `.env`.
 - Commit and push to GitHub (`origin main`) at the end of each implementation phase.
 
-See [`docs/PLAN.md`](docs/PLAN.md) for the phased roadmap and design decisions.
+## License
+
+This project is open-sourced under the [MIT license](LICENSE).

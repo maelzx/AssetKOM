@@ -29,3 +29,14 @@ Thumbs.db
 
 # Local uploads (not committed)
 /uploads/
+
+# AI agent/tooling files (local only, not published)
+/AGENTS.md
+/CLAUDE.md
+/docs/
+/.ai/
+/.claude/
+/.agents/
+/boost.json
+/opencode.json
+/.mcp.json
