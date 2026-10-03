@@ -184,6 +184,16 @@ The implementation was driven by AI pair development across three models:
 
 A human set the direction, reviewed each phase, and approved every change before it shipped.
 
+## Related projects
+
+- **[BookingKOM](https://github.com/maelzx/BookingKOM)** — open-source **resource booking &
+  scheduling** for organisations (rooms, vehicles, equipment, people; multi-resource bookings
+  with conflict detection, approvals and a calendar). It's a sibling app built on the same
+  foundation and visual language as AssetKOM — and an AssetKOM asset can become a bookable
+  BookingKOM resource.
+
+> **AssetKOM = What do we own? · BookingKOM = When can we use it?**
+
 ## Contributing
 
 - **Feature requests / bug reports:** [open an issue](https://github.com/maelzx/AssetKOM/issues).
