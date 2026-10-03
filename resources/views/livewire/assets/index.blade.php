@@ -88,6 +88,7 @@ new #[Layout('layouts.app')] class extends Component
     <div class="mx-auto max-w-7xl space-y-6 px-4 sm:px-6 lg:px-8">
         <x-page-header :title="__('Assets')" :subtitle="__('Browse and manage the asset registry.')">
             <x-slot name="actions">
+                <a href="{{ route('scan.index') }}" wire:navigate class="btn btn-outline btn-sm">{{ __('Find by code') }}</a>
                 @can('create', \App\Models\Asset::class)
                     <a href="{{ route('assets.create') }}" wire:navigate class="btn btn-primary btn-sm">
                         {{ __('New asset') }}

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Asset;
+use App\Models\Setting;
+use App\Support\AssetBarcode;
 use App\Support\AssetQrCode;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
@@ -16,7 +18,8 @@ class LabelController extends Controller
 
         $pdf = Pdf::loadView('labels.single', [
             'asset' => $asset,
-            'qr' => AssetQrCode::dataUri($asset, 400),
+            'barcode' => AssetBarcode::dataUri($asset->asset_tag),
+            'qr' => $this->qrEnabled() ? AssetQrCode::dataUri($asset, 300) : null,
         ])->setPaper('a4');
 
         return $pdf->download('label-'.$asset->asset_tag.'.pdf');
@@ -25,6 +28,7 @@ class LabelController extends Controller
     public function bulk(Request $request): Response
     {
         $status = $request->string('status')->toString();
+        $qrEnabled = $this->qrEnabled();
 
         $assets = Asset::query()
             ->with(['category.parent', 'location.parent'])
@@ -37,11 +41,17 @@ class LabelController extends Controller
 
         $labels = $assets->map(fn (Asset $asset): array => [
             'asset' => $asset,
-            'qr' => AssetQrCode::dataUri($asset, 220),
+            'barcode' => AssetBarcode::dataUri($asset->asset_tag),
+            'qr' => $qrEnabled ? AssetQrCode::dataUri($asset, 200) : null,
         ]);
 
         $pdf = Pdf::loadView('labels.bulk', ['labels' => $labels])->setPaper('a4');
 
         return $pdf->download('asset-labels.pdf');
+    }
+
+    private function qrEnabled(): bool
+    {
+        return (bool) Setting::get('label_qr_enabled', false);
     }
 }

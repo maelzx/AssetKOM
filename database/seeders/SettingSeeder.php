@@ -22,6 +22,7 @@ class SettingSeeder extends Seeder
             'asset_tag_sequence' => [0, 'integer'],
             'depreciation_method' => ['straight_line', 'string'],
             'depreciation_rate' => [20, 'float'],
+            'label_qr_enabled' => [false, 'boolean'],
         ];
 
         foreach ($defaults as $key => [$value, $type]) {

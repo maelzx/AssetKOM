@@ -50,7 +50,8 @@ class LabelTest extends TestCase
         $this->actingAs(User::factory()->staff()->create())
             ->get('/labels')
             ->assertOk()
-            ->assertSeeLivewire('labels.index');
+            ->assertSeeLivewire('labels.index')
+            ->assertSee('data:image/png', false);
     }
 
     public function test_single_label_pdf_downloads(): void

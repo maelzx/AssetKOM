@@ -6,8 +6,10 @@
     <style>
         body { font-family: DejaVu Sans, sans-serif; }
         table { width: 100%; border-collapse: collapse; }
-        td { width: 33.33%; padding: 8px; text-align: center; border: 1px dashed #999; }
-        .tag { font-size: 12px; font-weight: bold; margin-top: 4px; }
+        td { width: 33.33%; padding: 8px; text-align: center; border: 1px dashed #999; vertical-align: top; }
+        .barcode { height: 44px; }
+        .qr { height: 80px; margin-bottom: 4px; }
+        .tag { font-family: DejaVu Sans Mono, monospace; font-size: 12px; font-weight: bold; margin-top: 4px; }
         .name { font-size: 9px; color: #444; }
     </style>
 </head>
@@ -17,7 +19,10 @@
             <tr>
                 @foreach ($chunk as $label)
                     <td>
-                        <img src="{{ $label['qr'] }}" width="110" height="110" alt="">
+                        @if ($label['qr'])
+                            <img class="qr" src="{{ $label['qr'] }}" alt="">
+                        @endif
+                        <img class="barcode" src="{{ $label['barcode'] }}" alt="">
                         <div class="tag">{{ $label['asset']->asset_tag }}</div>
                         <div class="name">{{ $label['asset']->name }}</div>
                     </td>

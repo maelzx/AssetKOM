@@ -71,6 +71,10 @@ Volt::route('labels', 'labels.index')
     ->middleware(['auth', 'verified'])
     ->name('labels.index');
 
+Volt::route('scan', 'scan.index')
+    ->middleware(['auth', 'verified', 'throttle:60,1'])
+    ->name('scan.index');
+
 Volt::route('imports/assets', 'imports.assets')
     ->middleware(['auth', 'verified', 'can:manage-assets'])
     ->name('imports.assets');

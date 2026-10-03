@@ -190,7 +190,17 @@ Decisions (locked): **daisyUI 5**, **modern spacious / card-based**, placeholder
 
 > **Deferred / out of scope (v1):** stocktake & reconciliation; full retirement/disposal
 > lifecycle; live FX rates and historical currency valuation; user self-service profile
-> (avatar, name changes beyond Breeze defaults); 1D barcode labels.
+> (avatar, name changes beyond Breeze defaults).
+
+### Phase 13 — Labels & code lookup ✅
+- [x] **1D barcode labels by default** (Code 128 of the asset tag) with the asset ID printed
+      below; **QR is now opt-in** via the `label_qr_enabled` setting (default off), since an
+      intranet-only host makes QR URLs useless to phones off the network.
+- [x] Single + bulk label PDFs, the labels preview and the asset detail card all show
+      barcode + tag (QR appended only when enabled).
+- [x] **Code lookup page** (`/scan`): scan/type an asset tag or serial (case-insensitive) and
+      jump to the asset. Works with keyboard-emulating hardware scanners today and is the
+      entry point for a camera scanner / stocktake later.
 
 ## Risks / watch items
 

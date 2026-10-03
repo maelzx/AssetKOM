@@ -4,8 +4,10 @@ use App\Enums\AssetCondition;
 use App\Exceptions\AssetAssignmentException;
 use App\Models\Asset;
 use App\Models\Location;
+use App\Models\Setting;
 use App\Models\User;
 use App\Services\AssetAssignmentService;
+use App\Support\AssetBarcode;
 use App\Support\AssetQrCode;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\Rule;
@@ -183,7 +185,9 @@ new #[Layout('layouts.app')] class extends Component
         return [
             'users' => User::orderBy('name')->get(),
             'locations' => Location::with('parent')->get()->sortBy('full_name'),
-            'qr' => AssetQrCode::dataUri($this->asset, 200),
+            'barcode' => AssetBarcode::dataUri($this->asset->asset_tag, 2, 60),
+            'qrEnabled' => (bool) Setting::get('label_qr_enabled', false),
+            'qr' => Setting::get('label_qr_enabled', false) ? AssetQrCode::dataUri($this->asset, 200) : null,
             'depreciationMethod' => $depreciation->method(),
             'isDepreciable' => $depreciation->isDepreciable($this->asset),
             'annualDepreciation' => $depreciation->annualAmount($this->asset),
@@ -523,9 +527,12 @@ new #[Layout('layouts.app')] class extends Component
                 </div>
 
                 <div class="card bg-base-100 p-6 text-center">
-                    <h3 class="text-lg font-medium text-base-content">{{ __('QR label') }}</h3>
-                    <img src="{{ $qr }}" class="mx-auto mt-3 h-40 w-40" alt="{{ $asset->asset_tag }}">
-                    <p class="mt-2 font-mono text-xs text-base-content/60">{{ $asset->asset_tag }}</p>
+                    <h3 class="text-lg font-medium text-base-content">{{ __('Label') }}</h3>
+                    @if ($qr)
+                        <img src="{{ $qr }}" class="mx-auto mt-3 h-32 w-32" alt="{{ $asset->asset_tag }}">
+                    @endif
+                    <img src="{{ $barcode }}" class="mx-auto mt-3 h-12" alt="{{ $asset->asset_tag }}">
+                    <p class="mt-2 font-mono text-sm font-semibold text-base-content">{{ $asset->asset_tag }}</p>
                     <a href="{{ route('labels.single', $asset) }}" target="_blank" class="mt-3 btn btn-outline btn-sm">
                         {{ __('Print label') }}
                     </a>

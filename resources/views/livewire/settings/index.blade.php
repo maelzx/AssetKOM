@@ -23,6 +23,8 @@ new #[Layout('layouts.app')] class extends Component
 
     public float $depreciation_rate = 20.0;
 
+    public bool $label_qr_enabled = false;
+
     public function mount(): void
     {
         Gate::authorize('manage-settings');
@@ -34,6 +36,7 @@ new #[Layout('layouts.app')] class extends Component
         $this->asset_tag_prefix = (string) Setting::get('asset_tag_prefix', 'AST');
         $this->depreciation_method = (string) Setting::get('depreciation_method', 'straight_line');
         $this->depreciation_rate = (float) Setting::get('depreciation_rate', 20);
+        $this->label_qr_enabled = (bool) Setting::get('label_qr_enabled', false);
     }
 
     public function save(): void
@@ -48,10 +51,17 @@ new #[Layout('layouts.app')] class extends Component
             'asset_tag_prefix' => ['required', 'string', 'max:10', 'alpha_num'],
             'depreciation_method' => ['required', Rule::in(['straight_line', 'reducing_balance'])],
             'depreciation_rate' => ['required', 'numeric', 'min:0', 'max:100'],
+            'label_qr_enabled' => ['boolean'],
         ]);
 
+        $types = [
+            'usd_to_myr_rate' => 'float',
+            'depreciation_rate' => 'float',
+            'label_qr_enabled' => 'boolean',
+        ];
+
         foreach ($validated as $key => $value) {
-            Setting::set($key, $value, in_array($key, ['usd_to_myr_rate', 'depreciation_rate'], true) ? 'float' : 'string');
+            Setting::set($key, $value, $types[$key] ?? 'string');
         }
 
         $this->dispatch('settings-saved');
@@ -128,6 +138,17 @@ new #[Layout('layouts.app')] class extends Component
                     </p>
                     <x-input-error :messages="$errors->get('depreciation_rate')" class="mt-2" />
                 </div>
+            </div>
+
+            <div class="border-t border-base-300 pt-6">
+                <h3 class="text-base font-medium text-base-content">{{ __('Labels') }}</h3>
+                <p class="mt-1 text-sm text-base-content/60">{{ __('Printed labels always show a 1D barcode and the asset tag. Optionally add a QR code (useful only when scanners can reach the app URL).') }}</p>
+
+                <label class="mt-3 flex items-center gap-2">
+                    <input type="checkbox" wire:model="label_qr_enabled" class="rounded border-base-300 text-primary focus:ring-primary">
+                    <span class="text-sm text-base-content/80">{{ __('Include QR code on printed labels') }}</span>
+                </label>
+                <x-input-error :messages="$errors->get('label_qr_enabled')" class="mt-2" />
             </div>
 
             <div class="flex items-center gap-4">

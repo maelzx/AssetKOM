@@ -77,4 +77,18 @@ class SettingsScreenTest extends TestCase
         $this->assertSame('reducing_balance', Setting::get('depreciation_method'));
         $this->assertEquals(30.0, Setting::get('depreciation_rate'));
     }
+
+    public function test_manager_can_toggle_qr_on_labels(): void
+    {
+        $manager = User::factory()->manager()->create();
+
+        $this->actingAs($manager);
+
+        Volt::test('settings.index')
+            ->set('label_qr_enabled', true)
+            ->call('save')
+            ->assertHasNoErrors();
+
+        $this->assertTrue((bool) Setting::get('label_qr_enabled'));
+    }
 }

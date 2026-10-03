@@ -4,6 +4,8 @@ use App\Enums\AssetStatus;
 use App\Models\Asset;
 use App\Models\Category;
 use App\Models\Location;
+use App\Models\Setting;
+use App\Support\AssetBarcode;
 use App\Support\AssetQrCode;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Url;
@@ -38,9 +40,11 @@ new #[Layout('layouts.app')] class extends Component
             'locations' => Location::with('parent')->get()->sortBy('full_name'),
             'statuses' => AssetStatus::cases(),
             'total' => $total,
+            'qrEnabled' => (bool) Setting::get('label_qr_enabled', false),
             'preview' => $query->limit(12)->get()->map(fn (Asset $asset): array => [
                 'asset' => $asset,
-                'qr' => AssetQrCode::dataUri($asset, 160),
+                'barcode' => AssetBarcode::dataUri($asset->asset_tag, 2, 50),
+                'qr' => Setting::get('label_qr_enabled', false) ? AssetQrCode::dataUri($asset, 140) : null,
             ]),
         ];
     }
@@ -48,7 +52,7 @@ new #[Layout('layouts.app')] class extends Component
 
 <div class="py-8 sm:py-10">
     <div class="mx-auto max-w-7xl space-y-6 px-4 sm:px-6 lg:px-8">
-        <x-page-header :title="__('QR Labels')" :subtitle="__('Generate scannable labels for your assets.')">
+        <x-page-header :title="__('Labels')" :subtitle="__('Printable asset labels: 1D barcode + asset tag, with an optional QR code.')">
             <x-slot name="actions">
                 @if ($total > 0)
                     <a
@@ -61,6 +65,13 @@ new #[Layout('layouts.app')] class extends Component
                 @endif
             </x-slot>
         </x-page-header>
+
+        <div class="card bg-base-100 p-4">
+            <div class="flex flex-wrap items-center justify-between gap-3">
+                <span class="badge badge-ghost">{{ $qrEnabled ? __('QR enabled') : __('Barcode + tag') }}</span>
+                <a href="{{ route('settings') }}" wire:navigate class="text-xs text-primary hover:opacity-80">{{ __('Label settings') }}</a>
+            </div>
+        </div>
 
         <div class="card bg-base-100 p-4">
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -93,7 +104,10 @@ new #[Layout('layouts.app')] class extends Component
             <div class="mt-4 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
                 @forelse ($preview as $item)
                     <div class="rounded-md border border-dashed border-base-300 p-3 text-center" wire:key="label-{{ $item['asset']->id }}">
-                        <img src="{{ $item['qr'] }}" class="mx-auto h-28 w-28" alt="">
+                        @if ($item['qr'])
+                            <img src="{{ $item['qr'] }}" class="mx-auto mb-1 h-20 w-20" alt="">
+                        @endif
+                        <img src="{{ $item['barcode'] }}" class="mx-auto h-10" alt="">
                         <p class="mt-2 font-mono text-xs font-semibold text-base-content">{{ $item['asset']->asset_tag }}</p>
                         <p class="truncate text-xs text-base-content/60">{{ $item['asset']->name }}</p>
                     </div>

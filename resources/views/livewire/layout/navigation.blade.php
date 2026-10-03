@@ -26,10 +26,11 @@ new class extends Component
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate>{{ __('Dashboard') }}</x-nav-link>
                     <x-nav-link :href="route('assets.index')" :active="request()->routeIs('assets.*')" wire:navigate>{{ __('Assets') }}</x-nav-link>
 
-                    <x-nav-group :label="__('Operations')" :active="request()->routeIs('assignments.*', 'maintenance.*', 'labels.*', 'imports.*')">
+                    <x-nav-group :label="__('Operations')" :active="request()->routeIs('assignments.*', 'maintenance.*', 'labels.*', 'imports.*', 'scan.index')">
                         <x-dropdown-link :href="route('assignments.index')" :active="request()->routeIs('assignments.*')" wire:navigate>{{ __('Assignments') }}</x-dropdown-link>
                         <x-dropdown-link :href="route('maintenance.index')" :active="request()->routeIs('maintenance.*')" wire:navigate>{{ __('Maintenance') }}</x-dropdown-link>
                         <x-dropdown-link :href="route('labels.index')" :active="request()->routeIs('labels.*')" wire:navigate>{{ __('Labels') }}</x-dropdown-link>
+                        <x-dropdown-link :href="route('scan.index')" :active="request()->routeIs('scan.index')" wire:navigate>{{ __('Scan / find') }}</x-dropdown-link>
                         @can('manage-assets')
                             <x-dropdown-link :href="route('imports.assets')" :active="request()->routeIs('imports.*')" wire:navigate>{{ __('Import') }}</x-dropdown-link>
                         @endcan
@@ -107,6 +108,7 @@ new class extends Component
             <x-responsive-nav-link :href="route('assignments.index')" :active="request()->routeIs('assignments.*')" wire:navigate>{{ __('Assignments') }}</x-responsive-nav-link>
             <x-responsive-nav-link :href="route('maintenance.index')" :active="request()->routeIs('maintenance.*')" wire:navigate>{{ __('Maintenance') }}</x-responsive-nav-link>
             <x-responsive-nav-link :href="route('labels.index')" :active="request()->routeIs('labels.*')" wire:navigate>{{ __('Labels') }}</x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('scan.index')" :active="request()->routeIs('scan.index')" wire:navigate>{{ __('Scan / find') }}</x-responsive-nav-link>
             @can('manage-assets')
                 <x-responsive-nav-link :href="route('imports.assets')" :active="request()->routeIs('imports.*')" wire:navigate>{{ __('Import') }}</x-responsive-nav-link>
             @endcan
